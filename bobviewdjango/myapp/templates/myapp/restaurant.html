@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <h2> 매장 정보 </h2> 
+        <form name="restaurant" action="/mypage/add-restaurant/" method="post">{% csrf_token %}
+            restaurant name : <input type="text" name="username" > </br>
+            restaurant latitude : <input type="number" name="latitude" > </br>
+            restaurant longitude : <input type="number" name="latitude" > </br>
+            <input type="submit" value="저장">
+        </form>
+    </body>
+</html>

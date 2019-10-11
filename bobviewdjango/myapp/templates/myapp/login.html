@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <h2> 로그인 </h2> 
+        <form name="login" action="/dologin/" method="post">{% csrf_token %}
+            ID : <input type="text" name="username" > </br>
+            PW : <input type="password" name="password" > </br>
+            <input type="submit" value="확인">
+        </form>
+    </body>
+</html>
