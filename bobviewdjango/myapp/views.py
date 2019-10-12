@@ -47,6 +47,7 @@ from myapp.models import Post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+#template
 @csrf_exempt
 @api_view(['POST'])
 def testing(request):
@@ -72,7 +73,7 @@ def testing(request):
 
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET', 'POST', 'DELETE'])
 def myrestaurant(request):    
     data=request.data
     # 레스토랑페이지에서 기본적인 레스토랑 정보 + 메뉴 정보를 보여주기
@@ -138,7 +139,6 @@ def myrestaurant(request):
 @csrf_exempt
 @api_view(['GET'])
 def mypage(request):    
-    data=request.data
     # 기본적인 마이페이지에 유저의 정보를 표시하기
     if request.method == 'GET':
         user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
@@ -162,6 +162,7 @@ def mypage(request):
 
     # 마이페이지에서 무언가를 수정했을때
     elif request.method == 'PUT':
+        data=request.data
         user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
         if 'new_username' in data.keys():
             try :
@@ -222,6 +223,8 @@ def signup(request):
 
         print("before save")
         new_user.save()
+
+        message = data['email'] + "로 메일을 전송하였습니다. 메일을 확인해주세요"
 
         #set response. (dont need it here)
         resp = JsonResponse({

@@ -1,52 +1,76 @@
 <template>
     <v-container grid-list-xs>
-        <v-card
-            v-if="beforesending"
-        >
-            <v-card-title primary-title>
-                Register
-            </v-card-title>
-            <v-content>
-                <v-text-field  label="Name" v-model="PersonalData.name"></v-text-field>
-                <v-text-field  label="ID" v-model="PersonalData.id"></v-text-field>
-                <v-text-field
-                    name="name"
-                    label="password"
-                    hint="At least 8 characters"
-                    counter="8"
-                    :append-icon="passwordVisiable ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                    :append-icon-cb="onVisiableClicked"
-                    v-model="PersonalData.password"
-                    :type="passwordVisiable ? 'password' : 'text'"
-                ></v-text-field>
-                <v-text-field
-                    label="E-mail"
-                    v-model="PersonalData.email"
-                ></v-text-field>
-            </v-content>
-                
-            
-            <v-card-actions>
-                <v-btn
-                    text
-                    @click="RegisterOnClick"
-                >
-                    <span>Register</span>
-                </v-btn>
-                <v-btn
-                    text
-                    to="/"
-                >
-                    <span>cancel</span>
-                </v-btn>
-            </v-card-actions>
-        </v-card>
 
-        <v-card
-            v-if="!beforesending"
+        <v-content
+            v-if="selectingOwner"
         >
-            <p>{{res_message}}</p>
-        </v-card>
+            <v-card
+            class="d-flex justify-space-around mb-5 ma-5"
+            >
+                <v-btn
+                    text
+                    class="mb-5 ma-5"
+                    @click="setOwner(true)"
+                >
+                    <span>Owner</span>
+                </v-btn>
+                <v-btn
+                    text
+                    class="mb-5 ma-5"
+                    @click="setOwner(false)"
+                >
+                    <span>Customer</span>
+                </v-btn>
+            </v-card>
+        </v-content>
+        <v-content
+            v-if="!selectingOwner"
+        >
+            <v-card
+            v-if="beforesending"
+            >
+                <v-card-title primary-title>
+                    Register
+                </v-card-title>
+                <v-content>
+                    <v-text-field  label="Name" v-model="PersonalData.name"></v-text-field>
+                    <v-text-field  label="ID" v-model="PersonalData.id"></v-text-field>
+                    <v-text-field
+                        name="name"
+                        label="password"
+                        hint="At least 8 characters"
+                        counter="8"
+                        v-model="PersonalData.password"
+                        :type="passwordVisiable ? 'password' : 'text'"
+                    ></v-text-field>
+                    <v-text-field
+                        label="E-mail"
+                        v-model="PersonalData.email"
+                    ></v-text-field>
+                </v-content>
+                <v-card-actions>
+                    <v-btn
+                        text
+                        @click="RegisterOnClick"
+                    >
+                        <span>Register</span>
+                    </v-btn>
+                    <v-btn
+                        text
+                        to="/"
+                    >
+                        <span>cancel</span>
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+            <v-card
+                v-if="!beforesending"
+            >
+                <p>{{res_message}}</p>
+            </v-card>
+        </v-content>
+        
     </v-container>
     
 </template>
@@ -64,6 +88,11 @@ export default {
                 password:'',
                 email:'',
             }],
+            is_owner: {
+                type: Boolean,
+                default: false,
+                description: 'person is owner?'
+            },
             passwordVisiable: {
                 type: Boolean,
                 default : true,
@@ -74,23 +103,31 @@ export default {
                 default: true,
                 desciprtion : 'before sending request'
             },
+            selectingOwner: {
+                type: Boolean,
+                default: false,
+                desciprtion : 'before selecting owner'
+            },
             res_message: ''
         }
     },
     methods: {
         RegisterOnClick () {
             let currentObj = this
+            //debuging code
             var postData =[{
-                is_owner: true,
+                is_owner: currentObj.is_owner,
                 username: currentObj.PersonalData.name,
                 id: currentObj.PersonalData.id,
                 password: currentObj.PersonalData.password,
                 email: currentObj.PersonalData.email  
             }]
             console.log(postData)
+
+            //axios transmission
             axios
-            .post('http://127.0.0.1:8000/api/signup/', {
-                is_owner: false,
+            .post('http://127.0.0.1:8000/api/applysignup/', {
+                is_owner: currentObj.is_owner,
                 first_name: currentObj.PersonalData.name,
                 username: currentObj.PersonalData.id,
                 password: currentObj.PersonalData.password,
@@ -106,6 +143,7 @@ export default {
                 console.log(error)
             });
         },
+        //visibility of password
         onVisiableClicked () {
             if(this.passwordVisiable){
                 this.passwordVisiable = false
@@ -113,6 +151,11 @@ export default {
             else{
                 this.passwordVisiable = true
             }
+        },
+
+        setOwner(value) {
+            this.is_owner = value
+            this.selectingOwner = !this.selectingOwner
         },
     }
 }
