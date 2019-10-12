@@ -35,7 +35,6 @@ class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
 
-
 class OrderMenuViewSet(viewsets.ModelViewSet):
     queryset = OrderMenu.objects.all()
     serializer_class = OrderMenuSerializer
@@ -48,6 +47,7 @@ from myapp.models import Post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+#template
 @csrf_exempt
 @api_view(['POST'])
 def testing(request):
@@ -69,10 +69,10 @@ def testing(request):
 
 #ref http://raccoonyy.github.io/drf3-tutorial-2/
 
-#dosignup -> signup
+#dosignup -> applysignup
 @csrf_exempt
 @api_view(['POST'])
-def signup(request):
+def applysignup(request):
     if request.method == 'POST':
         #get data
         data=request.data
@@ -95,6 +95,8 @@ def signup(request):
         mail.content_subtype = "html"
         mail.send()
 
+        message = data['email'] + "로 메일을 전송하였습니다. 메일을 확인해주세요"
+
         print("before save")
         new_user.save()
 
@@ -105,6 +107,8 @@ def signup(request):
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp
+
+
 
 '''
 Things after this need refactoring
