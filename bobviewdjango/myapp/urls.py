@@ -15,8 +15,10 @@ router.register('menuinfo', views.MenuInfoViewSet)
 urlpatterns = [
     path('testing/', views.testing),
     path('dologin/', views.dologin),
-    path('signup/', views.signup),
+    path('applysignup/', views.applysignup),
     path('dosignup/', views.dosignup),
+    path('mypage/', views.mypage)
+    path('myrestaurant', view.myrestaurant)
     
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
