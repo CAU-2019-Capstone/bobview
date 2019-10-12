@@ -35,7 +35,6 @@ class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
 
-
 class OrderMenuViewSet(viewsets.ModelViewSet):
     queryset = OrderMenu.objects.all()
     serializer_class = OrderMenuSerializer
@@ -69,6 +68,136 @@ def testing(request):
 
 #ref http://raccoonyy.github.io/drf3-tutorial-2/
 
+# 유저 생성, 레스토랑 등록/삭제도 나중에 다 예외처리 해줘야함....
+
+
+@csrf_exempt
+@api_view(['GET'])
+def myrestaurant(request):    
+    data=request.data
+    # 레스토랑페이지에서 기본적인 레스토랑 정보 + 메뉴 정보를 보여주기
+    if request.method == 'GET':
+        user = get_object_or_404(UserInfo, username=data['username'])      # 유저 객체를 가져온다     
+        try:
+            restaurant = RestaurantInfo.object.get(owner=user)             # 레스토랑 객체를 가져온다
+            restaurant_name = restaurant.name
+            restaurant_address = restaurant.restaurant_address
+            restaurant_image = restaurant_image
+            menus = []
+            for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant)
+                MenuInfos.append(MenuInfo)
+            resp = JsonResponse({
+            'message' : 'success'
+            'itmes'   : [restaurant, menus]
+            })
+        except Exception e:       
+            resp = JsonResponse({
+            'message' : 'no_res_info'\
+            })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+    # 레스토랑을 등록 했을때!
+    if request.method == 'POST': 
+
+        '''
+        restaurant_name = models.CharField(primary_key=True, max_length=45, unique=True)
+        restaurant_address = models.CharField(max_length=128, unique=True)
+        restaurant_latitude = models.IntegerField()
+        restaurant_longitude = models.IntegerField()
+        restaurant_image = models.CharField(max_length=1024, unique=True)
+        '''
+
+        new_restaurant = RestaurantInfo(restaurant_name=data['restaurant_name'], restaurant_address=data['restaurant_address'], 
+                                        restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'],
+                                        restaurant_image=data['restaurant_image']) # 이미지는 로컬에 저장하는거 해야됨.....
+        new_restaurant.save()
+
+        resp = JsonResponse({
+            'message' : 'success'
+            'itmes'   : [new_restaurant]
+            })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+    # 레스토랑을 삭제 했을때!
+    if request.method == 'DELETE': 
+        
+        RestaurantInfo.objects.get(restaurant_name=data['restaurant_name']).delete()
+
+        resp = JsonResponse({
+        'message' : 'success'
+        })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+@csrf_exempt
+@api_view(['GET'])
+def mypage(request):    
+    data=request.data
+    # 기본적인 마이페이지에 유저의 정보를 표시하기
+    if request.method == 'GET':
+        user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
+
+        #TODO
+        username = user.username
+        join_data = user.date_joined
+        last_login = user.last_login
+        name = user.first_name
+        email = user.email
+        is_owner = user.is_owner
+
+        #set response.
+        resp = JsonResponse({
+            'message' : 'success'
+            'itmes'   : [username, join_data, last_login, name, email, is_owner]
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+    # 마이페이지에서 무언가를 수정했을때
+    else if request.method == 'PUT':
+        user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
+        try:
+            instance = YourModel.objects.get(pk=something)
+        except Your Model.DoesNotExist:
+            return render_to_response('a_template_with_your_error_message.html')
+        if 'new_username' in data.keys():
+            try :
+                user.username = data['new_username']
+            except Exception e:  
+                username_reply = '이미 사용중인 아이디입니다.'
+        if 'new_email' in data.keys():
+            try :
+                user.email = data['new_email']
+            except Exception e:  
+                email_reply = '이미 사용중인 이메일입니다.'
+        if 'new_name' in data.keys():
+            user.first_name = data['new_name']
+        if 'new_is_owner' in data.keys():
+            user.is_owner = data['new_is_owner']
+
+        username = user.username
+        join_data = user.date_joined
+        last_login = user.last_login
+        name = user.first_name
+        email = user.email
+        is_owner = user.is_owner
+
+        #set response.
+        resp = JsonResponse({
+            'message' : 'success'
+            'itmes'   : [username, join_data, last_login, name, email, is_owner]
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
 #dosignup -> signup
 @csrf_exempt
 @api_view(['POST'])
@@ -98,7 +227,7 @@ def signup(request):
         print("before save")
         new_user.save()
 
-        #set response
+        #set response. (dont need it here)
         resp = JsonResponse({
             'message' : message
         })

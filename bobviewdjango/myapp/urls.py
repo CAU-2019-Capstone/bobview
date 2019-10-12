@@ -17,6 +17,8 @@ urlpatterns = [
     path('dologin/', views.dologin),
     path('signup/', views.signup),
     path('dosignup/', views.dosignup),
+    path('mypage/', views.mypage)
+    path('myrestaurant', view.myrestaurant)
     
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
