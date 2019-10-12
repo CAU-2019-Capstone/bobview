@@ -37,7 +37,7 @@ class RestaurantInfo(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)    # User와 대대일 관계
-    order_id = models.CharField(primary_key=True, max_length=45)
+    order_id = models.AutoField(primary_key=True)
     order_time = models.DateTimeField()
     tot_price = models.IntegerField()
     table_id = models.IntegerField()
@@ -50,7 +50,7 @@ class Order(models.Model):
 
 class MenuInfo(models.Model):
     restaurant = models.ForeignKey(RestaurantInfo, on_delete=models.CASCADE)    # restaurant_info와 다대일 관계
-    menu_id = models.CharField(primary_key=True, max_length=45)
+    menu_id = models.AutoField(primary_key=True)
     menu_name = models.CharField(max_length=45)
     menu_price = models.IntegerField()
     menu_desc = models.TextField()

@@ -47,7 +47,6 @@ from myapp.models import Post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-#template
 @csrf_exempt
 @api_view(['POST'])
 def testing(request):
@@ -71,11 +70,82 @@ def testing(request):
 
 # 유저 생성, 레스토랑 등록/삭제도 나중에 다 예외처리 해줘야함....
 
-
 @csrf_exempt
 @api_view(['GET', 'POST', 'DELETE'])
+def mymenu(request):     # 메뉴 정보에서 편집 기능
+    # 해당 레스토랑의 메뉴 정보 보여주기
+    if request.method == 'GET':     
+        restaurant = RestaurantInfo.object.get(restaurant_name = restaurant_name)
+        try:
+            menus = []
+            for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant):
+                menus.append(MenuInfo)
+
+            resp = JsonResponse({
+            'message' : 'success',
+            'itmes'   : [restaurant, menus]
+            })
+        except Exception:       
+            resp = JsonResponse({
+            'message' : 'no_res_info'\
+            })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+
+    # 추가, 삭제, 수정 버튼 필요
+    if request.method == 'POST':    # 메뉴 추가
+        data=request.data
+        new_menu = MenuInfo(menu_name=data[menu_name],menu_price = data[menu_price], menu_desc = data[menu_desc],
+                                    menu_image=data[menu_image])
+        new_menu.save()
+
+        resp = JsonResponse({
+            'message' : 'success',
+            'items' : [new_menu]
+        })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp    
+
+    if request.method == 'DELETE':      # 메뉴 삭제
+        MenuInfo.objects.get(menu_name=data['menu_name']).delete()
+
+        resp = JsonResponse({
+        'message' : 'success'
+        })
+        
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+    if request.method == 'PUT':         # 메뉴 수정 
+        data=request.data
+        # 마이페이지 수정 참고
+        renew = MenuInfo.objects.get(menu_name = data['menu_name'])  # 정보를 가져올 메뉴 객체를 가져온다
+        
+        renew.menu_name = data['new_menuname']
+        renew.menu_price = data['new_menuprice']
+        renew.menu_desc = data['new_menudesc']
+        renew.menu_image = data['new_menuimage']
+
+        #set response.
+        resp = JsonResponse({
+            'message' : 'success',
+            'itmes'   : [renew.menu_name, renew.menu_price, renew.menu_desc, renew.menu_image]
+        })
+
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp 
+
+
+@csrf_exempt
+@api_view(['GET', 'DELETE', 'POST'])
 def myrestaurant(request):    
-    data=request.data
     # 레스토랑페이지에서 기본적인 레스토랑 정보 + 메뉴 정보를 보여주기
     if request.method == 'GET':
         user = get_object_or_404(UserInfo, username=data['username'])      # 유저 객체를 가져온다     
@@ -86,7 +156,7 @@ def myrestaurant(request):
             restaurant_image = restaurant_image
             menus = []
             for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant):
-                MenuInfos.append(MenuInfo)
+                menus.append(MenuInfo)
             resp = JsonResponse({
             'message' : 'success',
             'itmes'   : [restaurant, menus]
@@ -101,6 +171,7 @@ def myrestaurant(request):
         return resp
     # 레스토랑을 등록 했을때!
     if request.method == 'POST': 
+        data=request.data
 
         '''
         restaurant_name = models.CharField(primary_key=True, max_length=45, unique=True)
@@ -137,24 +208,16 @@ def myrestaurant(request):
         return resp
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def mypage(request):    
     # 기본적인 마이페이지에 유저의 정보를 표시하기
     if request.method == 'GET':
         user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
 
-        #TODO
-        username = user.username
-        join_data = user.date_joined
-        last_login = user.last_login
-        name = user.first_name
-        email = user.email
-        is_owner = user.is_owner
-
         #set response.
         resp = JsonResponse({
             'message' : 'success',
-            'itmes'   : [username, join_data, last_login, name, email, is_owner]
+            'itmes'   : [user.username, user.date_joined, user.last_login, user.first_name, user.email, user.is_owner]
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
@@ -179,17 +242,10 @@ def mypage(request):
         if 'new_is_owner' in data.keys():
             user.is_owner = data['new_is_owner']
 
-        username = user.username
-        join_data = user.date_joined
-        last_login = user.last_login
-        name = user.first_name
-        email = user.email
-        is_owner = user.is_owner
-
         #set response.
         resp = JsonResponse({
             'message' : 'success',
-            'itmes'   : [username, join_data, last_login, name, email, is_owner]
+            'itmes'   : [user.username, user.date_joined, user.last_login, user.first_name, user.email, user.is_owner]
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
@@ -223,8 +279,6 @@ def signup(request):
 
         print("before save")
         new_user.save()
-
-        message = data['email'] + "로 메일을 전송하였습니다. 메일을 확인해주세요"
 
         #set response. (dont need it here)
         resp = JsonResponse({

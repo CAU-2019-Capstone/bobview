@@ -19,7 +19,7 @@ urlpatterns = [
     path('signup/', views.signup),
     path('mypage/', views.mypage),
     path('myrestaurant/', views.myrestaurant),
-    
+    path('mymenu/', views.mymenu),
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),
