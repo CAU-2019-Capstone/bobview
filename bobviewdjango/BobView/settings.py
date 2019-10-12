@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'rest_framework',
-    'rest_framework_swagger',
+    # 'rest_framework_swagger',
     'BobView',
     'myapp',
     'corsheaders',
@@ -85,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bobview',
         'USER': 'root',
-        'PASSWORD': 'Hyun121$',
+        'PASSWORD': '12341234',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -153,3 +152,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 EASY_MAPS_GOOGLE_KEY = 'AIzaSyBPnnCeH8pLkE4Hfnk_Sw0f1wDLp1gAhQM'
 # EASY_MAPS_CENTER = (-41.3, 32)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

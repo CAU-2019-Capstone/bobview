@@ -28,7 +28,7 @@ class RestaurantInfo(models.Model):
     restaurant_address = models.CharField(max_length=128, unique=True)
     restaurant_latitude = models.IntegerField()
     restaurant_longitude = models.IntegerField()
-    restaurant_image = models.CharField(max_length=1024, unique=True)
+    restaurant_image = models.ImageField(blank=True)
 
     class Meta:
         managed = True
@@ -54,7 +54,7 @@ class MenuInfo(models.Model):
     menu_name = models.CharField(max_length=45)
     menu_price = models.IntegerField()
     menu_desc = models.TextField()
-    menu_image = models.CharField(max_length=1024)
+    menu_image = models.ImageField(blank=True)
 
     class Meta:
         managed = True

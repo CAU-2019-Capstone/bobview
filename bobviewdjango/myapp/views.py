@@ -84,15 +84,15 @@ def myrestaurant(request):
             restaurant_address = restaurant.restaurant_address
             restaurant_image = restaurant_image
             menus = []
-            for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant)
+            for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant):
                 MenuInfos.append(MenuInfo)
             resp = JsonResponse({
-            'message' : 'success'
+            'message' : 'success',
             'itmes'   : [restaurant, menus]
             })
-        except Exception e:       
+        except Exception:       
             resp = JsonResponse({
-            'message' : 'no_res_info'\
+            'message' : 'no_res_info'
             })
         
         resp['Access-Control-Allow-Origin'] = '*'
@@ -115,7 +115,7 @@ def myrestaurant(request):
         new_restaurant.save()
 
         resp = JsonResponse({
-            'message' : 'success'
+            'message' : 'success',
             'itmes'   : [new_restaurant]
             })
         
@@ -153,7 +153,7 @@ def mypage(request):
 
         #set response.
         resp = JsonResponse({
-            'message' : 'success'
+            'message' : 'success',
             'itmes'   : [username, join_data, last_login, name, email, is_owner]
         })
         resp['Access-Control-Allow-Origin'] = '*'
@@ -161,21 +161,17 @@ def mypage(request):
         return resp
 
     # 마이페이지에서 무언가를 수정했을때
-    else if request.method == 'PUT':
+    elif request.method == 'PUT':
         user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
-        try:
-            instance = YourModel.objects.get(pk=something)
-        except Your Model.DoesNotExist:
-            return render_to_response('a_template_with_your_error_message.html')
         if 'new_username' in data.keys():
             try :
                 user.username = data['new_username']
-            except Exception e:  
+            except Exception:  
                 username_reply = '이미 사용중인 아이디입니다.'
         if 'new_email' in data.keys():
             try :
                 user.email = data['new_email']
-            except Exception e:  
+            except Exception:  
                 email_reply = '이미 사용중인 이메일입니다.'
         if 'new_name' in data.keys():
             user.first_name = data['new_name']
@@ -191,7 +187,7 @@ def mypage(request):
 
         #set response.
         resp = JsonResponse({
-            'message' : 'success'
+            'message' : 'success',
             'itmes'   : [username, join_data, last_login, name, email, is_owner]
         })
         resp['Access-Control-Allow-Origin'] = '*'
