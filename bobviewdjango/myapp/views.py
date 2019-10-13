@@ -293,7 +293,7 @@ def signup(request):
 
         #set response. (dont need it here)
         resp = JsonResponse({
-            'message' : message
+            'message' : 'success'
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
