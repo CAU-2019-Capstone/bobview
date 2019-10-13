@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.conf.urls import url,include
 from rest_framework import routers
@@ -16,10 +16,17 @@ router.register('menuinfo', views.MenuInfoViewSet)
 
 urlpatterns = [
     path('testing/', views.testing),
+
     path('signup/', views.signup),
-    path('mypage/', views.mypage),
-    path('myrestaurant/', views.myrestaurant),
-    path('mymenu/', views.mymenu),
+
+    re_path(r'^mypage/$', views.mypage_get),
+    path('mypage/p', views.mypage_put),
+
+    re_path(r'^myrestaurant/$', views.myrestaurant_get_delete),
+    path('myrestaurant/p', views.myrestaurant_post),
+
+    re_path(r'^mymenu/$', views.mymenu_get_delete),
+    path('mymenu/p', views.mymenu_post_put),
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),
