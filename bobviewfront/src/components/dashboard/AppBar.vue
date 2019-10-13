@@ -3,9 +3,9 @@
     id="core-app-bar"
     absolute
     app
-    color="transparent"
+    color="blue-grey lighten-2"
     flat
-    height="88"
+    height="62"
   >
     <v-toolbar-title class="tertiary--text font-weight-light align-self-center">
       <v-btn
@@ -77,7 +77,7 @@
         </v-menu>
 
         <v-btn
-          to="/mypage"
+          to="/user_info"
           icon
         >
           <v-icon color="tertiary">

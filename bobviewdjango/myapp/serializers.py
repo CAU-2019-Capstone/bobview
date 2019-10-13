@@ -4,9 +4,10 @@ from rest_framework import  serializers
 from myapp.models import UserInfo, RestaurantInfo, Order, MenuInfo, OrderMenu
 
 class UserInfoSerializer(serializers.HyperlinkedModelSerializer):
+    
     class Meta:
         model = UserInfo
-        fields = ('id', 'password', 'last_login', 'is_superuser', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', 'is_owner')
+        fields = ('id', 'password', 'last_login', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', 'is_owner')
 
 class RestaurantInfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

@@ -37,6 +37,12 @@ export default new VueRouter({
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/main/Check.vue")
                 },
+                {
+                    path: "/logout",
+                    name: "logout",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/Logout.vue")
+                },
             ]
         },
         {
@@ -52,13 +58,13 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/Dashboard.vue")
                 },
                 {
-                    path: "/mypage",
-                    name: "mypage",
+                    path: "/user_info",
+                    name: "user_info",
                     // route level code-splitting
                     // this generates a separate chunk (about.[hash].js) for this route
                     // which is lazy-loaded when the route is visited.
                     component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/Mypage.vue")
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/UserInfo.vue")
                 },
             ]
         },

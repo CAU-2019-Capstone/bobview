@@ -4,7 +4,7 @@
     v-model="inputValue"
     :src="image"
     app
-    color="grey darken-2"
+    color="blue-grey darken-2"
     dark
     floating
     mobile-break-point="991"
@@ -28,7 +28,7 @@
       </v-list-item-avatar>
 
       <v-list-item-title class="title-sm">
-        BobView
+        <v-btn depressed color="blue-grey darken-2" to="/">Bobview</v-btn>
       </v-list-item-title>
     </v-list-item>
 
@@ -77,7 +77,7 @@
           text: 'Dashboard'
         },
         {
-          to: '/mypage',
+          to: '/user_info',
           icon: 'mdi-account',
           text: 'User Profile'
         },

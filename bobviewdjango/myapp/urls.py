@@ -16,7 +16,10 @@ router.register('menuinfo', views.MenuInfoViewSet)
 
 urlpatterns = [
     path('testing/', views.testing),
-    path('signup/', views.signup),
+    path('signup/add/', views.addSignup),
+    path('signup/modify/', views.modifySignup),
+    path('login/apply/', views.applyLogin),
+    path('login/verify/', views.verifyLogin),
     path('mypage/', views.mypage),
     path('myrestaurant/', views.myrestaurant),
     

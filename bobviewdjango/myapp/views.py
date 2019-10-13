@@ -23,6 +23,11 @@ class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
+    def retrieve(self, request, pk=None):
+        user = get_object_or_404(self.queryset, username = pk)
+        serializer = UserInfoSerializer(user)
+        return Response(serializer.data)
+
 class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
@@ -195,10 +200,10 @@ def mypage(request):
         print("before return")
         return resp
 
-#dosignup -> signup
+#dosignup -> addSignup
 @csrf_exempt
 @api_view(['POST'])
-def signup(request):
+def addSignup(request):
     if request.method == 'POST':
         #get data
         data=request.data
@@ -209,15 +214,18 @@ def signup(request):
         new_user = UserInfo(username=data['username'], first_name=data['first_name'], email=data['email'], is_owner=data['is_owner'])
         new_user.set_password(data['password'])
         new_user.is_active = False
-        new_user.last_name = randstr(5)
+        new_user.last_name = randstr(50)
         new_user.is_superuser = False
         new_user.is_staff = False
         new_user.date_joined = timezone.now()
 
         print("회원가입을 합니다.")
 
-        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n' 
-                                                    + 'http://127.0.0.1:8000/api/active/' + new_user.last_name, to=[data['email']])
+        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n'
+                            + 'http://127.0.0.1:8000/api/active/' + new_user.last_name, to=[data['email']])
+
+        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.<br/>사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.<br/>감사합니다.<br/>'
+        + "<a href=\"+http://127.0.0.1:8000/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>http://127.0.0.1:8000/api/active/"+ new_user.last_name, to=[data['email']] )                            
         mail.content_subtype = "html"
         mail.send()
 
@@ -234,44 +242,113 @@ def signup(request):
         print("before return")
         return resp
 
+#dologin -> applyLogin
+@csrf_exempt
+@api_view(['POST'])
+def applyLogin(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        user = authenticate(username=data['username'], password=data['password'])
+
+        userinfo = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
+        token = userinfo.last_name
+        message =''
+
+        if user is not None:
+            login(request, user)
+            result = 'success'
+            message = '로그인 성공'
+        else:
+            result = 'fail'
+            message = '로그인 실패. 다시 시도 해보세요.'
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : result,
+            'message' : message,
+            'token' : token,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#check login data
+@csrf_exempt
+@api_view(['POST'])
+def verifyLogin(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo is not None:
+            result = True
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#modify user info data
+@csrf_exempt
+@api_view(['POST'])
+def modifySignup(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        message =''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo.check_password(data['password']):
+            print("check password success")
+            userinfo.first_name = data['first_name']
+            message = 'success'
+        else:
+            message = 'password error'
+
+        if userinfo is not None:
+            result = True
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : message,
+            'access' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
 '''
 Things after this need refactoring
 '''
-
-def dologin(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        print(username)
-        print(password)
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user is not None:
-            login(request, user)
-            return redirect('success')
-        else:
-            return HttpResponse('로그인 실패. 다시 시도 해보세요.')
-
-
-def dosignup(request):
-    if request.method == 'POST':
-
-        # new_user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password, is_owner=is_owner)
-        new_user = UserInfo(username=userdata.username, first_name=userdata.first_name, email=userdata.email, is_owner=userdata.is_owner)
-        new_user.set_password(userdata.password)
-        new_user.is_active = False
-        new_user.last_name = randstr(50)
-            
-        print("회원가입을 합니다.")
-
-        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n' 
-                                                    + 'http://127.0.0.1:8000/active/' + new_user.last_name, to=[userdata.email])
-        mail.content_subtype = "html"
-        mail.send()
-
-        message = new_user.first_name + "님께서 입력하신 메일로 인증 링크를 발송했습니다."
-
-        new_user.save()
 
 def randstr(length):
     rstr = "0123456789abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ"
@@ -288,7 +365,6 @@ def user_active(request, token):
         message = "만료된 링크입니다. 다시 가입을 신청하세요."
     else:
         user.is_active = True
-        user.last_name = ''
         user.save()
         message = "이메일이 인증되었습니다."
     return render(request, 'myapp/success.html', {'message':message })
