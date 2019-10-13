@@ -12,7 +12,7 @@ class UserInfoSerializer(serializers.HyperlinkedModelSerializer):
 class RestaurantInfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestaurantInfo
-        fields = ('owner','restaurant_name','restaurant_gps', 'restaurant_rating','restaurant_image')
+        fields = ('owner_id','restaurant_name','restaurant_address', 'restaurant_latitude','restaurant_longitude','restaurant_image')
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
