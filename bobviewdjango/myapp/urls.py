@@ -20,7 +20,6 @@ urlpatterns = [
     path('signup/modify/', views.modifySignup),
     path('login/apply/', views.applyLogin),
     path('login/verify/', views.verifyLogin),
-    path('logout/', views.verifyLogin),
     path('mypage/', views.mypage),
     path('myrestaurant/', views.myrestaurant),
     
