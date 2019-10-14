@@ -16,16 +16,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-#serializer
+# serializer
 from rest_framework import viewsets
 from myapp.serializers import *
 from myapp.models import *
-
 from rest_framework.parsers import JSONParser
 
 # Create your views here.
-#api
+# api
 class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
