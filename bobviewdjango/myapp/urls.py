@@ -15,8 +15,6 @@ router.register('menuinfo', views.MenuInfoViewSet)
 
 
 urlpatterns = [
-    path('testing/', views.testing),
-
     path('signup/', views.signup),
 
     re_path(r'^mypage/$', views.mypage_get),

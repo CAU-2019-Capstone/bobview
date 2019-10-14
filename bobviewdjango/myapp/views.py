@@ -47,26 +47,7 @@ class OrderMenuViewSet(viewsets.ModelViewSet):
     queryset = OrderMenu.objects.all()
     serializer_class = OrderMenuSerializer
 
-@csrf_exempt
-@api_view(['POST'])
-def testing(request):
-    if request.method == 'POST':
-        #get data
-        data=request.data
-        print(data)
-
-        print("----------------------")
-        #TODO
-
-        #set response
-        resp = JsonResponse({
-            'message' : 'hello vue'
-        })
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
-
-#ref http://raccoonyy.github.io/drf3-tutorial-2/
+# ref http://raccoonyy.github.io/drf3-tutorial-2/
 
 # 유저 생성, 레스토랑 등록/삭제도 나중에 다 예외처리 해줘야함....
 
@@ -104,14 +85,10 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
         new_menu = MenuInfo(restaurant=restaurant, menu_name=data['menu_name'], 
                             menu_price = data['menu_price'], menu_desc = data['menu_desc'], menu_image=data['menu_image'])
         new_menu.save()
-        resp = JsonResponse({
-            'message' : 'success',
-            'items' : [new_menu]
-        })
-        
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp  
+
+        edited_menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
+        serializer = MenuInfoSerializer(edited_menus, many=True)
+        return JsonResponse(serializer.data)
 
         # data = JSONParser().parse(request)
         # serializer = MenuInfoSerializer(data=data)
@@ -131,12 +108,11 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
         renew.menu_price = data['new_menuprice']
         renew.menu_desc = data['new_menudesc']
         renew.menu_image = data['new_menuimage']
+        renew.save()
 
-        #set response.
-        resp = JsonResponse({
-            'message' : 'success',
-            'itmes'   : [renew.menu_name, renew.menu_price, renew.menu_desc, renew.menu_image]
-        })
+        edited_menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
+        serializer = MenuInfoSerializer(edited_menus, many=True)
+        return JsonResponse(serializer.data)
 
         # resp['Access-Control-Allow-Origin'] = '*'
         # print("before return")
@@ -157,26 +133,11 @@ def myrestaurant_get_delete(request, username):
     if request.method == 'GET':
         username = request.GET["username"]
         user = get_object_or_404(UserInfo, username=username)      # 유저 객체를 가져온다     
-        try:
-            restaurant = RestaurantInfo.object.get(owner=user)             # 레스토랑 객체를 가져온다
-            restaurant_name = restaurant.restaurant_name
-            restaurant_address = restaurant.restaurant_address
-            restaurant_image = restaurant.restaurant_image
-            menus = []
-            for MenuInfo in MenuInfo.objects.filter(RestaurantInfo=restaurant):
-                menus.append(MenuInfo)
-            resp = JsonResponse({
-            'message' : 'success',
-            'itmes'   : [restaurant, menus]
-            })
-        except Exception:       
-            resp = JsonResponse({
-            'message' : 'no_res_info'
-            })
-        
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
+
+        restaurant = RestaurantInfo.object.get(owner=user)             # 레스토랑 객체를 가져온다
+
+        serializer = MenuInfoSerializer(restaurant)
+        return JsonResponse(serializer.data)
 
     # 레스토랑을 삭제 했을때!
     if request.method == 'DELETE': 
@@ -186,7 +147,6 @@ def myrestaurant_get_delete(request, username):
         resp = JsonResponse({
         'message' : 'success'
         })
-        
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp
@@ -203,15 +163,8 @@ def myrestaurant_post(request):
                                         restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'],
                                         restaurant_image=data['restaurant_image'], owner=owner) # 이미지는 로컬에 저장하는거 해야됨.....
         new_restaurant.save()
-
-        resp = JsonResponse({
-            'message' : 'success',
-            'itmes'   : [new_restaurant]
-            })
-        
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
+        serializer = RestaurantInfoSerializer(new_restaurant)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 @api_view(['GET'])
@@ -220,15 +173,8 @@ def mypage_get(request):
     if request.method == 'GET':
         username = request.GET['username']
         user = get_object_or_404(UserInfo, username=username) # 정보를 가져올 유저 객체를 가져온다
-
-        #set response.
-        resp = JsonResponse({
-            'message' : 'success',
-            'itmes'   : [user]
-        })
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
+        serializer = UserInfoSerializer(user)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 @api_view(['PUT'])
@@ -253,14 +199,8 @@ def mypage_put(request):
             user.is_owner = data['new_is_owner']
         user.save()
 
-        #set response.
-        resp = JsonResponse({
-            'message' : 'success',
-            'itmes'   : [user]
-        })
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
+        serializer = UserInfoSerializer(user)
+        return JsonResponse(serializer.data)
 
 #dosignup -> signup
 @csrf_exempt
@@ -296,7 +236,6 @@ def signup(request):
             'message' : 'success'
         })
         resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
         return resp
 
 '''
