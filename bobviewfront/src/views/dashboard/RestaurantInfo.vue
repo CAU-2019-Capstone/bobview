@@ -1,26 +1,50 @@
 <template>
     <v-app>
-        <v-container>
-            <v-data-table
-                :headers="headers"
-                :items="userdatas"
-                class="elevation-1"
-                hide-default-footer
-                v-if="getAPI"
-            >
-                <template v-slot:top>
-                    <v-toolbar flat color="white">
-                        <v-toolbar-title>Restaurant Info</v-toolbar-title>
-                        <v-divider
-                        class="mx-4"
-                        inset
-                        vertical
-                        ></v-divider>
-                    <div class="flex-grow-1"></div>
-                    </v-toolbar>
-                </template>
-            </v-data-table>
-        </v-container>
+        <v-contatiner>
+            <v-content
+                v-if="selectingOwner"
+            >   
+                <v-card
+                class="d-flex justify-space-around mb-5 ma-5"
+                >
+                    <v-btn
+                        text
+                        class="mb-5 ma-5"
+                        @click="setOwner(true)"
+                    >
+                        <span>Owner</span>
+                    </v-btn>
+                    <v-btn
+                        text
+                        class="mb-5 ma-5"
+                        @click="setOwner(false)"
+                    >
+                        <span>Customer</span>
+                    </v-btn>
+                </v-card>
+            </v-content>
+            <v-content>
+                <v-data-table
+                    :headers="headers"
+                    :items="userdatas"
+                    class="elevation-1"
+                    hide-default-footer
+                    v-if="getAPI"
+                >
+                    <template v-slot:top>
+                        <v-toolbar flat color="white">
+                            <v-toolbar-title>Restaurant Info</v-toolbar-title>
+                            <v-divider
+                            class="mx-4"
+                            inset
+                            vertical
+                            ></v-divider>
+                        <div class="flex-grow-1"></div>
+                        </v-toolbar>
+                    </template>
+                </v-data-table>
+            </v-content>
+        </v-contatiner>
     </v-app>
 </template>
 

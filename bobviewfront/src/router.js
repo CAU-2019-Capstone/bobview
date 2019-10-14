@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 
 import AuthLayout from "@/layout/AuthLayout"
 import DashboardLayout from "@/layout/DashboardLayout"
-
+import tested from "@/views/Testing"
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -92,5 +92,9 @@ export default new VueRouter({
                 },
             ]
         },
+        {
+            path: "/testing",
+            component: tested,
+        },
     ]
-});
+})
