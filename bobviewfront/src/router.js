@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 
 import AuthLayout from "@/layout/AuthLayout"
 import DashboardLayout from "@/layout/DashboardLayout"
-
+import tested from "@/views/Testing"
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -37,6 +37,18 @@ export default new VueRouter({
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/main/Check.vue")
                 },
+                {
+                    path: "/logout",
+                    name: "logout",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/Logout.vue")
+                },
+                {
+                    path: "/preview",
+                    name: "preview",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/MenuPreview.vue")
+                },
             ]
         },
         {
@@ -52,15 +64,37 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/Dashboard.vue")
                 },
                 {
-                    path: "/mypage",
-                    name: "mypage",
+                    path: "/user_info",
+                    name: "user_info",
                     // route level code-splitting
                     // this generates a separate chunk (about.[hash].js) for this route
                     // which is lazy-loaded when the route is visited.
                     component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/Mypage.vue")
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/UserInfo.vue")
+                },
+                {
+                    path: "/restaurant_info",
+                    name: "restaurant_info",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/RestaurantInfo.vue")
+                },
+                {
+                    path: "/menu_info",
+                    name: "menu_info",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/MenuInfo.vue")
                 },
             ]
         },
+        {
+            path: "/testing",
+            component: tested,
+        },
     ]
-});
+})

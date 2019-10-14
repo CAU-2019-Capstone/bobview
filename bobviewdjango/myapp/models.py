@@ -21,8 +21,8 @@ class RestaurantInfo(models.Model):
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE)               # UserInfo와 다대일 관계
     restaurant_name = models.CharField(primary_key=True, max_length=45, unique=True)
     restaurant_address = models.CharField(max_length=128, unique=True)
-    restaurant_latitude = models.IntegerField()
-    restaurant_longitude = models.IntegerField()
+    restaurant_latitude = models.FloatField()
+    restaurant_longitude = models.FloatField()
     restaurant_image = models.ImageField(blank=True)
 
     class Meta:

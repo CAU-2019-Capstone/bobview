@@ -2,7 +2,7 @@
   <v-footer
     id="core-footer"
     absolute
-    height="82"
+    height="41"
   >
     <v-spacer />
     <span class="font-weight-light copyright">

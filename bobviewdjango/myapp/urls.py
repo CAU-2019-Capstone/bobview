@@ -8,16 +8,26 @@ from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register('userinfo', views.UserInfoViewSet)
+<<<<<<< HEAD
 router.register('retaurantinfo', views.RestaurantInfoViewSet)
 router.register('ordercontents', views.OrderContentsViewSet)
 router.register('userorder', views.UserOrderViewSet)
+=======
+router.register('restaurantinfo', views.RestaurantInfoViewSet)
+router.register('ordermenu', views.OrderMenuViewSet)
+router.register('order', views.OrderViewSet)
+>>>>>>> testing
 router.register('menuinfo', views.MenuInfoViewSet)
 router.register('restrating', views.RestRatingViewSet)
 router.register('menurating', views.MenuRatingViewSet)
 
 
 urlpatterns = [
+<<<<<<< HEAD
     path('signup/', views.signup),
+=======
+    path('testing/', views.testing),
+>>>>>>> testing
 
     re_path(r'^mypage/$', views.mypage_get),
     path('mypage/p', views.mypage_put),
@@ -27,6 +37,11 @@ urlpatterns = [
 
     re_path(r'^mymenu/$', views.mymenu_get_delete),
     path('mymenu/p', views.mymenu_post_put),
+    path('signup/add/', views.addSignup),
+    path('signup/modify/', views.modifySignup),
+    path('login/apply/', views.applyLogin),
+    path('login/verify/', views.verifyLogin),
+    
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),
