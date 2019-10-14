@@ -8,26 +8,15 @@ from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register('userinfo', views.UserInfoViewSet)
-<<<<<<< HEAD
-router.register('retaurantinfo', views.RestaurantInfoViewSet)
+router.register('restaurantinfo', views.RestaurantInfoViewSet)
 router.register('ordercontents', views.OrderContentsViewSet)
 router.register('userorder', views.UserOrderViewSet)
-=======
-router.register('restaurantinfo', views.RestaurantInfoViewSet)
-router.register('ordermenu', views.OrderMenuViewSet)
-router.register('order', views.OrderViewSet)
->>>>>>> testing
 router.register('menuinfo', views.MenuInfoViewSet)
 router.register('restrating', views.RestRatingViewSet)
 router.register('menurating', views.MenuRatingViewSet)
 
 
 urlpatterns = [
-<<<<<<< HEAD
-    path('signup/', views.signup),
-=======
-    path('testing/', views.testing),
->>>>>>> testing
 
     re_path(r'^mypage/$', views.mypage_get),
     path('mypage/p', views.mypage_put),

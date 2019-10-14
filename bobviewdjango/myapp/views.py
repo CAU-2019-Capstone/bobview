@@ -64,12 +64,6 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
         restaurant.restaurant_longitude = request.data['restaurant_longitude']
         restaurant.save()
 
-
-
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-
 class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
@@ -94,11 +88,13 @@ class MenuInfoViewSet(viewsets.ModelViewSet):
             queryset = MenuInfo.objects.filter(menu_name = menu_name)
         return queryset
 
+class UserOrderViewSet(viewsets.ModelViewSet):
+    queryset = UserOrder.objects.all()
+    serializer_class = UserOrderSerializer
 
-
-class OrderMenuViewSet(viewsets.ModelViewSet):
-    queryset = OrderMenu.objects.all()
-    serializer_class = OrderMenuSerializer
+class OrderContentsViewSet(viewsets.ModelViewSet):
+    queryset = OrderContents.objects.all()
+    serializer_class = OrderContentsSerializer
 
 class RestRatingViewSet(viewsets.ModelViewSet):
     queryset = RestRating.objects.all()

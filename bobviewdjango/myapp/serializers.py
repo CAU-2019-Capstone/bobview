@@ -17,16 +17,12 @@ class RestaurantInfoSerializer(serializers.HyperlinkedModelSerializer):
 class MenuInfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MenuInfo
-<<<<<<< HEAD
         fields = ('menu_id', 'menu_name', 'menu_price','menu_desc', 'menu_rating', 'menu_image')
 
 class UserOrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserOrder
         fields = ('user','user_order_id', 'order_time', 'tot_price','table_id')
-=======
-        fields = ('restaurant','restaurant_id','menu_id', 'menu_name', 'menu_price','menu_desc', 'menu_image')
->>>>>>> testing
         
 class OrderContentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
