@@ -44,14 +44,47 @@
         :to="link.to"
         active-class="primary white--text"
       >
-        <v-list-item-action>
+        <v-list-item-action
+        >
           <v-icon>{{ link.icon }}</v-icon>
         </v-list-item-action>
 
-        <v-list-item-title v-text="link.text" />
+        <v-list-item-title
+          v-text="link.text" />
       </v-list-item>
+        <v-list-item
+          v-for="(link, i) in restaurant_links"
+          :key="i"
+          :to="link.to"
+          active-class="primary white--text"
+        >
+          <v-list-item-action
+            v-if="is_owner"
+          >
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-title
+            v-if="is_owner"
+            v-text="link.text" />
+        </v-list-item>
     </v-list>
 
+    <template v-slot:append>
+      <v-list nav>
+        <v-list-item
+          to="/logout"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-title class="font-weight-light">
+            Logout
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -70,34 +103,59 @@
       }
     },
     data: () => ({
+      is_owner: false,
       links: [
         {
           to: '/dashboard',
           icon: 'mdi-view-dashboard',
-          text: 'Dashboard'
+          text: 'Dashboard',
         },
         {
           to: '/user_info',
           icon: 'mdi-account',
-          text: 'User Profile'
+          text: 'User Profile',
         },
+      ],
+      restaurant_links: [
+        {
+          to: '/restaurant_info',
+          icon: 'mdi-silverware',
+          text: 'Restaurant Profile',
+        },
+        {
+          to: '/menu_info',
+          icon: 'mdi-rice',
+          text: 'Menu Profile',
+        }
       ]
     }),
-
+    mounted() {
+      console.log("dashboard navbar updated")
+      console.log("navbar is owner : "+this.is_owner)
+      this.initialize()
+    },
     computed: {
       ...mapState('app', ['image', 'color']),
       inputValue: {
         get () {
-          return this.$store.state.app.drawer
+          let currentObj = this
+          return currentObj.$store.state.app.drawer
         },
         set (val) {
-          this.setDrawer(val)
-        }
-      }
+          let currentObj = this
+          currentObj.setDrawer(val)
+        },
+      },
     },
 
     methods: {
-      ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
+      initialize() {
+        this.is_owner = this.$store.getters.isOwner
+        console.log("initialize owner is : "+ this.is_owner)
+      },
+      ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+
+
     }
   }
 </script>

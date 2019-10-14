@@ -8,9 +8,9 @@ export default {
                 username: context.state.userdata['username'],
                 token: context.state.userdata['logintoken'],
             })
-            .then(function(response) {
-                console.log(response.data)
-                if (response.data['result']) {
+            .then((result) => {
+                console.log(result.data)
+                if (result.data['result']) {
                     context.commit('setLogin')
                 } else {
                     context.commit('logout')
@@ -20,5 +20,19 @@ export default {
                 console.log("senserver error")
                 console.log(error)
             });
+    },
+    getUserInfo(context) {
+        axios.get('http://127.0.0.1:8000/api/userinfo/' + context.state.userdata['username'] + '/')
+            .then((result) => {
+                console.log("get response : " + result.data)
+                if (result.data['is_owner']) {
+                    context.commit('setIsowner')
+                }
+            })
+            .catch(function(error) {
+                console.log("senserver error")
+                console.log(error)
+            });
     }
+
 }

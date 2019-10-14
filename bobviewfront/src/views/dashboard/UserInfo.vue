@@ -105,29 +105,33 @@ export default {
             console.log(currentObj.$store.state.userdata['username'])
             this.axios
             .get('http://127.0.0.1:8000/api/userinfo/'+currentObj.$store.state.userdata['username']+'/')
-            .then(function(response) {
-                console.log(response.data)
-                currentObj.userinfoResponse = response.data
+            .then((result) => {
+                console.log(result.data)
+                currentObj.userinfoResponse = result.data
                 currentObj.userdatas =[
                     {
                         name: 'ID',
-                        data: response.data['username'],
+                        data: result.data['username'],
                     },
                     {
                         name: 'name',
-                        data: response.data['first_name'],
+                        data: result.data['first_name'],
                     },
                     {
                         name: 'email',
-                        data: response.data['email'],
+                        data: result.data['email'],
                     },
                     {
                         name: 'last_login',
-                        data: response.data['last_login'],
+                        data: result.data['last_login'],
                     },
                     {
                         name: 'date_joined',
-                        data: response.data['date_joined'],
+                        data: result.data['date_joined'],
+                    },
+                    {
+                        name: 'is_owner',
+                        data: String(result.data['is_owner']),
                     }
                 ]
                 currentObj.getAPI = true

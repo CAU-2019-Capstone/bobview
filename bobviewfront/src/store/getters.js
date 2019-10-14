@@ -6,5 +6,8 @@ export default {
     },
     isLogined(state) {
         return state.is_logined;
+    },
+    isOwner(state) {
+        return state.is_owner;
     }
 }

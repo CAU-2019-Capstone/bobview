@@ -19,5 +19,9 @@ export default {
         state.userdata['username'] = ''
         state.userdata['logintoken'] = ''
         console.log("commit logout : " + state.is_logined)
+    },
+    setIsowner(state, payload) {
+        state.is_owner = payload.is_owner
+        console.log("commit is_owner : " + state.is_owner)
     }
 }

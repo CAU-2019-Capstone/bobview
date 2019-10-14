@@ -17,6 +17,7 @@
                     :type="'password'"
                     v-model="userdata.password"
                 ></v-text-field>
+                <p v-if="loginerror">{{message}}</p>
             </v-content>
             
             <v-card-actions>
@@ -57,7 +58,9 @@ export default {
             userdata: {
                 id:'',
                 password:'',
-            }
+            },
+            message:'',
+            loginerror : false
         }
     },
     mounted() { 
@@ -79,21 +82,29 @@ export default {
             .then(function(response) {
                 console.log(response.data)
                 //save userdata
-                currentObj.$store.commit('saveUserdata',{
-                    username:currentObj.userdata.id,
-                    logintoken:response.data['token']
-                })
-                currentObj.$store.commit('setLogin')
-                console.log(currentObj.$store.getters.getUserdata)
                 if(response.data['result'] == 'success'){
+                    currentObj.$store.commit('saveUserdata',{
+                        username:currentObj.userdata.id,
+                        logintoken:response.data['token']
+                    })
+                    currentObj.$store.commit('setLogin')
+                    currentObj.$store.commit('setIsowner', {
+                        is_owner:response.data['is_owner']
+                    })
                     currentObj.$store.dispatch('verifyLogin')
+                    console.log(currentObj.$store.getters.getUserdata)
                     router.push("/")
+                } else {
+                    currentObj.loginerror=true
+                    currentObj.message=response.data['message']
                 }
                 console.log(response.data['message'])
             })
             .catch(function(error) {
                 console.log("senserver error")
                 console.log(error)
+                currentObj.loginerror=true
+                currentObj.message='server error'
             });
         },
     },

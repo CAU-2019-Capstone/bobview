@@ -24,6 +24,7 @@
         }
     },
     updated() { 
+        let currentObj = this
         console.log("dashboard layout updated")
         currentObj.isLogined = currentObj.$store.getters.isLogined
         if(!currentObj.isLogined){

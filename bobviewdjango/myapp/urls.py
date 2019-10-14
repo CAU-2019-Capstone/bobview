@@ -8,7 +8,7 @@ from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register('userinfo', views.UserInfoViewSet)
-router.register('retaurantinfo', views.RestaurantInfoViewSet)
+router.register('restaurantinfo', views.RestaurantInfoViewSet)
 router.register('ordermenu', views.OrderMenuViewSet)
 router.register('order', views.OrderViewSet)
 router.register('menuinfo', views.MenuInfoViewSet)
@@ -20,6 +20,7 @@ urlpatterns = [
     path('signup/modify/', views.modifySignup),
     path('login/apply/', views.applyLogin),
     path('login/verify/', views.verifyLogin),
+    path('logout/', views.verifyLogin),
     path('mypage/', views.mypage),
     path('myrestaurant/', views.myrestaurant),
     

@@ -43,6 +43,12 @@ export default new VueRouter({
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/main/Logout.vue")
                 },
+                {
+                    path: "/preview",
+                    name: "preview",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/MenuPreview.vue")
+                },
             ]
         },
         {
@@ -65,6 +71,24 @@ export default new VueRouter({
                     // which is lazy-loaded when the route is visited.
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/UserInfo.vue")
+                },
+                {
+                    path: "/restaurant_info",
+                    name: "restaurant_info",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/RestaurantInfo.vue")
+                },
+                {
+                    path: "/menu_info",
+                    name: "menu_info",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/MenuInfo.vue")
                 },
             ]
         },

@@ -27,56 +27,6 @@
         class="mx-0"
       >
         <v-btn
-          icon
-          to="/"
-        >
-          <v-icon color="tertiary">
-            mdi-view-dashboard
-          </v-icon>
-        </v-btn>
-
-        <v-menu
-          bottom
-          left
-          offset-y
-          transition="slide-y-transition"
-        >
-          <template v-slot:activator="{ attrs, on }">
-            <v-btn
-              class="toolbar-items"
-              icon
-              to="/notifications"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-badge
-                color="error"
-                overlap
-              >
-                <template slot="badge">
-                  {{ notifications.length }}
-                </template>
-                <v-icon color="tertiary">
-                  mdi-bell
-                </v-icon>
-              </v-badge>
-            </v-btn>
-          </template>
-
-          <v-card>
-            <v-list dense>
-              <v-list-item
-                v-for="notification in notifications"
-                :key="notification"
-                @click="onClick"
-              >
-                <v-list-item-title v-text="notification" />
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </v-menu>
-
-        <v-btn
           to="/user_info"
           icon
         >

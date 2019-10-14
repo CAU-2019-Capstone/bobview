@@ -5,5 +5,6 @@ export default {
         'username': '',
         'logintoken': '',
     },
-    is_logined: false
+    is_logined: false,
+    is_owner: false
 }

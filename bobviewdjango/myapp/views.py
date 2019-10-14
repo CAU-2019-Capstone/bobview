@@ -23,7 +23,7 @@ class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None, format=None):
         user = get_object_or_404(self.queryset, username = pk)
         serializer = UserInfoSerializer(user)
         return Response(serializer.data)
@@ -31,6 +31,31 @@ class UserInfoViewSet(viewsets.ModelViewSet):
 class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
+
+    def retrieve(self, request, pk=None):
+        userqueryset = UserInfo.objects.all()
+        user = get_object_or_404(userqueryset, username = pk)
+        serializer_context = {
+            'request': request,
+        }
+        restaurant = get_object_or_404(self.queryset, owner = user)
+        serializer = RestaurantInfoSerializer(restaurant, context=serializer_context)
+        return Response(serializer.data)
+    
+    def update(self, request, pk=None):
+        userqueryset = UserInfo.objects.all()
+        user = get_object_or_404(userqueryset, username = pk)
+        serializer_context = {
+            'request': request,
+        }
+        restaurant = get_object_or_404(self.queryset, owner = user)
+        restaurant.restaurant_name = request.data['restaurant_name']
+        restaurant.restaurant_address = request.data['restaurant_address']
+        restaurant.restaurant_latitude = request.data['restaurant_latitude']
+        restaurant.restaurant_longitude = request.data['restaurant_longitude']
+        restaurant.save()
+
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -254,24 +279,34 @@ def applyLogin(request):
         print("----------------------")
         #TODO
         user = authenticate(username=data['username'], password=data['password'])
-
-        userinfo = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
-        token = userinfo.last_name
         message =''
+        userinfo = None
+        token = ''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
+            token = userinfo.last_name
+        except:
+            result = 'fail'
+            message = '로그인 실패. 다시 시도 해보세요.'
+        
+        
 
         if user is not None:
             login(request, user)
             result = 'success'
             message = '로그인 성공'
+            is_owner = userinfo.is_owner
         else:
             result = 'fail'
             message = '로그인 실패. 다시 시도 해보세요.'
+            is_owner = False
 
         #set response. (dont need it here)
         resp = JsonResponse({
             'result' : result,
             'message' : message,
             'token' : token,
+            'is_owner': is_owner
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
@@ -334,6 +369,39 @@ def modifySignup(request):
 
         if userinfo is not None:
             result = True
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : message,
+            'access' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#logout
+@csrf_exempt
+@api_view(['POST'])
+def logout(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        message =''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo is not None:
+            result = True
+            userinfo.logout()
         else:
             result = False
 
