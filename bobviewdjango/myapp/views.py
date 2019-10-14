@@ -31,9 +31,43 @@ class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
+    def retrieve(self, request, pk=None):
+        serializer_context = {
+            'request': request,
+        }
+        user = UserInfo.objects.filter(username=pk)
+        serializer = UserInfoSerializer(user,many=True,context=serializer_context)
+        return Response(serializer.data)
+        
+
 class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
+
+    def retrieve(self, request, pk=None):
+        userqueryset = UserInfo.objects.all()
+        user = get_object_or_404(userqueryset, username = pk)
+        serializer_context = {
+            'request': request,
+        }
+        restaurant = get_object_or_404(self.queryset, owner = user)
+        serializer = RestaurantInfoSerializer(restaurant, context=serializer_context)
+        return Response(serializer.data)
+    
+    def update(self, request, pk=None):
+        userqueryset = UserInfo.objects.all()
+        user = get_object_or_404(userqueryset, username = pk)
+        serializer_context = {
+            'request': request,
+        }
+        restaurant = get_object_or_404(self.queryset, owner = user)
+        restaurant.restaurant_name = request.data['restaurant_name']
+        restaurant.restaurant_address = request.data['restaurant_address']
+        restaurant.restaurant_latitude = request.data['restaurant_latitude']
+        restaurant.restaurant_longitude = request.data['restaurant_longitude']
+        restaurant.save()
+
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -42,6 +76,28 @@ class OrderViewSet(viewsets.ModelViewSet):
 class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
+
+    def retrieve(self, request, pk=None):
+        serializer_context = {
+            'request': request,
+        }
+        menu_name = self.request.query_params.get('menu_name')
+        restaurant = None
+        if menu_name is not None :
+            restaurant = MenuInfo.objects.filter(restaurant_id=pk, menu_name = menu_name)
+        else :
+            restaurant = MenuInfo.objects.filter(restaurant_id=pk)
+        serializer = MenuInfoSerializer(restaurant,many=True,context=serializer_context)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        menu_name = self.request.query_params.get('menu_name')
+        if menu_name is not None :
+            queryset = MenuInfo.objects.filter(menu_name = menu_name)
+        return queryset
+
+
 
 class OrderMenuViewSet(viewsets.ModelViewSet):
     queryset = OrderMenu.objects.all()
@@ -74,24 +130,27 @@ def testing(request):
 @api_view(['GET', 'DELETE'])
 def mymenu_get_delete(request):     # 메뉴 정보에서 편집 기능
     # 해당 레스토랑의 메뉴 정보 보여주기
-    if request.method == 'GET':  
+    if request.method == 'GET':
         try:
-            menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
+            menuqueryset = MenuInfo.objects.filter(restaurant_id=request.GET['restaurant_id'])
+            
         except MenuInfo.DoesNotExist:
             return HttpResponse(status=404)
-   
-        serializer = MenuInfoSerializer(menus, many=True)
-        return JsonResponse(serializer.data)
+        serializer_context = {
+            'request': request,
+        }
+        serializer = MenuInfoSerializer(menuqueryset,many=True, context=serializer_context)
+        return Response(serializer.data)
 
     if request.method == 'DELETE':      # 메뉴 삭제
         try:
-            menu = MenuInfo.objects.get(restaurant_name=request.DELETE['restaurant_name'], menu_id=request.DELETE['menu_id'])
+            menu = MenuInfo.objects.get(restaurant_id=request.DELETE['restaurant_id'], menu_id=request.DELETE['menu_id'])
         except MenuInfo.DoesNotExist:
             return HttpResponse(status=404)
         menu.delete()
-        edited_menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
+        edited_menus = MenuInfo.objects.get(restaurant_id=request.GET['restaurant_id'])
         serializer = MenuInfoSerializer(edited_menus, many=True)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
 
 @csrf_exempt
 @api_view(['POST', 'PUT'])
@@ -104,9 +163,9 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
         new_menu = MenuInfo(restaurant=restaurant, menu_name=data['menu_name'], 
                             menu_price = data['menu_price'], menu_desc = data['menu_desc'], menu_image=data['menu_image'])
         new_menu.save()
+
         resp = JsonResponse({
             'message' : 'success',
-            'items' : [new_menu]
         })
         
         resp['Access-Control-Allow-Origin'] = '*'
@@ -184,7 +243,7 @@ def myrestaurant_get_delete(request, username):
         RestaurantInfo.objects.get(restaurant_name=restaurant_name).delete()
 
         resp = JsonResponse({
-        'message' : 'success'
+            'message' : 'success'
         })
         
         resp['Access-Control-Allow-Origin'] = '*'
@@ -262,10 +321,10 @@ def mypage_put(request):
         print("before return")
         return resp
 
-#dosignup -> signup
+#dosignup -> addSignup
 @csrf_exempt
 @api_view(['POST'])
-def signup(request):
+def addSignup(request):
     if request.method == 'POST':
         #get data
         data=request.data
@@ -276,15 +335,18 @@ def signup(request):
         new_user = UserInfo(username=data['username'], first_name=data['first_name'], email=data['email'], is_owner=data['is_owner'])
         new_user.set_password(data['password'])
         new_user.is_active = False
-        new_user.last_name = randstr(5)
+        new_user.last_name = randstr(50)
         new_user.is_superuser = False
         new_user.is_staff = False
         new_user.date_joined = timezone.now()
 
         print("회원가입을 합니다.")
 
-        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n' 
-                                                    + 'http://127.0.0.1:8000/api/active/' + new_user.last_name, to=[data['email']])
+        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n'
+                            + 'http://127.0.0.1:8000/api/active/' + new_user.last_name, to=[data['email']])
+
+        mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.<br/>사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.<br/>감사합니다.<br/>'
+        + "<a href=\"+http://127.0.0.1:8000/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>http://127.0.0.1:8000/api/active/"+ new_user.last_name, to=[data['email']] )                            
         mail.content_subtype = "html"
         mail.send()
 
@@ -299,23 +361,156 @@ def signup(request):
         print("before return")
         return resp
 
+#dologin -> applyLogin
+@csrf_exempt
+@api_view(['POST'])
+def applyLogin(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        user = authenticate(username=data['username'], password=data['password'])
+        message =''
+        userinfo = None
+        token = ''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
+            token = userinfo.last_name
+        except:
+            result = 'fail'
+            message = '로그인 실패. 다시 시도 해보세요.'
+        
+        
+
+        if user is not None:
+            login(request, user)
+            result = 'success'
+            message = '로그인 성공'
+            is_owner = userinfo.is_owner
+        else:
+            result = 'fail'
+            message = '로그인 실패. 다시 시도 해보세요.'
+            is_owner = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : result,
+            'message' : message,
+            'token' : token,
+            'is_owner': is_owner
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#check login data
+@csrf_exempt
+@api_view(['POST'])
+def verifyLogin(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo is not None:
+            result = True
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#modify user info data
+@csrf_exempt
+@api_view(['POST'])
+def modifySignup(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        message =''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo.check_password(data['password']):
+            print("check password success")
+            userinfo.first_name = data['first_name']
+            message = 'success'
+        else:
+            message = 'password error'
+
+        if userinfo is not None:
+            result = True
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : message,
+            'access' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#logout
+@csrf_exempt
+@api_view(['POST'])
+def logout(request):
+    if request.method == 'POST':
+        #get data
+        data=request.data
+        print(data)
+
+        print("----------------------")
+        #TODO
+        userinfo= None
+        message =''
+        try:
+            userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
+        except:
+            print('error')
+
+        if userinfo is not None:
+            result = True
+            userinfo.logout()
+        else:
+            result = False
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : message,
+            'access' : result,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
 '''
 Things after this need refactoring
 '''
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        print(username)
-        print(password)
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user is not None:
-            login(request, user)
-            return redirect('success')
-        else:
-            return HttpResponse('로그인 실패. 다시 시도 해보세요.')
 
 def randstr(length):
     rstr = "0123456789abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ"
@@ -332,7 +527,6 @@ def user_active(request, token):
         message = "만료된 링크입니다. 다시 가입을 신청하세요."
     else:
         user.is_active = True
-        user.last_name = ''
         user.save()
         message = "이메일이 인증되었습니다."
     return render(request, 'myapp/success.html', {'message':message })
