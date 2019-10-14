@@ -41,11 +41,6 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
 
-<<<<<<< HEAD
-class UserOrderViewSet(viewsets.ModelViewSet):
-    queryset = UserOrder.objects.all()
-    serializer_class = UserOrderSerializer
-=======
     def retrieve(self, request, pk=None):
         userqueryset = UserInfo.objects.all()
         user = get_object_or_404(userqueryset, username = pk)
@@ -74,17 +69,11 @@ class UserOrderViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
->>>>>>> testing
 
 class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
 
-<<<<<<< HEAD
-class OrderContentsViewSet(viewsets.ModelViewSet):
-    queryset = OrderContents.objects.all()
-    serializer_class = OrderContentsSerializer
-=======
     def retrieve(self, request, pk=None):
         serializer_context = {
             'request': request,
@@ -110,7 +99,6 @@ class OrderContentsViewSet(viewsets.ModelViewSet):
 class OrderMenuViewSet(viewsets.ModelViewSet):
     queryset = OrderMenu.objects.all()
     serializer_class = OrderMenuSerializer
->>>>>>> testing
 
 class RestRatingViewSet(viewsets.ModelViewSet):
     queryset = RestRating.objects.all()
@@ -162,11 +150,6 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
                             menu_price = data['menu_price'], menu_desc = data['menu_desc'], menu_image=data['menu_image'])
         new_menu.save()
 
-<<<<<<< HEAD
-        edited_menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
-        serializer = MenuInfoSerializer(edited_menus, many=True)
-        return JsonResponse(serializer.data)
-=======
         resp = JsonResponse({
             'message' : 'success',
         })
@@ -174,7 +157,6 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp  
->>>>>>> testing
 
         # data = JSONParser().parse(request)
         # serializer = MenuInfoSerializer(data=data)
