@@ -14,14 +14,13 @@ from django.utils import timezone
 # trans
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from myapp.models import Post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 #serializer
 from rest_framework import viewsets
-from myapp.serializers import UserInfoSerializer, RestaurantInfoSerializer, OrderSerializer, MenuInfoSerializer, OrderMenuSerializer
-from myapp.models import UserInfo, RestaurantInfo, Order, MenuInfo, OrderMenu
+from myapp.serializers import *
+from myapp.models import *
 
 from rest_framework.parsers import JSONParser
 
@@ -35,17 +34,25 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+class UserOrderViewSet(viewsets.ModelViewSet):
+    queryset = UserOrder.objects.all()
+    serializer_class = UserOrderSerializer
 
 class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
 
-class OrderMenuViewSet(viewsets.ModelViewSet):
-    queryset = OrderMenu.objects.all()
-    serializer_class = OrderMenuSerializer
+class OrderContentsViewSet(viewsets.ModelViewSet):
+    queryset = OrderContents.objects.all()
+    serializer_class = OrderContentsSerializer
+
+class RestRatingViewSet(viewsets.ModelViewSet):
+    queryset = RestRating.objects.all()
+    serializer_class = RestRatingSerializer
+
+class MenuRatingViewSet(viewsets.ModelViewSet):
+    queryset = MenuRating.objects.all()
+    serializer_class = MenuRatingSerializer
 
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 

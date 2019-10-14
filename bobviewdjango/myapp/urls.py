@@ -9,9 +9,11 @@ from django.conf import settings
 router = routers.DefaultRouter()
 router.register('userinfo', views.UserInfoViewSet)
 router.register('retaurantinfo', views.RestaurantInfoViewSet)
-router.register('ordermenu', views.OrderMenuViewSet)
-router.register('order', views.OrderViewSet)
+router.register('ordercontents', views.OrderContentsViewSet)
+router.register('userorder', views.UserOrderViewSet)
 router.register('menuinfo', views.MenuInfoViewSet)
+router.register('restrating', views.RestRatingViewSet)
+router.register('menurating', views.MenuRatingViewSet)
 
 
 urlpatterns = [
