@@ -55,6 +55,7 @@ class UserOrder(models.Model):
     order_time = models.DateTimeField()
     tot_price = models.IntegerField()
     table_id = models.IntegerField()
+    is_active = models.BooleanField(default=False)
 
     class Meta:
         managed = True

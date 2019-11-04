@@ -123,21 +123,6 @@ class ImageTableViewSet(viewsets.ModelViewSet):
 class UserOrderViewSet(viewsets.ModelViewSet):
     queryset = UserOrder.objects.all()
     serializer_class = UserOrderSerializer
-    
-    def create(self, request):
-        print(request.data)
-        #username, restarant_name, table_id, tot_price, 
-        restaurantquery = RestaurantInfo.objects.all()
-        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
-        userinfoquery = UserInfo.objects.all()
-        user = get_object_or_404(userinfoquery, username = request.data['username'])
-        new_order = OrderContents(user=user,restaurant=restaurant, order_time=timezone.now(),
-                                  tot_price = request.data['tot_price'], table_id=request.data['table_id'])
-        new_order.save()
-
-        
-
-
 
 class OrderContentsViewSet(viewsets.ModelViewSet):
     queryset = OrderContents.objects.all()
@@ -154,6 +139,64 @@ class MenuRatingViewSet(viewsets.ModelViewSet):
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
 # 유저 생성, 레스토랑 등록/삭제도 나중에 다 예외처리 해줘야함....
+
+
+#insert order
+@csrf_exempt
+@api_view(['POST'])
+def createOrder(request):
+    # 추가, 삭제, 수정 버튼 필요
+    if request.method == 'POST':
+        #username, restarant_name, table_id, tot_price, basket_menus(menu_id, count)
+        restaurantquery = RestaurantInfo.objects.all()
+        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
+        userinfoquery = UserInfo.objects.all()
+        user = get_object_or_404(userinfoquery, username = request.data['username'])
+        new_order = OrderContents(user=user,restaurant=restaurant, order_time=timezone.now(),
+                                  tot_price = request.data['tot_price'], table_id=request.data['table_id'])
+        new_order.save()
+        
+        menuquery = MenuInfo.objects.all()
+        for basket_menu in request.data['basket_menus']:
+            seleted_menu = get_object_or_404(menuquery, menu_id = basket_menu['menu_id'])
+            new_order_contents = OrderContents(userorder = new_order, menu = seleted_menu, menu_num = basket_menu['count'])
+            new_order_contents.save()
+
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp  
+
+#update Order
+@csrf_exempt
+@api_view(['POST'])
+def updateOrder(request):
+    # 추가, 삭제, 수정 버튼 필요
+    if request.method == 'POST':
+        #username, restarant_name, table_id, tot_price, basket_menus(menu_id, count)
+        restaurantquery = RestaurantInfo.objects.all()
+        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
+        userinfoquery = UserInfo.objects.all()
+        user = get_object_or_404(userinfoquery, username = request.data['username'])
+        new_order = OrderContents(user=user,restaurant=restaurant, order_time=timezone.now(),
+                                  tot_price = request.data['tot_price'], table_id=request.data['table_id'])
+        new_order.save()
+        
+        menuquery = MenuInfo.objects.all()
+        for basket_menu in request.data['basket_menus']:
+            seleted_menu = get_object_or_404(menuquery, menu_id = basket_menu['menu_id'])
+            new_order_contents = OrderContents(userorder = new_order, menu = seleted_menu, menu_num = basket_menu['count'])
+            new_order_contents.save()
+
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp  
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -179,7 +222,7 @@ def postImage(request):     # 메뉴 정보에서 편집 기능
             return resp  
 
 @csrf_exempt
-@api_view(['POST', 'PUT'])
+@api_view(['POST'])
 def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
     # 추가, 삭제, 수정 버튼 필요
     if request.method == 'POST':    # 메뉴 추가
@@ -203,33 +246,6 @@ def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
         print("before return")
         return resp  
         
-    if request.method == 'PUT':         # 메뉴 수정 
-        data=request.data
-        # 마이페이지 수정 참고
-        renew = MenuInfo.objects.get(menu_name = data['menu_name'])  # 정보를 가져올 메뉴 객체를 가져온다
-        
-        renew.menu_name = data['new_menuname']
-        renew.menu_price = data['new_menuprice']
-        renew.menu_desc = data['new_menudesc']
-        renew.menu_image = data['new_menuimage']
-        renew.save()
-
-        edited_menus = MenuInfo.objects.get(restaurant_name=request.GET['restaurant_name'])
-        serializer = MenuInfoSerializer(edited_menus, many=True)
-        return JsonResponse(serializer.data)
-
-        # resp['Access-Control-Allow-Origin'] = '*'
-        # print("before return")
-        # return resp 
-
-        # data = JSONParser().parse(request)
-        # serializer = MenuSerializer(menu, data=data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JSONResponse(serializer.data)
-        # else:
-        #     return JSONResponse(serializer.errors, status=400)
-
 @csrf_exempt
 @api_view(['POST'])
 def myrestaurant_post(request):    

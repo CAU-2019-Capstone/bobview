@@ -27,6 +27,9 @@ urlpatterns = [
     path('login/apply/', views.applyLogin),
     path('login/verify/', views.verifyLogin),
     path('upload/image/', views.postImage),
+    path('order/create/', views.createOrder),
+    path('order/update/', views.updateOrder),
+
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),
