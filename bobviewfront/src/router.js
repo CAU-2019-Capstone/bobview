@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import AuthLayout from "@/layout/AuthLayout"
 import DashboardLayout from "@/layout/DashboardLayout"
+import OrderLayout from "@/layout/OrderLayout"
 import tested from "@/views/Testing"
 Vue.use(VueRouter);
 
@@ -32,12 +33,6 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/main/Register.vue")
                 },
                 {
-                    path: "/check",
-                    name: "check",
-                    component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/main/Check.vue")
-                },
-                {
                     path: "/logout",
                     name: "logout",
                     component: () =>
@@ -48,6 +43,54 @@ export default new VueRouter({
                     name: "preview",
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/main/MenuPreview.vue")
+                },
+            ]
+        },
+        {
+            path: "/order",
+            redirect: "order/main",
+            component: OrderLayout,
+            children: [{
+                    path: "/order/menu",
+                    name: "ordermenu",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/OrderMenu.vue")
+                },
+                {
+                    path: "/order/main",
+                    name: "ordermain",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/OrderMain.vue")
+                },
+                {
+                    path: "/order/basket",
+                    name: "basket",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/Basket.vue")
+                },
+                {
+                    path: "/order/payment",
+                    name: "payment",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/Payment.vue")
+                },
+                {
+                    path: "/order/call",
+                    name: "call",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/Call.vue")
+                },
+                {
+                    path: "/order/login",
+                    name: "orderlogin",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/Login.vue")
+                },
+                {
+                    path: "/order/complete",
+                    name: "ordercomplete",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/order/Complete.vue")
                 },
             ]
         },

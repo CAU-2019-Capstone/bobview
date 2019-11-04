@@ -8,7 +8,7 @@
                 </div>
             </v-card-title>
 
-            <v-content>
+            <v-content class="px-5 py-2">
                 <v-text-field  label="ID" v-model="userdata.id"></v-text-field>
                 <v-text-field
                     label="password"
@@ -50,7 +50,6 @@
 
 <script>
 import axios from 'axios'
-import router from "@/router"
 export default {
     name :'login',
     data() {
@@ -64,7 +63,7 @@ export default {
         }
     },
     mounted() { 
-        console.log("login mounted") 
+        console.log("login mounted")
         console.log(this.$store.getters.isLogined)
         if(this.$store.getters.isLogined){
             this.$router.push("/")
@@ -93,7 +92,8 @@ export default {
                     })
                     currentObj.$store.dispatch('verifyLogin')
                     console.log(currentObj.$store.getters.getUserdata)
-                    router.push("/")
+                    console.log(currentObj.$store.getters.RedirectDomain)
+                    currentObj.$router.push(currentObj.$store.getters.RedirectDomain);
                 } else {
                     currentObj.loginerror=true
                     currentObj.message=response.data['message']

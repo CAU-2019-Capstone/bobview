@@ -63,11 +63,6 @@
 <script>
 export default {
     name :'user_info',
-    mounted() {
-        
-    },
-    updated() {
-    },
     watch: {
       dialog (val) {
         val || this.close()
@@ -141,7 +136,6 @@ export default {
                 console.log("senserver error")
                 console.log(error)
             });
-            
         },
         LoadData() {
             this.editedItem = {
@@ -176,7 +170,6 @@ export default {
                 console.log(error)
             });
         },
-
     }
 }
 </script>

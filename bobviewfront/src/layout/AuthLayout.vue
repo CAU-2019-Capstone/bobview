@@ -14,8 +14,9 @@
         <v-btn
             depressed
             mall
-            to="/login"
             v-if="!isLogined"
+            @click="saveDomain()"
+            to="/login"
         >
             <span class="mr-2">Login</span>
         </v-btn>
@@ -103,10 +104,11 @@ export default {
                     icon:'mdi-logout',
                     to: 'logout'
                 }
-            ]
+            ],
+            redirect : this.$router.fullPath
         }
     },
-    method: {
+    methods: {
         user_info() {
             this.$router.push("/user_info")
         },
@@ -117,6 +119,11 @@ export default {
             })
             this.$store.commit('setLogout')
             this.$router.push("/")
+        },
+        saveDomain() {
+            this.$store.commit('setRedirectDomain',{
+                redirectDomain: "/"
+            })
         }
     }
 };

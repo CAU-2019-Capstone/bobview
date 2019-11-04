@@ -27,7 +27,8 @@
             v-if="!selectingOwner"
         >
             <v-card
-            v-if="beforesending"
+                v-if="beforesending"
+                class = "px-5 py-2"
             >
                 <v-card-title primary-title>
                     Register
