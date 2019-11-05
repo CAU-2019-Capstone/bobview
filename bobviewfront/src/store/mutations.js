@@ -33,6 +33,10 @@ export default {
         state.redirectDomain = payload.redirectDomain
         console.log("commit redirectDomain : " + state.redirectDomain)
     },
+    initBasket(state) {
+        state.basketCount = 0
+        state.basketMenus = []
+    },
     addBasketCount(state) {
         state.basketCount += 1
     },
@@ -60,5 +64,9 @@ export default {
             state.basketMenus.push(payload.item)
         }
         console.log("commit add basket count : " + state.basketMenus)
+    },
+    setOrderId(state, payload) {
+        state.order_id = payload.order_id
+        console.log("commit order id : " + state.order_id)
     }
 }

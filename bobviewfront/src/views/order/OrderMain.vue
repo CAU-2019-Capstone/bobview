@@ -1,14 +1,25 @@
 <template>
     <v-container grid-list-xs>
         <v-card>
-            <v-card-title primary-title>
-                restaurant : {{ this.$route.query.r }}     table : {{this.$route.query.t}}
-            </v-card-title>
+            <v-content v-if="tableIsActive" class="my-10">
+                <v-row
+                    v-for="menu in activeOrders"
+                    :key="menu.order_contents_id"
+                    class="justify-space-around"
+                >
+                    {{menu.menu}} x {{menu.menu_num}}
+                </v-row>
+                <v-row class="justify-space-around">
+                    <v-btn depressed text @click="toRating()">
+                        평가하러 가기
+                    </v-btn>
+                </v-row>
+            </v-content>
             <v-content class="px-5 py-2">
                 <v-row class="justify-center">
                     <v-img
                         src="@/assets/logo.png"
-                        max-height="300"
+                        max-height="100"
                     ></v-img>
                 </v-row>
                 <v-row  class="justify-center py-5"> 
@@ -18,7 +29,7 @@
                         to="/order/menu"
                         props:
                     >
-                        <span>Order</span>
+                        <span>주문하기</span>
                     </v-btn>
                 </v-row>
                 <v-row  class="justify-center py-5">
@@ -27,7 +38,7 @@
                         depressed
                         to="/order/call"
                     >
-                        <span>Call</span>
+                        <span>요청하기</span>
                     </v-btn>
                 </v-row>
                 <v-row v-if="gettingLocation">
@@ -37,7 +48,6 @@
         </v-card>
     </v-container>
 </template>
-
 <script>
 export default {
     name :'ordermain',
@@ -47,7 +57,9 @@ export default {
             table : this.$route.query.t,
             gettingLocation : false,
             location : false,
-            errorStr : false
+            errorStr : false,
+            tableIsActive :false,
+            activeOrders : [],
         }
     },
     created() {
@@ -82,11 +94,42 @@ export default {
         })
         console.log(this.$store.getters.RestaurantName)
         console.log(this.$store.getters.TableNumber)
+
+        this.getOrderMenus()
     },
 
     methods: {
-        hello() {
-
+        getOrderMenus() {
+            this.axios
+                .post("http://localhost:8000/api/order/active/",{
+                    restaurant_name:this.$route.query.r,
+                    table_id:this.$route.query.t
+                })
+                .then((response) => {
+                    console.log(response.data)
+                    if(response.data['message'] == 'fail'){
+                        return
+                    }
+                    this.activeOrders = response.data['menus']
+                    console.log(this.activeOrders)
+                    this.tableIsActive = true
+                })
+                .catch((error) => {
+                    console.log("senserver error")
+                    console.log(error)
+                })
+        },
+        toRating() {
+            if(this.$store.getters.isLogined){
+                this.$router.push('/dashboard/orderlist')
+                return
+            }
+            else {
+                this.$store.commit('setRedirectDomain',{
+                    redirectDomain:'/dashboard/orderlist'
+                })
+                this.$router.push('/login')
+            }
         }
     },
 }

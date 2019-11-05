@@ -119,7 +119,7 @@ export default {
                 {
                     title:'user_info',
                     icon:'mdi-account-circle',
-                    to: 'user_info'
+                    to: '/dashboard/user_info'
                 },
                 {
                     title:'logout',
@@ -131,7 +131,7 @@ export default {
     },
     methods: {
         user_info() {
-            this.$router.push("/user_info")
+            this.$router.push("/dashboard/user_info")
         },
         logout() {
             this.$store.commit('saveUserdata',{

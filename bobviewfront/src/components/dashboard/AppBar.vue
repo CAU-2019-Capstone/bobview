@@ -27,7 +27,7 @@
         class="mx-0"
       >
         <v-btn
-          to="/user_info"
+          to="/dashboard/user_info"
           icon
         >
           <v-icon color="tertiary">

@@ -25,4 +25,7 @@ export default {
     GetBasketCount(state) {
         return state.basketCount
     },
+    GetOrderId(state) {
+        return state.order_id
+    },
 }

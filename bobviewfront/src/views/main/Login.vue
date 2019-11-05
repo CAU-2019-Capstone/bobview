@@ -109,7 +109,7 @@ export default {
         },
     },
     computed: {
-        getUserdata () {
+        getUserdata: function () {
             return this.$store.getters.getUserdata
         }
     }

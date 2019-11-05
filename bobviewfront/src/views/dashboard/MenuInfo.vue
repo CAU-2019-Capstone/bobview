@@ -2,7 +2,7 @@
 <v-container>
     <v-select
       :items="restaurants"
-      label="Restaurant lisk"
+      label="Restaurant list"
       outlined
       v-model="selectedRestaurant"
     ></v-select>

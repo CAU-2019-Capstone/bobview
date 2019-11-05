@@ -26,7 +26,7 @@ class MenuInfoSerializer(serializers.HyperlinkedModelSerializer):
 class UserOrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserOrder
-        fields = ('user','user_order_id', 'restaurant', 'order_time', 'tot_price','table_id')
+        fields = ('user','user_order_id', 'restaurant', 'order_time','table_id', 'is_active')
         
 class OrderContentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

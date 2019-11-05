@@ -106,27 +106,37 @@
       is_owner: false,
       links: [
         {
-          to: '/dashboard',
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard',
-        },
-        {
-          to: '/user_info',
+          to: '/dashboard/user_info',
           icon: 'mdi-account',
           text: 'User Profile',
+        },
+        {
+          to: '/dashboard/orderlist',
+          icon: 'mdi-menu',
+          text: 'Order List',
         },
       ],
       restaurant_links: [
         {
-          to: '/restaurant_info',
+          to: '/dashboard/restaurant_info',
           icon: 'mdi-silverware',
           text: 'Restaurant Profile',
         },
         {
-          to: '/menu_info',
+          to: '/dashboard/menu_info',
           icon: 'mdi-rice',
           text: 'Menu Profile',
-        }
+        },
+        {
+          to: '/dashboard/restaurant_rating',
+          icon: 'mdi-star',
+          text: 'Restaurant Rating',
+        },
+        {
+          to: '/dashboard/menu_rating',
+          icon: 'mdi-star-outline',
+          text: 'Menu Rating',
+        },
       ]
     }),
     mounted() {

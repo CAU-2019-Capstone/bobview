@@ -107,7 +107,7 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/Dashboard.vue")
                 },
                 {
-                    path: "/user_info",
+                    path: "/dashboard/user_info",
                     name: "user_info",
                     // route level code-splitting
                     // this generates a separate chunk (about.[hash].js) for this route
@@ -116,7 +116,7 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/UserInfo.vue")
                 },
                 {
-                    path: "/restaurant_info",
+                    path: "/dashboard/restaurant_info",
                     name: "restaurant_info",
                     // route level code-splitting
                     // this generates a separate chunk (about.[hash].js) for this route
@@ -125,13 +125,40 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/RestaurantInfo.vue")
                 },
                 {
-                    path: "/menu_info",
+                    path: "/dashboard/menu_info",
                     name: "menu_info",
                     // route level code-splitting
                     // this generates a separate chunk (about.[hash].js) for this route
                     // which is lazy-loaded when the route is visited.
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/MenuInfo.vue")
+                },
+                {
+                    path: "/dashboard/orderlist",
+                    name: "orderlist",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/Orderlist.vue")
+                },
+                {
+                    path: "/dashboard/restaurant_rating",
+                    name: "restaurant_rating",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/RestaurantRating.vue")
+                },
+                {
+                    path: "/dashboard/menu_rating",
+                    name: "menu_rating",
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/MenuRating.vue")
                 },
             ]
         },

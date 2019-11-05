@@ -123,6 +123,7 @@ export default {
                 }
             ],
             selectedPayment:null,
+            resultFailed:false,
             userinfo:[],
         }
     },
@@ -161,6 +162,43 @@ export default {
         },
         Payment() {
             console.log("payment...")
+            //#TODO
+            //get payment api
+            
+
+            //if result is true
+            //save order data into server
+
+
+            //else false
+            //alert
+            let result = true
+            let currentObj = this
+            if(result){
+                currentObj.axios
+                    .post("http://127.0.0.1:8000/api/order/create/",{
+                        username:currentObj.$store.getters.getUserdata['username'],
+                        restaurant_name : currentObj.$store.getters.RestaurantName,
+                        table_id : currentObj.$store.getters.TableNumber,
+                        basket_menus:currentObj.$store.getters.GetBasketMenus
+                    })
+                    .then(function(response) {
+                        console.log(response.data)
+                        currentObj.$store.commit('setOrderId',{
+                            order_id : response.data['order_id']
+                        })
+                        currentObj.$store.commit('initBasket')
+                    })
+                    .catch(function(error) {
+                        console.log("senserver error")
+                        console.log(error)
+                    });
+                setTimeout(function(){
+                    currentObj.$router.push("/order/complete/")
+                }, 1000);
+            } else {
+                this.resultFailed=true
+            }
         }
     }
 }

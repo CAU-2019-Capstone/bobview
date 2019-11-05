@@ -53,7 +53,6 @@ class UserOrder(models.Model):
     user_order_id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(RestaurantInfo, on_delete=models.CASCADE)    # RestaurantInfo와 다대일 관계
     order_time = models.DateTimeField()
-    tot_price = models.IntegerField()
     table_id = models.IntegerField()
     is_active = models.BooleanField(default=False)
 
