@@ -45,31 +45,45 @@
 <script>
 export default {
     name:'basket',
+    props:['dialog'],
     data() {
         return {
             basketMenus: [],
             loaded:false,
             basketEmpty:false,
+            totPrice:0,
+            basketCount:0,
         }
     },
-    mounted() {
+    created() {
+        console.log("basket created")
         this.initMenus()
     },
-    computed: {
-        totPrice: function() {
-            let price = 0;
-
-            for(let [index] in this.basketMenus){
-                price = price + this.basketMenus[index]['menu_price']
+    mounted() {
+        console.log("basket mounted")
+        let currentObj = this
+        setInterval(function() {
+            console.log("updated")
+            this.basketMenus =  currentObj.$store.getters.GetBasketMenus
+            this.basketCount = currentObj.$store.getters.GetBasketCount
+        },1000)
+    },
+    watch: {
+        dialog: function() {
+            this.initMenus()
+        },
+        basketCount: function() {
+            this.totPrice = 0
+            for (let [index] in this.basketMenus) {
+                this.totPrice = this.totPrice + this.basketMenus[index]['menu_price'] * this.basketMenus[index]['count']
             }
-
-            return price;
-        }
+        },
     },
     methods: {
         initMenus() {
             this.loaded = false
             this.basketMenus =  this.$store.getters.GetBasketMenus
+            this.basketCount = this.$store.getters.GetBasketCount
             this.loaded = true
         },
         Payment() {

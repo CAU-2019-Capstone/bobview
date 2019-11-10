@@ -15,19 +15,16 @@ router.register('menuinfo', views.MenuInfoViewSet)
 router.register('restrating', views.RestRatingViewSet)
 router.register('menurating', views.MenuRatingViewSet)
 router.register('imagetable', views.ImageTableViewSet)
-
+router.register('commentlist', views.CommentListViewSet)
 
 urlpatterns = [
-
-    path('mypage/p', views.mypage_put),
-    path('myrestaurant/p', views.myrestaurant_post),
-    path('mymenu/p', views.mymenu_post_put),
     path('signup/add/', views.addSignup),
     path('signup/modify/', views.modifySignup),
     path('login/apply/', views.applyLogin),
     path('login/verify/', views.verifyLogin),
     path('upload/image/', views.postImage),
     path('order/create/', views.createOrder),
+    path('order/change/', views.changeOrder),
     path('order/active/', views.getActiveOrder),
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),

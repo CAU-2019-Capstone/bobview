@@ -8,4 +8,6 @@ admin.site.register(OrderContents)
 admin.site.register(MenuInfo)
 admin.site.register(RestRating)
 admin.site.register(MenuRating)
+admin.site.register(ImageTable)
+admin.site.register(CommentList)
 # Register your models here.

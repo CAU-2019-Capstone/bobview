@@ -91,7 +91,7 @@ export default {
                         is_owner:response.data['is_owner']
                     })
                     currentObj.$store.dispatch('verifyLogin')
-                    console.log(currentObj.$store.getters.getUserdata)
+                    console.log(currentObj.$store.getters.GetUserdata)
                     console.log(currentObj.$store.getters.RedirectDomain)
                     currentObj.$router.push(currentObj.$store.getters.RedirectDomain);
                 } else {
@@ -109,8 +109,8 @@ export default {
         },
     },
     computed: {
-        getUserdata () {
-            return this.$store.getters.getUserdata
+        GetUserdata () {
+            return this.$store.getters.GetUserdata
         }
     }
 }

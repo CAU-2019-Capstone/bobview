@@ -132,7 +132,7 @@ export default {
             let price = 0;
 
             for(let [index] in this.basketMenus){
-                price = price + this.basketMenus[index]['menu_price']
+                price = price + this.basketMenus[index]['menu_price']*this.basketMenus[index]['count']
             }
 
             return price;
@@ -146,7 +146,7 @@ export default {
     },
     methods: {
         initUserInfo() {
-            let owner = this.$store.getters.getUserdata['username']
+            let owner = this.$store.getters.GetUserdata['username']
             this.isLogined = false
             this.axios
                 .get('http://127.0.0.1:8000/api/userinfo/'+owner+'/')
@@ -177,7 +177,7 @@ export default {
             if(result){
                 currentObj.axios
                     .post("http://127.0.0.1:8000/api/order/create/",{
-                        username:currentObj.$store.getters.getUserdata['username'],
+                        username:currentObj.$store.getters.GetUserdata['username'],
                         restaurant_name : currentObj.$store.getters.RestaurantName,
                         table_id : currentObj.$store.getters.TableNumber,
                         basket_menus:currentObj.$store.getters.GetBasketMenus
@@ -185,7 +185,7 @@ export default {
                     .then(function(response) {
                         console.log(response.data)
                         currentObj.$store.commit('setOrderId',{
-                            order_id : response.data['order_id']
+                            orderId : response.data['order_id']
                         })
                         currentObj.$store.commit('initBasket')
                     })
@@ -195,7 +195,7 @@ export default {
                     });
                 setTimeout(function(){
                     currentObj.$router.push("/order/complete/")
-                }, 1000);
+                }, 2000);
             } else {
                 this.resultFailed=true
             }

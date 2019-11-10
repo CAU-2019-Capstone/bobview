@@ -170,7 +170,7 @@ export default {
   methods: {
     initialize () {
       this.axios
-      .get('http://127.0.0.1:8000/api/restaurantinfo/'+this.$store.state.userdata['username']+'/')
+      .get('http://127.0.0.1:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           for(let [index] in result.data){
@@ -194,7 +194,7 @@ export default {
       let currentObj = this
       currentObj.getRestaurantData = false
       this.axios
-          .get('http://127.0.0.1:8000/api/menuinfo/'+this.selectedRestaurant+'/')
+          .get('http://127.0.0.1:8000/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
           .then((result) => {
               console.log("menuinfo data")
               console.log(result.data)
@@ -311,7 +311,7 @@ export default {
             })
         }
         setTimeout(function(){
-          currentObj.axios.post('http://localhost:8000/api/mymenu/p', {
+          currentObj.axios.post('http://localhost:8000/api/menuinfo/', {
               restaurant_name:currentObj.selectedRestaurant,
               menu_name: currentObj.editedItem['menu_name'],
               menu_price: currentObj.editedItem['menu_price'],

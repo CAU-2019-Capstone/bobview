@@ -80,6 +80,7 @@ class RestRating(models.Model):
     rest_rating_id = models.AutoField(primary_key=True)
     rating = models.FloatField()
     desc = models.TextField()
+    like = models.IntegerField()
 
     class Meta:
         managed = True
@@ -93,8 +94,19 @@ class MenuRating(models.Model):
     menu_rating_id = models.AutoField(primary_key=True)
     rating = models.FloatField()
     desc = models.TextField()
+    like = models.IntegerField()
 
     class Meta:
         managed = True
         db_table = 'menu_rating'
         # unique_together = (('menu', 'user', 'menu_rating_id'),)
+
+class CommentList(models.Model):
+    comment_list_id = models.AutoField(primary_key=True)
+    rest_rating = models.ForeignKey(RestRating, on_delete=models.CASCADE)         # RestRating와 다대일 관계
+    menu_rating = models.ForeignKey(MenuRating, on_delete=models.CASCADE)         # MenuRating와 다대일 관계
+    comment = models.TextField()
+
+    class Meta:
+        managed = True
+        db_table = 'comment_list'

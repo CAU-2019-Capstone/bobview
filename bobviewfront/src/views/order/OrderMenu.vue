@@ -70,7 +70,7 @@ export default {
             }
             console.log(restaurant, table)
             this.axios
-            .get('http://127.0.0.1:8000/api/menuinfo/'+restaurant+'/')
+            .get('http://127.0.0.1:8000/api/menuinfo/0/?restaurant_name='+restaurant)
             .then((result) => {
                 console.log(result.data)
                 this.menuinfos = result.data

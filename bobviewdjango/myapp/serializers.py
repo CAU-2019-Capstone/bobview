@@ -36,9 +36,14 @@ class OrderContentsSerializer(serializers.HyperlinkedModelSerializer):
 class RestRatingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestRating
-        fields = ('restaurant', 'user', 'rest_rating_id', 'rating', 'desc')
+        fields = ('restaurant', 'user', 'rest_rating_id', 'rating', 'desc', 'like')
 
 class MenuRatingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MenuRating
-        fields = ('menu', 'user', 'menu_rating_id', 'rating', 'desc')
+        fields = ('menu', 'user', 'menu_rating_id', 'rating', 'desc', 'like')
+
+class CommentListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = CommentList
+        fields = ('comment_list_id', 'rest_rating', 'menu_rating', 'comment')

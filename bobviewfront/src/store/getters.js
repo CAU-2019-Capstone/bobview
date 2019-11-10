@@ -1,7 +1,7 @@
 // https://vuex.vuejs.org/en/getters.html
 
 export default {
-    getUserdata(state) {
+    GetUserdata(state) {
         return state.userdata;
     },
     isLogined(state) {
@@ -25,7 +25,14 @@ export default {
     GetBasketCount(state) {
         return state.basketCount
     },
+    GetTotalPrice(state) {
+        let price = 0
+        for (let [index] in state.basketMenus) {
+            price = price + state.basketMenus[index]['menu_price'] * state.basketMenus[index]['count']
+        }
+        return price
+    },
     GetOrderId(state) {
-        return state.order_id
+        return state.orderId
     },
 }

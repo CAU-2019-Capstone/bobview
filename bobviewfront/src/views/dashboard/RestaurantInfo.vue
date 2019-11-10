@@ -47,23 +47,23 @@
                         <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-text-field v-model="editedItem.restaurant_name" label="Restaurant Name"></v-text-field>
+                                <v-text-field v-model="editedItem['restaurant_name']" label="Restaurant Name"></v-text-field>
                             </v-row>
                             <v-row>
-                                <v-text-field v-model="editedItem.restaurant_address" label="Restaurant Address"></v-text-field>
+                                <v-text-field v-model="editedItem['restaurant_address']" label="Restaurant Address"></v-text-field>
                             </v-row>
                             <v-row>
-                                <v-text-field v-model="editedItem.restaurant_latitude" label="latitude"></v-text-field>
+                                <v-text-field v-model="editedItem['restaurant_latitude']" label="latitude"></v-text-field>
                             </v-row>
                             <v-row>
-                                <v-text-field v-model="editedItem.restaurant_longitude" label="longitude"></v-text-field>
+                                <v-text-field v-model="editedItem['restaurant_longitude']" label="longitude"></v-text-field>
                             </v-row>
                             <v-row>
-                                <v-file-input :rules="rules" 
+                                <v-file-input
                                 label="Restaurant Image" 
                                 accept="image/png, image/jpeg, image/bmp"
                                 prepend-icon="mdi-camera"
-                                v-model ="editedItem.restaurant_image"
+                                v-model ="editedItem['restaurant_image']"
                                 dense></v-file-input>
                             </v-row>
                         </v-container>
@@ -85,9 +85,12 @@
 export default {
     name :'restaurant_info',
     watch: {
-      dialog (val) {
-        val || this.close()
-      },
+        dialog (val) {
+            val || this.close()
+        },
+        userdatas: function() {
+            this.initialize()
+        },
     },
     created () {
         console.log("before created")
@@ -110,15 +113,15 @@ export default {
             editedItem: {
                 restaurant_name: '',
                 restaurant_address:'',
-                restaurant_latitude:'',
-                restaurant_longitude:'',
+                restaurant_latitude:0.0,
+                restaurant_longitude:0.0,
                 restaurant_image:null
             },
             defaultItem : {
                 restaurant_name: '',
                 restaurant_address:'',
-                restaurant_latitude:'',
-                restaurant_longitude:'',
+                restaurant_latitude:0.0,
+                restaurant_longitude:0.0,
                 restaurant_image:null
             },
             userdatas : {},
@@ -127,8 +130,9 @@ export default {
     },
     methods: {
         initialize () {
+            this.getSuccess=false
             this.axios
-            .get('http://127.0.0.1:8000/api/restaurantinfo/'+this.$store.state.userdata['username']+'/')
+            .get('http://127.0.0.1:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 console.log("results")
@@ -168,37 +172,52 @@ export default {
         },
         close () {
             this.dialog = false
-            setTimeout(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-            }, 300)
         },
         save () {
             this.getSuccess = false
-            this.dialog = false
             let currentObj = this
-            console.log(this.editedItem)
-            this.axios
-                .post('http://localhost:8000/api/myrestaurant/p', {
+            console.log("edited item : "+this.editedItem)
+            let config = { headers: { 'Content-Type': 'multipart/formed-data' } }
+            if(this.editedItem['restaurant_image'] != null){
+                let frm = new FormData()
+                frm.append('image', this.editedItem['restaurant_image'])
+                this.axios
+                    .post('http://localhost:8000/api/upload/image/',frm,config)
+                    .then((response) => {
+                    console.log(response.data)
+                    this.editedItem['restaurant_image'] = response.data['url'].split('/')[5]
+                    console.log("response image url : " + this.editedItem['restaurant_image'])
+                    })
+                    .catch((error) => {
+                        console.log("senserver error")
+                        console.log(error)
+                    })
+            }
+            setTimeout(function(){
+            currentObj.axios
+                .post('http://localhost:8000/api/restaurantinfo/', {
                     username: currentObj.$store.state.userdata['username'],
-                    restaurant_name: currentObj.editedItem.restaurant_name,
-                    restaurant_address: currentObj.editedItem.restaurant_address,
-                    restaurant_latitude: currentObj.editedItem.restaurant_latitude,
-                    restaurant_longitude: currentObj.editedItem.restaurant_longitude,
-                    restaurant_image: currentObj.editedItem.restaurant_image
+                    restaurant_name: currentObj.editedItem['restaurant_name'],
+                    restaurant_address: currentObj.editedItem['restaurant_address'],
+                    restaurant_latitude: currentObj.editedItem['restaurant_latitude'],
+                    restaurant_longitude: currentObj.editedItem['restaurant_longitude'],
+                    restaurant_image: currentObj.editedItem['restaurant_image']
                 })
                 .then(function(response) {
                     console.log(response.data)
-                    
+                    currentObj.getSuccess = true
+                    currentObj.close()
+                    currentObj.initialize()
+                    currentObj.editedItem = currentObj.defaultItem
                 })
                 .catch(function(error) {
                     console.log("senserver error")
                     console.log(error)
                 });
-            setTimeout(function(){
-                currentObj.initialize()
             }, 1000);
         }
     },
+
     destroyed() {
         clearInterval();
     }

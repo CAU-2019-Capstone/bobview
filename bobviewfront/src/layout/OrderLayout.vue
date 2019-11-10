@@ -20,7 +20,6 @@
                         fab depressed
                         class="mx-2"
                         v-on="on"
-                        
                         >
                         <v-badge overlap>
                             <template v-slot:badge>{{$store.getters.GetBasketCount}}</template>
@@ -28,7 +27,7 @@
                         </v-badge>
                     </v-btn>
                 </template>
-                <basket @toggle="toggleDialog"></basket>
+                <basket v-bind:dialog="dialog" @toggle="toggleDialog"></basket>
             </v-dialog>
             <v-btn
                 depressed
@@ -100,7 +99,7 @@ export default {
     mounted() { 
         console.log("orderlayout mounted") 
         this.$store.dispatch('verifyLogin')
-        console.log(this.$store.getters.getUserdata)
+        console.log(this.$store.getters.GetUserdata)
         console.log(this.$store.getters.isLogined)
         this.isLogined = this.$store.getters.isLogined
     },

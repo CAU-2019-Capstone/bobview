@@ -56,37 +56,79 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
     queryset = RestaurantInfo.objects.all()
     serializer_class = RestaurantInfoSerializer
 
-    def retrieve(self, request, pk=None):
-        userqueryset = UserInfo.objects.all()
-        user = get_object_or_404(userqueryset, username = pk)
+    def retrieve(self, request, pk=None, format=None):
+        owner = self.request.query_params.get('owner')
+        print(pk)
+        print(owner)
         serializer_context = {
             'request': request,
         }
-        restaurant_name = self.request.query_params.get('restaurant_name')
-        if restaurant_name is not None :
-            restaurant = RestaurantInfo.objects.filter(restaurant_name=restaurant_name, owner = user)
-        else :
+        try:
+            userqueryset = UserInfo.objects.all()
+            user = get_object_or_404(userqueryset, username = owner)
             restaurant = RestaurantInfo.objects.filter(owner = user)
+        except:
+            restaurant = RestaurantInfo.objects.filter(restaurant_name = pk)
         serializer = RestaurantInfoSerializer(restaurant, many=True, context=serializer_context)
         return Response(serializer.data)
+    
+    def create(self, request, pk=None, format=None):
+        print("create restaurant")
+        print(request.data)
+        data=request.data
+        owner = get_object_or_404(UserInfo, username=data['username'])
+
+        new_restaurant = RestaurantInfo(restaurant_name=data['restaurant_name'], restaurant_address=data['restaurant_address'], 
+                                        restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'], owner=owner) # 이미지는 로컬에 저장하는거 해야됨.....
+        if(request.data['restaurant_image'] is not ''):
+            image = get_object_or_404(ImageTable, id = request.data['restaurant_image'])
+            new_restaurant.restaurant_image = image.image
+        new_restaurant.save()
+        
+        resp = JsonResponse({
+            'message' : 'success'
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
 
 class MenuInfoViewSet(viewsets.ModelViewSet):
     queryset = MenuInfo.objects.all()
     serializer_class = MenuInfoSerializer
 
     def retrieve(self, request, pk=None, format=None):
+        restaurant_name = self.request.query_params.get('restaurant_name')
         serializer_context = {
             'request': request,
         }
-        restaurantquery = RestaurantInfo.objects.all()
-        restaurant = get_object_or_404(restaurantquery, restaurant_name = pk)
-        menu_name = self.request.query_params.get('menu_name')
-        if menu_name is not None :
-            restaurant = MenuInfo.objects.filter(restaurant=restaurant, menu_name = menu_name)
-        else :
-            restaurant = MenuInfo.objects.filter(restaurant=restaurant)
-        serializer = MenuInfoSerializer(restaurant,many=True,context=serializer_context)
+        try:
+            restaurantquery = RestaurantInfo.objects.all()
+            restaurant = get_object_or_404(restaurantquery, restaurant_name = restaurant_name)
+            menus = MenuInfo.objects.filter(restaurant = restaurant)
+        except:
+            menus = MenuInfo.objects.filter(menu_id=pk)
+
+        serializer = MenuInfoSerializer(menus,many=True,context=serializer_context)
         return Response(serializer.data)
+
+    def create(self, request, pk=None, format=None):
+        data=request.data
+        print(data)
+        restaurant_name = data['restaurant_name']
+        restaurant = get_object_or_404(RestaurantInfo, restaurant_name=restaurant_name)
+        new_menu = MenuInfo(restaurant=restaurant, menu_name=data['menu_name'], 
+                            menu_price = data['menu_price'], menu_desc = data['menu_desc'])
+        if(data['menu_image'] is not ''):
+            image = get_object_or_404(ImageTable, id = data['menu_image'])
+            new_menu.menu_image = image.image
+        new_menu.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp  
 
     def destroy(self, request, pk=None):
         menu = get_object_or_404(self.queryset, menu_id = pk)
@@ -125,14 +167,18 @@ class UserOrderViewSet(viewsets.ModelViewSet):
     serializer_class = UserOrderSerializer
     def retrieve(self, request, pk=None, format=None):
         username = self.request.query_params.get('username')
+        isActive = self.request.query_params.get('is_active')
         print(pk)
         print(self.request.query_params)
         try:
             userquery = UserInfo.objects.all()
             user = get_object_or_404(userquery, username=username)
-            userOrder = UserOrder.objects.filter(user=user)
+            if isActive is None:
+                userOrder = UserOrder.objects.filter(user=user)
+            else :
+                userOrder = UserOrder.objects.filter(user=user, is_active=True)
         except:
-            userorder = None
+            print("query error")
             userOrder = UserOrder.objects.filter(user_order_id=pk)
 
         serializer_context = {
@@ -168,13 +214,20 @@ class RestRatingViewSet(viewsets.ModelViewSet):
     serializer_class = RestRatingSerializer
     def retrieve(self, request, pk=None, format=None):
         restaurant_name = self.request.query_params.get('restaurant_name')
+        username = self.request.query_params.get('username')
         print(pk)
         print(self.request.query_params)
         try:
             restaurantquery = RestaurantInfo.objects.all()
             restaurant = get_object_or_404(restaurantquery, restaurant_name=restaurant_name)
-            restRating = RestRating.objects.filter(restaurant=restaurant)
+            if username is None:
+                restRating = RestRating.objects.filter(restaurant=restaurant)
+            else :
+                userquery = UserInfo.objects.all()
+                user = get_object_or_404(userquery, username=username)
+                restRating = RestRating.objects.filter(restaurant=restaurant, user=user)
         except:
+            print("query error")
             restRating = RestRating.objects.filter(rest_rating_id=pk)
 
         serializer_context = {
@@ -183,25 +236,89 @@ class RestRatingViewSet(viewsets.ModelViewSet):
         serializer = RestRatingSerializer(restRating, many=True, context=serializer_context)
         return Response(serializer.data)
 
+    def create(self,request, pk=None, format=None):
+        print(request.data)
+        restaurantquery = RestaurantInfo.objects.all()
+        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
+        userinfoquery = UserInfo.objects.all()
+        user = get_object_or_404(userinfoquery,username=request.data['username'])
+        newRestReview = RestRating(restaurant= restaurant, user=user, rating=request.data['rating'], desc=request.data['desc'], like=0)
+        newRestReview.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        return resp
+    def update(self,request, pk=None, format=None):
+        print(pk)
+        print(request.data)
+        restratingquery = RestRating.objects.all()
+        currentRating = get_object_or_404(restratingquery, rest_rating_id=pk)
+        currentRating.rating = request.data['rating']
+        currentRating.desc = request.data['desc']
+        currentRating.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        return resp
+
 class MenuRatingViewSet(viewsets.ModelViewSet):
     queryset = MenuRating.objects.all()
     serializer_class = MenuRatingSerializer
     def retrieve(self, request, pk=None, format=None):
         menu_id = self.request.query_params.get('menu_id')
+        username = self.request.query_params.get('username')
         print(pk)
         print(self.request.query_params)
         try:
             menuquery = MenuInfo.objects.all()
             menu = get_object_or_404(menuquery, menu_id=menu_id)
-            menuRating = MenuRating.objects.filter(menu=menu)
+            if username is '':
+                menuRating = MenuRating.objects.filter(menu=menu)
+            else :
+                userquery = UserInfo.objects.all()
+                user = get_object_or_404(userquery, username=username)
+                menuRating = MenuRating.objects.filter(menu=menu, user=user)
+
         except:
             menuRating = MenuRating.objects.filter(menu_rating_id=pk)
+            print("query error")
 
         serializer_context = {
             'request': request,
         }
         serializer = MenuRatingSerializer(menuRating, many=True, context=serializer_context)
         return Response(serializer.data)
+    
+    def create(self,request, pk=None, format=None):
+        print(request.data)
+        menuquery = MenuInfo.objects.all()
+        menu = get_object_or_404(menuquery, menu_id=request.data['menu_id'])
+        userinfoquery = UserInfo.objects.all()
+        user = get_object_or_404(userinfoquery,username=request.data['username'])
+        newMenuReview = MenuRating(menu= menu, user=user, rating=request.data['rating'], desc=request.data['desc'], like=0)
+        newMenuReview.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        return resp
+    def update(self,request, pk=None, format=None):
+        print(pk)
+        print(request.data)
+        menuratingquery = MenuRating.objects.all()
+        currentRating = get_object_or_404(menuratingquery, menu_rating_id=pk)
+        currentRating.rating = request.data['rating']
+        currentRating.desc = request.data['desc']
+        currentRating.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+class CommentListViewSet(viewsets.ModelViewSet):
+    queryset = CommentList.objects.all()
+    serializer_class = CommentListSerializer
 
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
@@ -214,6 +331,7 @@ class MenuRatingViewSet(viewsets.ModelViewSet):
 def createOrder(request):
     # 추가, 삭제, 수정 버튼 필요
     if request.method == 'POST':
+        print(request.data)
         #username, restarant_name, table_id, basket_menus(menu_id, count)
         restaurantquery = RestaurantInfo.objects.all()
         restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
@@ -233,8 +351,8 @@ def createOrder(request):
         
         menuquery = MenuInfo.objects.all()
         for basket_menu in request.data['basket_menus']:
-            seleted_menu = get_object_or_404(menuquery, menu_id = basket_menu['menu_id'])
-            new_order_contents = OrderContents(userorder = current_order, menu = seleted_menu, menu_num = basket_menu['count'])
+            selected_menu = get_object_or_404(menuquery, menu_id = basket_menu['menu_id'])
+            new_order_contents = OrderContents(userorder = current_order, menu = selected_menu, menu_num = basket_menu['count'])
             new_order_contents.save()
 
         resp = JsonResponse({
@@ -245,6 +363,32 @@ def createOrder(request):
         print("before return")
         return resp
 
+#insert order
+@csrf_exempt
+@api_view(['POST'])
+def changeOrder(request):
+    # 추가, 삭제, 수정 버튼 필요
+    if request.method == 'POST':
+        print(request.data)
+        userquery = UserInfo.objects.all()
+        user = get_object_or_404(userquery, username= request.data['username'])
+        tempuser = get_object_or_404(userquery, username='tempuser')
+        userorderquery = UserOrder.objects.all()
+        userorder = get_object_or_404(userorderquery, user_order_id=request.data['order_id'])
+        
+        print(userorder.user)
+        print(user)
+        userorder.user = user
+        
+        userorder.save()
+        message='success'
+
+
+        resp = JsonResponse({
+            'message' : message,
+        })
+        return resp
+
 @csrf_exempt
 @api_view(['POST'])
 def getActiveOrder(request):     # 메뉴 정보에서 편집 기능
@@ -252,27 +396,38 @@ def getActiveOrder(request):     # 메뉴 정보에서 편집 기능
     if request.method == 'POST':    # 메뉴 추가
         print(request.data)
         message='success'
-        try:
-            restaurantquery = RestaurantInfo.objects.all()
-            restaurant = get_object_or_404(restaurantquery, restaurant_name = request.data['restaurant_name'])
-            userorderquery = UserOrder.objects.all()
-            userorder = get_object_or_404(userorderquery, restaurant = restaurant, table_id = request.data['table_id'], is_active=True)
-            orderContents = OrderContents.objects.filter(userorder=userorder)
-        except:
-            message = 'failed'
-
+        menus = []
+        image=''
+        order_id=0
         serializer_context = {
             'request': request,
         }
+        try:
+            restaurantquery = RestaurantInfo.objects.all()
+            restaurant = get_object_or_404(restaurantquery, restaurant_name = request.data['restaurant_name'])
+            serializer = RestaurantInfoSerializer(restaurant, context=serializer_context)
+            image = serializer.data['restaurant_image']
+            userorderquery = UserOrder.objects.all()
+            userorder = get_object_or_404(userorderquery, restaurant = restaurant, table_id = request.data['table_id'], is_active=True)
+            orderContents = OrderContents.objects.filter(userorder=userorder)
+            order_id=userorder.user_order_id
+        except:
+            message = 'failed'
+            orderContents = OrderContents.objects.all()
+
+
         serializer = OrderContentsSerializer(orderContents, many=True, context=serializer_context)
 
         resp = JsonResponse({
             'message' : message,
-            'menus' : serializer.data
+            'menus' : serializer.data,
+            'restaurant_image' : image,
+            'order_id' : order_id,
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
-        return resp  
+        return resp
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -296,78 +451,6 @@ def postImage(request):     # 메뉴 정보에서 편집 기능
             resp['Access-Control-Allow-Origin'] = '*'
             print("before return")
             return resp  
-
-@csrf_exempt
-@api_view(['POST'])
-def mymenu_post_put(request):     # 메뉴 정보에서 편집 기능
-    # 추가, 삭제, 수정 버튼 필요
-    if request.method == 'POST':    # 메뉴 추가
-        data=request.data
-        print(data)
-        restaurant_name = data['restaurant_name']
-        restaurant = get_object_or_404(RestaurantInfo, restaurant_name=restaurant_name)
-        new_menu = MenuInfo(restaurant=restaurant, menu_name=data['menu_name'], 
-                            menu_price = data['menu_price'], menu_desc = data['menu_desc'])
-        if(data['menu_image'] is not ''):
-            image = get_object_or_404(ImageTable, id = data['menu_image'])
-            new_menu.menu_image = image.image
-        new_menu.save()
-        
-
-        resp = JsonResponse({
-            'message' : 'success',
-        })
-        
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp  
-        
-@csrf_exempt
-@api_view(['POST'])
-def myrestaurant_post(request):    
-    # 레스토랑을 등록 했을때!
-    if request.method == 'POST': 
-        print(request.data)
-        data=request.data
-        owner = get_object_or_404(UserInfo, username=data['username'])
-
-        new_restaurant = RestaurantInfo(restaurant_name=data['restaurant_name'], restaurant_address=data['restaurant_address'], 
-                                        restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'],
-                                        restaurant_image=data['restaurant_image'], owner=owner) # 이미지는 로컬에 저장하는거 해야됨.....
-        new_restaurant.save()
-        
-        resp = JsonResponse({
-            'message' : 'success'
-        })
-        resp['Access-Control-Allow-Origin'] = '*'
-        print("before return")
-        return resp
-
-@csrf_exempt
-@api_view(['PUT'])
-def mypage_put(request):    
-    # 마이페이지에서 무언가를 수정했을때
-    if request.method == 'PUT':
-        data=request.data
-        user = get_object_or_404(UserInfo, username=data['username']) # 정보를 가져올 유저 객체를 가져온다
-        if 'new_username' in data.keys():
-            try :
-                user.username = data['new_username']
-            except Exception:  
-                username_reply = '이미 사용중인 아이디입니다.'
-        if 'new_email' in data.keys():
-            try :
-                user.email = data['new_email']
-            except Exception:  
-                email_reply = '이미 사용중인 이메일입니다.'
-        if 'new_name' in data.keys():
-            user.first_name = data['new_name']
-        if 'new_is_owner' in data.keys():
-            user.is_owner = data['new_is_owner']
-        user.save()
-
-        serializer = UserInfoSerializer(user)
-        return JsonResponse(serializer.data)
 
 #dosignup -> addSignup
 @csrf_exempt

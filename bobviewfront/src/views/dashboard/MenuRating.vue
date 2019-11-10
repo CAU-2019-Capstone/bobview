@@ -52,7 +52,6 @@
 <script>
 export default {
     data: () => ({
-    getRaingData:true,
     isUpdated:false,
     headers: [
         {
@@ -81,7 +80,7 @@ export default {
         initialize () {
             this.isUpdated = false
             this.axios
-            .get('http://127.0.0.1:8000/api/restaurantinfo/'+this.$store.state.userdata['username']+'/')
+            .get('http://127.0.0.1:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 for(let [index] in result.data){
@@ -104,8 +103,12 @@ export default {
             console.log(this.selectedRestaurant)
             let currentObj = this
             //get restaurant rating
+            if(this.selectedRestaurant == undefined){
+                currentObj.isUpdated=true
+                return
+            }
             this.axios
-            .get('http://localhost:8000/api/menuinfo/'+this.selectedRestaurant+'/')
+            .get('http://localhost:8000/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
             .then((result) => {
                 console.log("menuinfo data")
                 console.log(result.data)

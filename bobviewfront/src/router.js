@@ -44,6 +44,18 @@ export default new VueRouter({
                     component: () =>
                         import ( /* webpackChunkName: "demo" */ "./views/main/MenuPreview.vue")
                 },
+                {
+                    path: "/review",
+                    name: "review",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/Review.vue")
+                },
+                {
+                    path: "/review/search",
+                    name: "review",
+                    component: () =>
+                        import ( /* webpackChunkName: "demo" */ "./views/main/ReviewSearch.vue")
+                },
             ]
         },
         {
@@ -98,15 +110,6 @@ export default new VueRouter({
             path: "/",
             component: DashboardLayout,
             children: [{
-                    path: "/dashboard",
-                    name: "dashboard",
-                    // route level code-splitting
-                    // this generates a separate chunk (about.[hash].js) for this route
-                    // which is lazy-loaded when the route is visited.
-                    component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/dashboard/Dashboard.vue")
-                },
-                {
                     path: "/dashboard/user_info",
                     name: "user_info",
                     // route level code-splitting
@@ -164,6 +167,7 @@ export default new VueRouter({
         },
         {
             path: "/testing",
+            name: "testing",
             component: tested,
         },
     ]

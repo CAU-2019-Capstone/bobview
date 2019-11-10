@@ -79,7 +79,7 @@ export default {
     mounted() { 
         console.log("authlayout mounted") 
         this.$store.dispatch('verifyLogin')
-        console.log(this.$store.getters.getUserdata)
+        console.log(this.$store.getters.GetUserdata)
         console.log(this.$store.getters.isLogined)
         this.isLogined = this.$store.getters.isLogined
     },

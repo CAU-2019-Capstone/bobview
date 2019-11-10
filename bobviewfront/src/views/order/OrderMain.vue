@@ -2,24 +2,24 @@
     <v-container grid-list-xs>
         <v-card>
             <v-content v-if="tableIsActive" class="my-10">
-                <v-row
-                    v-for="menu in activeOrders"
-                    :key="menu.order_contents_id"
-                    class="justify-space-around"
-                >
-                    {{menu.menu}} x {{menu.menu_num}}
+                <v-row class="justify-center">
+                    주문이 진행중인 테이블입니다!
                 </v-row>
-                <v-row class="justify-space-around">
-                    <v-btn depressed text @click="toRating()">
-                        평가하러 가기
+                <v-row class="justify-center">
+                    주문번호 : {{this.order_id}}
+                </v-row>
+                <v-row class="justify-center">
+                    <v-btn text depressed @click="toRating()">
+                        <span>평가하러 가기</span>
                     </v-btn>
                 </v-row>
             </v-content>
             <v-content class="px-5 py-2">
                 <v-row class="justify-center">
                     <v-img
-                        src="@/assets/logo.png"
-                        max-height="100"
+                        :src="restaurant_img_src"
+                        max-height="400"
+                        max-width="700"
                     ></v-img>
                 </v-row>
                 <v-row  class="justify-center py-5"> 
@@ -28,11 +28,21 @@
                         depressed
                         to="/order/menu"
                         props:
+                        v-if="!tableIsActive"
                     >
                         <span>주문하기</span>
                     </v-btn>
+                    <v-btn
+                        text
+                        depressed
+                        to="/order/menu"
+                        props:
+                        v-if="tableIsActive"
+                    >
+                        <span>추가 주문하기</span>
+                    </v-btn>
                 </v-row>
-                <v-row  class="justify-center py-5">
+                <v-row  class="justify-center">
                     <v-btn
                         text
                         depressed
@@ -40,9 +50,6 @@
                     >
                         <span>요청하기</span>
                     </v-btn>
-                </v-row>
-                <v-row v-if="gettingLocation">
-                    Your location data is {{ location.coords.latitude }}, {{ location.coords.longitude}}
                 </v-row>
             </v-content>
         </v-card>
@@ -60,6 +67,8 @@ export default {
             errorStr : false,
             tableIsActive :false,
             activeOrders : [],
+            order_id: 0,
+            restaurant_img_src:'@/assets/logo.png',
         }
     },
     created() {
@@ -107,12 +116,17 @@ export default {
                 })
                 .then((response) => {
                     console.log(response.data)
-                    if(response.data['message'] == 'fail'){
-                        return
+                    if(response.data['restaurant_image'] != ''){
+                        this.restaurant_img_src = response.data['restaurant_image']
                     }
                     this.activeOrders = response.data['menus']
+                    this.order_id = response.data['order_id']
                     console.log(this.activeOrders)
-                    this.tableIsActive = true
+                    if(response.data['message'] == 'failed'){
+                        this.tableIsActive = false
+                    } else {
+                        this.tableIsActive = true
+                    }
                 })
                 .catch((error) => {
                     console.log("senserver error")
@@ -125,6 +139,10 @@ export default {
                 return
             }
             else {
+                console.log(this.order_id)
+                this.$store.commit('setOrderId', {
+                    orderId : this.order_id,
+                })
                 this.$store.commit('setRedirectDomain',{
                     redirectDomain:'/dashboard/orderlist'
                 })

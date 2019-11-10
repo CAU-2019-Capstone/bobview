@@ -6,6 +6,11 @@
                 <h2 class="headline mb-0">결제가 완료되었습니다.</h2>
             </div>
         </v-card-title>
+        <v-content>
+            <v-row class="justify-space-around">
+                <span>주문번호 : {{order_id}}</span>
+            </v-row>
+        </v-content>
         <v-card-actions >
             <v-container>
                 <v-row class="justify-space-around mb-10">
@@ -35,7 +40,7 @@ export default {
     data() {
         return {
             currentOrderMenus:[],
-
+            order_id:0,
         }
     },
     methods: {
@@ -52,7 +57,7 @@ export default {
                     console.log("senserver error")
                     console.log(error)
                 });
-            
+            this.order_id = this.$store.getters.GetOrderId
         },
         routerGo(to) {
             if(to == 'main'){

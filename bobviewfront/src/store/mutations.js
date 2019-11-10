@@ -66,7 +66,7 @@ export default {
         console.log("commit add basket count : " + state.basketMenus)
     },
     setOrderId(state, payload) {
-        state.order_id = payload.order_id
-        console.log("commit order id : " + state.order_id)
+        state.orderId = payload.orderId
+        console.log("commit orderId id : " + state.orderId)
     }
 }

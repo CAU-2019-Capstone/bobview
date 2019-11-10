@@ -16,7 +16,7 @@
         let currentObj = this
         console.log("dashboard layout mounted") 
         currentObj.$store.dispatch('verifyLogin')
-        console.log(currentObj.$store.getters.getUserdata)
+        console.log(currentObj.$store.getters.GetUserdata)
         console.log(currentObj.$store.getters.isLogined)
         currentObj.isLogined = currentObj.$store.getters.isLogined
         if(!currentObj.isLogined){
