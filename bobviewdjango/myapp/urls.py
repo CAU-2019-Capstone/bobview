@@ -18,6 +18,8 @@ router.register('imagetable', views.ImageTableViewSet)
 router.register('commentlist', views.CommentListViewSet)
 
 urlpatterns = [
+    path('community/main/', views.community_main),     
+    path('community/search/', views.search), 
     path('signup/add/', views.addSignup),
     path('signup/modify/', views.modifySignup),
     path('login/apply/', views.applyLogin),
