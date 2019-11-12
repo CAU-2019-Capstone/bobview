@@ -27,7 +27,8 @@
             v-if="!selectingOwner"
         >
             <v-card
-            v-if="beforesending"
+                v-if="beforesending"
+                class = "px-5 py-2"
             >
                 <v-card-title primary-title>
                     Register
@@ -79,6 +80,13 @@
 import axios from 'axios'
 export default {
     name :'register',
+    mounted() { 
+        console.log(this.name+" mounted") 
+        console.log(this.$store.getters.isLogined)
+        if(this.$store.getters.isLogined){
+            this.$router.push("/")
+        }
+    },
     data() {
         return {
             PersonalData :[
@@ -114,7 +122,6 @@ export default {
     methods: {
         RegisterOnClick () {
             let currentObj = this
-            //debuging code
             var postData =[{
                 is_owner: currentObj.is_owner,
                 username: currentObj.PersonalData.name,
@@ -126,7 +133,7 @@ export default {
 
             //axios transmission
             axios
-            .post('http://127.0.0.1:8000/api/applysignup/', {
+            .post('http://127.0.0.1:8000/api/signup/add/', {
                 is_owner: currentObj.is_owner,
                 first_name: currentObj.PersonalData.name,
                 username: currentObj.PersonalData.id,
@@ -137,11 +144,14 @@ export default {
                 currentObj.res_message = response.data['message']
                 console.log(response.data['message'])
                 currentObj.beforesending=false
+                currentObj.$router.push("/dashboard")
+                
             })
             .catch(function(error) {
                 console.log("senserver error")
                 console.log(error)
             });
+            
         },
         //visibility of password
         onVisiableClicked () {

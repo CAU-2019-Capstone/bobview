@@ -4,7 +4,7 @@
     v-model="inputValue"
     :src="image"
     app
-    color="grey darken-2"
+    color="blue-grey darken-2"
     dark
     floating
     mobile-break-point="991"
@@ -28,7 +28,7 @@
       </v-list-item-avatar>
 
       <v-list-item-title class="title-sm">
-        BobView
+        <v-btn depressed color="blue-grey darken-2" to="/">Bobview</v-btn>
       </v-list-item-title>
     </v-list-item>
 
@@ -44,14 +44,47 @@
         :to="link.to"
         active-class="primary white--text"
       >
-        <v-list-item-action>
+        <v-list-item-action
+        >
           <v-icon>{{ link.icon }}</v-icon>
         </v-list-item-action>
 
-        <v-list-item-title v-text="link.text" />
+        <v-list-item-title
+          v-text="link.text" />
       </v-list-item>
+        <v-list-item
+          v-for="(link, i) in restaurant_links"
+          :key="i"
+          :to="link.to"
+          active-class="primary white--text"
+        >
+          <v-list-item-action
+            v-if="is_owner"
+          >
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-title
+            v-if="is_owner"
+            v-text="link.text" />
+        </v-list-item>
     </v-list>
 
+    <template v-slot:append>
+      <v-list nav>
+        <v-list-item
+          to="/logout"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-title class="font-weight-light">
+            Logout
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -70,34 +103,69 @@
       }
     },
     data: () => ({
+      is_owner: false,
       links: [
         {
-          to: '/dashboard',
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard'
+          to: '/dashboard/user_info',
+          icon: 'mdi-account',
+          text: 'User Profile',
         },
         {
-          to: '/mypage',
-          icon: 'mdi-account',
-          text: 'User Profile'
+          to: '/dashboard/orderlist',
+          icon: 'mdi-menu',
+          text: 'Order List',
+        },
+      ],
+      restaurant_links: [
+        {
+          to: '/dashboard/restaurant_info',
+          icon: 'mdi-silverware',
+          text: 'Restaurant Profile',
+        },
+        {
+          to: '/dashboard/menu_info',
+          icon: 'mdi-rice',
+          text: 'Menu Profile',
+        },
+        {
+          to: '/dashboard/restaurant_rating',
+          icon: 'mdi-star',
+          text: 'Restaurant Rating',
+        },
+        {
+          to: '/dashboard/menu_rating',
+          icon: 'mdi-star-outline',
+          text: 'Menu Rating',
         },
       ]
     }),
-
+    mounted() {
+      console.log("dashboard navbar updated")
+      console.log("navbar is owner : "+this.is_owner)
+      this.initialize()
+    },
     computed: {
       ...mapState('app', ['image', 'color']),
       inputValue: {
         get () {
-          return this.$store.state.app.drawer
+          let currentObj = this
+          return currentObj.$store.state.app.drawer
         },
         set (val) {
-          this.setDrawer(val)
-        }
-      }
+          let currentObj = this
+          currentObj.setDrawer(val)
+        },
+      },
     },
 
     methods: {
-      ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
+      initialize() {
+        this.is_owner = this.$store.getters.isOwner
+        console.log("initialize owner is : "+ this.is_owner)
+      },
+      ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+
+
     }
   }
 </script>

@@ -21,11 +21,11 @@ Vue.use(Vuex)
 
 // Create a new store
 const store = new Vuex.Store({
-  actions,
-  getters,
-  modules,
-  mutations,
-  state
+    actions,
+    getters,
+    modules,
+    mutations,
+    state
 })
 
 export default store
