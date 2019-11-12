@@ -4,11 +4,21 @@ from rest_framework import  serializers
 from .models import *
 
 class UserInfoSerializer(serializers.HyperlinkedModelSerializer):
+    def get_field_names(self, *args, **kwargs):
+        field_names = self.context.get('fields', None)
+        if field_names:
+            return field_names
+        return super(ServerSerializer, self).get_field_names(*args, **kwargs)
     class Meta:
         model = UserInfo
         fields = ('id', 'password', 'last_login', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'date_joined', 'is_owner')
 
 class RestaurantInfoSerializer(serializers.HyperlinkedModelSerializer):
+    def get_field_names(self, *args, **kwargs):
+        field_names = self.context.get('fields', None)
+        if field_names:
+            return field_names
+        return super(ServerSerializer, self).get_field_names(*args, **kwargs)
     class Meta:
         model = RestaurantInfo
         fields = ('owner','restaurant_name','restaurant_address', 'restaurant_latitude','restaurant_longitude','restaurant_image')
@@ -19,6 +29,11 @@ class ImageTableSerializer(serializers.HyperlinkedModelSerializer):
         fields = "__all__"
 
 class MenuInfoSerializer(serializers.HyperlinkedModelSerializer):
+    def get_field_names(self, *args, **kwargs):
+        field_names = self.context.get('fields', None)
+        if field_names:
+            return field_names
+        return super(ServerSerializer, self).get_field_names(*args, **kwargs)
     class Meta:
         model = MenuInfo
         fields = ('restaurant', 'menu_id', 'menu_name', 'menu_price','menu_desc', 'menu_image')
@@ -44,6 +59,16 @@ class MenuRatingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('menu', 'user', 'menu_rating_id', 'rating', 'desc', 'like')
 
 class CommentListSerializer(serializers.HyperlinkedModelSerializer):
+    def get_field_names(self, *args, **kwargs):
+        field_names = self.context.get('fields', None)
+        if field_names:
+            return field_names
+        return super(ServerSerializer, self).get_field_names(*args, **kwargs)
     class Meta:
         model = CommentList
         fields = ('comment_list_id', 'rest_rating', 'menu_rating', 'comment')
+
+class MenuTemplateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MenuTemplate
+        fields = ('restaurant', 'font_type', 'font_caption_size', 'font_normal_size', 'font_caption_color', 'fond_normal_color', 'is_active')
