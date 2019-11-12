@@ -14,7 +14,12 @@ class UserInfo(AbstractUser):
     class Meta:
         managed = True
         db_table = 'user_info'
-
+        
+ class ImageTable(models.Model):
+    image = models.ImageField(blank=True)
+    class Meta:
+        managed = True
+        db_table = 'image_table'
 
 class RestaurantInfo(models.Model):
     # owner = models.OneToOneField(UserInfo, on_delete=models.CASCADE)          # UserInfo와 일대일 관계
@@ -46,6 +51,7 @@ class MenuInfo(models.Model):
 class UserOrder(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)                # UserInfo와 다대일 관계
     user_order_id = models.AutoField(primary_key=True)
+    restaurant = models.ForeignKey(RestaurantInfo, on_delete=models.CASCADE)    # RestaurantInfo와 다대일 관계
     order_time = models.DateTimeField()
     tot_price = models.IntegerField()
     table_id = models.IntegerField()
@@ -100,6 +106,7 @@ class MenuRating(models.Model):
 
 class CommentList(models.Model):
     # Rest와 Menu중 둘 중 하나만 있어야 한다
+    comment_list_id = models.AutoField(primary_key=True)
     rest_rating = models.ForeignKey(RestRating, on_delete=models.CASCADE, null=True)         # RestRating와 다대일 관계
     menu_rating = models.ForeignKey(MenuRating, on_delete=models.CASCADE, null=True)         # MenuRating와 다대일 관계
     comment = models.TextField()
