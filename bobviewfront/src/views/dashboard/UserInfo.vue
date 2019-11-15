@@ -99,7 +99,7 @@ export default {
             let currentObj = this
             console.log(currentObj.$store.state.userdata['username'])
             this.axios
-            .get('http://127.0.0.1:8000/api/userinfo/'+currentObj.$store.state.userdata['username']+'/')
+            .get('http://127.0.0.1:8000/api/userinfo/0/?username='+currentObj.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 currentObj.userinfoResponse = result.data

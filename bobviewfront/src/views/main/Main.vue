@@ -7,7 +7,7 @@
         </v-card-text>
         <v-content>
           <v-row
-          class="justify-space-around mb-2"
+          class="justify-space-around mb-2 mx-2"
           v-for="review in reviewLists"
           :key="review.rating_id"
           >
@@ -35,7 +35,7 @@ export default {
           rest_rating_type:true,
         },
         {
-          rating_id:2,
+          rating_id:1,
           menu_rating_type:true,
         },
       ],

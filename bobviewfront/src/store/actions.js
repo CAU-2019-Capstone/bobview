@@ -22,7 +22,7 @@ export default {
             });
     },
     getUserInfo(context) {
-        axios.get('http://127.0.0.1:8000/api/userinfo/' + context.state.userdata['username'] + '/')
+        axios.get('http://127.0.0.1:8000/api/userinfo/0/?username=' + context.state.userdata['username'])
             .then((result) => {
                 console.log("get response : " + result.data)
                 if (result.data['is_owner']) {

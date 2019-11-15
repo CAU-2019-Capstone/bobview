@@ -40,38 +40,53 @@
                     @click="manageItem(item)"
                 >mdi-circle-edit-outline
                 </v-icon>
+                <v-dialog
+                v-model="dialog"
+                max-width="1000"
+                >
+                    <menuReview v-bind:menu_rating_id="item['menu_rating_id']"></menuReview>
+                </v-dialog>
             </template>
             <template v-slot:no-data>
                 <v-btn color="primary" @click="initialize">Reset</v-btn>
             </template>
+
         </v-data-table>
         </v-card>
     </v-container>
   </v-container>
 </template>
 <script>
+import MenuReview from "@/components/MenuReview"
 export default {
+    components:{
+        MenuReview
+    },
     data: () => ({
-    isUpdated:false,
-    headers: [
-        {
-        text: 'Rating_id',
-        align: 'left',
-        value: 'menu_rating_id',
-        },
-        { text: 'Rating', value: 'rating', align: 'right' },
-        { text: 'Description', value: 'desc', sortable: false, align: 'right', divider:true },
-        { text: 'Reply', value: 'action', sortable: false, align: 'right' },
-    ],
-    restaurants: [],
-    selectedRestaurant:'',
-    currentRatingInfo:[],
+        dialog:false,
+        isUpdated:false,
+        headers: [
+            {
+            text: 'Rating_id',
+            align: 'left',
+            value: 'menu_rating_id',
+            },
+            { text: 'Rating', value: 'rating', align: 'right' },
+            { text: 'Description', value: 'desc', sortable: false, align: 'right', divider:true },
+            { text: 'Reply', value: 'action', sortable: false, align: 'right' },
+        ],
+        restaurants: [],
+        selectedRestaurant:'',
+        currentRatingInfo:[],
     }),
 
     created () {
         this.initialize()
     },
     watch: {
+        dialog: function(val){
+            val || this.close()
+        },
         selectedRestaurant: function () {
             this.getRatingInfo()
         },
@@ -146,8 +161,12 @@ export default {
             //get menu's rating
         },
         manageItem(item) {
+            this.dialog=true
             console.log(item)
         },
+        close(){
+            this.dialog=false
+        }
     },
 }
 </script>

@@ -41,7 +41,7 @@
     v-for="order in activeOrders"
     :key="order.user_order_id"
     >
-      <review class="justify-space-around" v-bind:order_id="order.user_order_id"></review>
+      <review v-bind:order_id="order.user_order_id"></review>
     </v-content>
     <v-dialog
     v-model="dialog"
@@ -87,7 +87,6 @@ export default {
 
   mounted () {
     console.log("order list mounted")
-    this.initialize()
     console.log("current order id : " +this.$store.getters.GetOrderId)
     if(this.$store.getters.GetOrderId > 0){
       this.axios.post('http://localhost:8000/api/order/change/',{
@@ -107,6 +106,11 @@ export default {
         console.log(error)
       });
     }
+    let currentObj = this
+    setTimeout(function(){
+      currentObj.initialize()
+      currentObj.getOrderData = true
+    },1000)
   },
   methods: {
     close() {

@@ -32,6 +32,12 @@
                 @click="manageItem(item)"
             >mdi-circle-edit-outline
             </v-icon>
+            <v-dialog
+            v-model="dialog"
+            max-width="1000"
+            >
+              <restReview v-bind:rest_rating_id="item['rest_rating_id']"></restReview>
+            </v-dialog>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -41,8 +47,13 @@
   </v-container>
 </template>
 <script>
+import RestReview from "@/components/RestReview"
 export default {
+  components:{
+    RestReview
+  },
   data: () => ({
+    dialog:false,
     getRaingData:true,
     headers: [
       {
@@ -82,6 +93,9 @@ export default {
     selectedRestaurant: function () {
       this.getRatingInfo()
     },
+    dialog : function(val) {
+      val || this.close()
+    }
   },
   methods: {
     initialize () {
@@ -125,7 +139,11 @@ export default {
         //get menu's rating
     },
     manageItem(item) {
-        console.log(item)
+      this.dialog=true
+      console.log(item)
+    },
+    close(){
+      this.dialog=false
     }
   },
 }

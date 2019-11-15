@@ -28,11 +28,17 @@ class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None, format=None):
+        username = self.request.query_params.get('username')
         serializer_context = {
             'request': request,
         }
-        user = get_object_or_404(self.queryset, username = pk)
+        try:
+            userinfoquery = UserInfo.objects.all()
+            user = get_object_or_404(userinfoquery, username = username)
+        except:
+            user = get_object_or_404(userinfoquery, id=pk)
+
         serializer = UserInfoSerializer(user,context=serializer_context)
         return Response(serializer.data)
 
@@ -80,7 +86,7 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
 
         new_restaurant = RestaurantInfo(restaurant_name=data['restaurant_name'], restaurant_address=data['restaurant_address'], 
                                         restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'], owner=owner) # 이미지는 로컬에 저장하는거 해야됨.....
-        if(request.data['restaurant_image'] is not ''):
+        if(request.data['restaurant_image'] is not None):
             image = get_object_or_404(ImageTable, id = request.data['restaurant_image'])
             new_restaurant.restaurant_image = image.image
         new_restaurant.save()
@@ -319,6 +325,50 @@ class MenuRatingViewSet(viewsets.ModelViewSet):
 class CommentListViewSet(viewsets.ModelViewSet):
     queryset = CommentList.objects.all()
     serializer_class = CommentListSerializer
+    def retrieve(self, request, pk=None, format=None):
+        menu_rating_id = self.request.query_params.get('menu_rating_id')
+        rest_rating_id = self.request.query_params.get('rest_rating_id')
+        print(pk)
+        print(self.request.query_params)
+        serializer_context = {
+            'request': request,
+        }
+        try:
+            menu_rating = get_object_or_404(MenuRating, menu_rating_id=menu_rating_id)
+        except:
+            menu_rating = None
+        
+        try:
+            rest_rating = get_object_or_404(RestRating, rest_rating_id=rest_rating_id)
+        except:
+            rest_rating = None
+
+        if menu_rating is None and rest_rating is None:
+            commentList = get_object_or_404(CommentList, comment_list_id=pk)
+            serializer = CommentListSerializer(commentList, context=serializer_context)
+        else:
+            commentList = CommentList.objects.filter(menu_rating=menu_rating, rest_rating=rest_rating)
+            serializer = CommentListSerializer(commentList, many=True, context=serializer_context)
+
+        return Response(serializer.data)
+    def create(self,request, pk=None, format=None):
+        print(request.data)
+        user = get_object_or_404(UserInfo, username=request.data['username'])
+        try:
+            menu_rating = get_object_or_404(MenuRating, menu_rating_id = request.data['menu_rating_id'])
+        except:
+            menu_rating = None
+        try:
+            rest_rating = get_object_or_404(RestRating, rest_rating_id = request.data['rest_rating_id'])
+        except:
+            rest_rating = None
+        new_comment = CommentList(user=user,menu_rating=menu_rating, rest_rating=rest_rating, comment=request.data['comment'])
+        new_comment.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        return resp
 
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
@@ -343,7 +393,7 @@ def createOrder(request):
         
         try:
             orderquery = UserOrder.objects.all()
-            current_order = get_object_or_404(orderquery, user=user,restaurant=restaurant, is_active=True)
+            current_order = get_object_or_404(orderquery, user=user,restaurant=restaurant, table_id=requst.data['table_id'], is_active=True)
         except:
             current_order = UserOrder(user=user,restaurant=restaurant, order_time=timezone.now(),
                                     table_id=request.data['table_id'], is_active=True)

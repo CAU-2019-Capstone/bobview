@@ -103,9 +103,10 @@ class MenuRating(models.Model):
 
 class CommentList(models.Model):
     comment_list_id = models.AutoField(primary_key=True)
-    rest_rating = models.ForeignKey(RestRating, on_delete=models.CASCADE)         # RestRating와 다대일 관계
-    menu_rating = models.ForeignKey(MenuRating, on_delete=models.CASCADE)         # MenuRating와 다대일 관계
+    rest_rating = models.ForeignKey(RestRating, on_delete=models.CASCADE, null=True)         # RestRating와 다대일 관계
+    menu_rating = models.ForeignKey(MenuRating, on_delete=models.CASCADE, null=True)         # MenuRating와 다대일 관계
     comment = models.TextField()
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)                # UserInfo와 다대일 관계
 
     class Meta:
         managed = True

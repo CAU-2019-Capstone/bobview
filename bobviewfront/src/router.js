@@ -107,8 +107,9 @@ export default new VueRouter({
             ]
         },
         {
-            path: "/",
+            path: "/dashboard",
             component: DashboardLayout,
+            redirect: '/dashboard/user_info',
             children: [{
                     path: "/dashboard/user_info",
                     name: "user_info",

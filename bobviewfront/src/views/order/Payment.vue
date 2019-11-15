@@ -149,7 +149,7 @@ export default {
             let owner = this.$store.getters.GetUserdata['username']
             this.isLogined = false
             this.axios
-                .get('http://127.0.0.1:8000/api/userinfo/'+owner+'/')
+                .get('http://127.0.0.1:8000/api/userinfo/0/?username='+owner)
                 .then((result) => {
                     console.log(result.data)
                     this.userinfo = result.data

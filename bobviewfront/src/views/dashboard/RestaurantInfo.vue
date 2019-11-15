@@ -176,7 +176,8 @@ export default {
         save () {
             this.getSuccess = false
             let currentObj = this
-            console.log("edited item : "+this.editedItem)
+            console.log("edited item : ")
+            console.log(this.editedItem)
             let config = { headers: { 'Content-Type': 'multipart/formed-data' } }
             if(this.editedItem['restaurant_image'] != null){
                 let frm = new FormData()

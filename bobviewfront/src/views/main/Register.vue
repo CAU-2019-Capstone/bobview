@@ -63,6 +63,11 @@
                         <span>cancel</span>
                     </v-btn>
                 </v-card-actions>
+                <v-content v-if="mailSending">
+                    <v-progress-linear  :indeterminate="true"></v-progress-linear>
+                    <p>메일이 보내졌습니다. 확인해주세요</p>
+                </v-content>
+                
             </v-card>
 
             <v-card
@@ -71,9 +76,8 @@
                 <p>{{res_message}}</p>
             </v-card>
         </v-content>
-        
     </v-container>
-    
+
 </template>
 
 <script>
@@ -89,6 +93,7 @@ export default {
     },
     data() {
         return {
+            mailSending:false,
             PersonalData :[
             {
                 name:'',
@@ -121,6 +126,7 @@ export default {
     },
     methods: {
         RegisterOnClick () {
+            this.mailSending = true
             let currentObj = this
             var postData =[{
                 is_owner: currentObj.is_owner,
@@ -144,8 +150,8 @@ export default {
                 currentObj.res_message = response.data['message']
                 console.log(response.data['message'])
                 currentObj.beforesending=false
-                currentObj.$router.push("/dashboard")
-                
+                this.mailSending = true
+                this.$router.push("/")
             })
             .catch(function(error) {
                 console.log("senserver error")

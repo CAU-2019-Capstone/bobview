@@ -6,33 +6,7 @@
                     v-for="menuinfo in menuinfos"
                     :key="menuinfo.menu_name"
                     cols="12" sm="6">
-                        <v-card
-                            class="mx-auto"
-                            max-width="400"
-                        >
-                            <v-img
-                            class="align-end"
-                            height="200px"
-                            :src="menuinfo.menu_image"
-                            >
-                            <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
-                            </v-img>
-
-                            <v-card-text class="text--primary">
-                                <div>Price : {{menuinfo.menu_price}}</div>
-                                <div>Description : {{menuinfo.menu_desc}}</div>
-                            </v-card-text>
-
-                            <v-card-actions>
-                            <v-btn
-                                color="orange"
-                                text
-                                @click="addBasket(menuinfo)"
-                            >
-                                Order
-                            </v-btn>
-                            </v-card-actions>
-                        </v-card>
+                        <menuTemplate1 v-bind:menuinfo="menuinfo"></menuTemplate1>
                   </v-col>
             </v-row>
             <v-row v-else>
@@ -43,14 +17,17 @@
 </template>
 
 <script>
+import MenuTemplate1 from "@/components/MenuTemplate1"
 export default {
+    components:{
+        MenuTemplate1
+    },
     mounted() {
         console.log("preview menu mounted")
         this.initMenu()
     },
     data() {
         return {
-            
             getMenuData : false,
             menuinfos: [
                 {

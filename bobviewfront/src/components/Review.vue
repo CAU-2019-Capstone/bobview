@@ -1,17 +1,16 @@
 <template>
-    <v-container>
+    <v-container class="justify-space-around mb-10" >
         <v-card 
-        v-if="progressSuccess"
-        class="elevation-4 justify-space-around" 
+        class="elevation-5"
         max-width="500"
         >
-            <v-card-title primary-title class="justify-space-around">
+            <v-card-title v-if="progressSuccess" primary-title class="justify-space-around">
                 <div >
                     <h2 class="headline mb-2">Rate Me!</h2>
                     <span sm>{{restaurantRating['restaurant_name']}}</span>
                 </div>
             </v-card-title>
-            <v-container>
+            <v-container v-if="progressSuccess">
                 <v-content>
                     <v-row class="justify-space-around">
                         <v-img
@@ -68,12 +67,16 @@
                         v-model="restaurantRating['desc']"></v-textarea>
                     </v-row>
                 </v-content>
+                <v-content v-if="rateSuccess"
+                >
+                    <p>평가가 완료되었습니다!</p>
+                </v-content>
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn depressed text @click="save">평가</v-btn>
                     <v-btn depressed text @click="close">취소</v-btn>
                 </v-card-actions>
-
+                
 
                 <v-dialog
                 v-model="dialog"
@@ -131,8 +134,6 @@
                 </v-card>
                 </v-dialog>
             </v-container>
-        </v-card>
-        <v-card>
             <v-progress-linear
             v-if="!progressSuccess"
             indeterminate
@@ -178,6 +179,7 @@ export default {
             editedRating:0,
             editedDesc:'',
             ordermenus: [],
+            rateSuccess:false,
         }
     },
     methods : {
@@ -249,13 +251,14 @@ export default {
                     console.log(error)
                 });
             }
-            
+            this.rateSuccess = true
             
             setTimeout(function() {
                     let payload = {
                     status:false,
                 }
                 currentObj.$emit('toggle',payload)
+                
             }, 1000)
             
         },
@@ -359,6 +362,7 @@ export default {
                 console.log("restaurant rating")
                 console.log(currentObj.restaurantRating)
                 currentObj.progressSuccess = true
+                
             }, 2000)
         },
         rateMenu(item){
@@ -373,23 +377,21 @@ export default {
             this.dialog=true
         },
         saveItem() {
+            
+            console.log(this.editedItem)
             if(this.editedItem['menu_rating']>0){
                 this.ordermenus[this.editedIndex]['rated'] = true
             }
-            this.ordermenus[this.editedIndex]['menu_name'] = this.editedItem['menu_name']
             this.ordermenus[this.editedIndex]['menu_rating']['desc'] = this.editedItem['desc']
             this.ordermenus[this.editedIndex]['menu_rating']['rating'] = this.editedItem['menu_rating']
 
             this.editedIndex=-1
             this.editedItem = this.defaultItem
             this.dialog = false
+            
         },
         closeItem() {
             console.log("close")
-            this.editedItem = { }
-            this.editedItem = this.ordermenus[this.editedIndex]
-            console.log(this.ordermenus[this.editedIndex])
-            console.log(this.editedItem)
             this.dialog = false
         }
     },

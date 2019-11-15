@@ -46,4 +46,4 @@ class MenuRatingSerializer(serializers.HyperlinkedModelSerializer):
 class CommentListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CommentList
-        fields = ('comment_list_id', 'rest_rating', 'menu_rating', 'comment')
+        fields = ('comment_list_id','rest_rating', 'menu_rating', 'comment', 'user')

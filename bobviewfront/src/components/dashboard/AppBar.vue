@@ -16,7 +16,9 @@
       >
         <v-icon>mdi-view-list</v-icon>
       </v-btn>
-      {{ title }}
+      <v-btn depressed text>
+        {{ title }}
+      </v-btn>
     </v-toolbar-title>
 
     <v-spacer />
