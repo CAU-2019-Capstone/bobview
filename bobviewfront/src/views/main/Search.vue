@@ -39,7 +39,7 @@ export default {
   mounted() {
     console.log("search keyword" + this.$route.query.keyword)
     this.search = this.$route.query.keyword
-    this.axios.post('http://13.124.90.6:8000/api/community/search/', {
+    this.axios.post('http://13.124.90.6:8080/api/community/search/', {
         search_string : this.$route.query.keyword
     })
       .then((result)=>{
@@ -68,7 +68,7 @@ export default {
     searchKeyword() {
       if(this.search != ''){
         this.reviewLists = []
-        this.axios.post('http://13.124.90.6:8000/api/community/search/', {
+        this.axios.post('http://13.124.90.6:8080/api/community/search/', {
             search_string : this.search
         })
           .then((result)=>{

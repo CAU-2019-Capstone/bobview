@@ -170,7 +170,7 @@ export default {
   methods: {
     initialize () {
       this.axios
-      .get('http://13.124.90.6:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+      .get('http://13.124.90.6:8080/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           for(let [index] in result.data){
@@ -194,7 +194,7 @@ export default {
       let currentObj = this
       currentObj.getRestaurantData = false
       this.axios
-          .get('http://:8000/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
+          .get('http://:8080/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
           .then((result) => {
               console.log("menuinfo data")
               console.log(result.data)
@@ -225,7 +225,7 @@ export default {
       this.editedItem = this.currentMenuInfo[index]
       confirm('Are you sure you want to delete this item?') && 
       this.axios
-        .delete('http://13.124.90.6:8000/api/menuinfo/'+this.editedItem['menu_id']+'/')
+        .delete('http://13.124.90.6:8080/api/menuinfo/'+this.editedItem['menu_id']+'/')
         .then(function(response) {
             console.log("delete complete")
             console.log(response.data)
@@ -261,7 +261,7 @@ export default {
           let frm = new FormData()
           frm.append('image', this.editedItem['menu_new_image'])
           this.axios
-            .post('http://13.124.90.6:8000/api/upload/image/',frm,config)
+            .post('http://13.124.90.6:8080/api/upload/image/',frm,config)
             .then((response) => {
               console.log(response.data)
               this.editedItem['menu_image'] = response.data['url'].split('/')[5]
@@ -274,7 +274,7 @@ export default {
         }
         setTimeout(function(){
           currentObj.axios
-            .put('http://13.124.90.6:8000/api/menuinfo/'+currentObj.currentMenuInfo[currentObj.editedIndex]['menu_id']+'/', {
+            .put('http://13.124.90.6:8080/api/menuinfo/'+currentObj.currentMenuInfo[currentObj.editedIndex]['menu_id']+'/', {
               menu_name: currentObj.editedItem['menu_name'],
               menu_price: currentObj.editedItem['menu_price'],
               menu_desc: currentObj.editedItem['menu_desc'],
@@ -299,7 +299,7 @@ export default {
           let frm = new FormData()
           frm.append('image', this.editedItem['menu_new_image'])
           this.axios
-            .post('http://13.124.90.6:8000/api/upload/image/',frm,config)
+            .post('http://13.124.90.6:8080/api/upload/image/',frm,config)
             .then((response) => {
               console.log(response.data)
               this.editedItem['menu_image'] = response.data['url'].split('/')[5]
@@ -311,7 +311,7 @@ export default {
             })
         }
         setTimeout(function(){
-          currentObj.axios.post('http://13.124.90.6:8000/api/menuinfo/', {
+          currentObj.axios.post('http://13.124.90.6:8080/api/menuinfo/', {
               restaurant_name:currentObj.selectedRestaurant,
               menu_name: currentObj.editedItem['menu_name'],
               menu_price: currentObj.editedItem['menu_price'],
