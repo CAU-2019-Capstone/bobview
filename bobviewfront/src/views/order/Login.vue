@@ -74,7 +74,7 @@ export default {
             let currentObj = this
             console.log(currentObj.userdata.id + "  " + currentObj.userdata.password)
             axios
-            .post('http://127.0.0.1:8000/api/login/apply/', {
+            .post('localhost:8000/api/login/apply/', {
                 username: currentObj.userdata.id,
                 password: currentObj.userdata.password,
             })

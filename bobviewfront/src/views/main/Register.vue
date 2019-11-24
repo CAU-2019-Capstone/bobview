@@ -34,7 +34,6 @@
                     Register
                 </v-card-title>
                 <v-content>
-                    <v-text-field  label="Name" v-model="PersonalData.name"></v-text-field>
                     <v-text-field  label="ID" v-model="PersonalData.id"></v-text-field>
                     <v-text-field
                         name="name"
@@ -45,9 +44,24 @@
                         :type="passwordVisiable ? 'password' : 'text'"
                     ></v-text-field>
                     <v-text-field
+                        name="name"
+                        label="password verify"
+                        hint="At least 8 characters"
+                        counter="8"
+                        v-model="passwordVerify"
+                        :type="passwordVisiable ? 'password' : 'text'"
+                    ></v-text-field>
+                    <v-text-field  label="Name" v-model="PersonalData.name"></v-text-field>
+                    <v-text-field
                         label="E-mail"
                         v-model="PersonalData.email"
                     ></v-text-field>
+                    <v-content v-if="passwordNotMatching">
+                        <span>passwords are not same please check your password</span>
+                    </v-content>
+                    <v-content v-if="passwordShort">
+                        <p>Please check your password, It's too short, </p>
+                    </v-content>
                 </v-content>
                 <v-card-actions>
                     <v-btn
@@ -63,11 +77,12 @@
                         <span>cancel</span>
                     </v-btn>
                 </v-card-actions>
-                <v-content v-if="mailSending">
+                <v-content v-if="loading">
                     <v-progress-linear  :indeterminate="true"></v-progress-linear>
-                    <p>메일이 보내졌습니다. 확인해주세요</p>
                 </v-content>
-                
+                <v-content v-if="mailSending">
+                    <p>Please check your email, We send an email to {PersonalData.email}}, </p>
+                </v-content>
             </v-card>
 
             <v-card
@@ -93,7 +108,11 @@ export default {
     },
     data() {
         return {
+            loading:false,
+            passwordNotMatching:false,
             mailSending:false,
+            passwordShort:false,
+            passwordVerify: '',
             PersonalData :[
             {
                 name:'',
@@ -126,7 +145,14 @@ export default {
     },
     methods: {
         RegisterOnClick () {
-            this.mailSending = true
+            if(this.passwordVerify != this.PersonalData.password ){
+                this.passwordNotMatching = true
+                return
+            }
+            if(this.PersonalData.password.length < 8){
+                this.passwordShort = true
+            }
+            this.loading = true
             let currentObj = this
             var postData =[{
                 is_owner: currentObj.is_owner,
@@ -139,7 +165,7 @@ export default {
 
             //axios transmission
             axios
-            .post('http://127.0.0.1:8000/api/signup/add/', {
+            .post('localhost:8000/api/signup/add/', {
                 is_owner: currentObj.is_owner,
                 first_name: currentObj.PersonalData.name,
                 username: currentObj.PersonalData.id,

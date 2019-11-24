@@ -71,27 +71,24 @@
             <v-row class="justify-space-around my-2">
                 <v-card outlined width="1000">
                     <v-card-title primary-title>
-                        <h3>결제 수단</h3>
+                        <h3>Payment Method</h3>
                     </v-card-title>
                     <v-content class="px-5 py-2">
                         <v-container>
                             <v-row>
                                 <v-radio-group v-model="selectedPayment" row>
-                                    <v-radio label="신용/체크카드" value="card"></v-radio>
-                                    <v-radio label="계좌이체" value="account"></v-radio>
-                                    <v-radio label="휴대폰" value="phone"></v-radio>
-                                    <v-radio label="무통장입금(가상계좌)" value="abstractAccount"></v-radio>
-                                    <v-radio label="간편결제" value="easyPay"></v-radio>
+                                    <v-radio label="Kakao Pay" value="easyPay"></v-radio>
+                                    <v-radio disabled label="Card" value="card"></v-radio>
+                                    <v-radio disabled label="Wrie" value="account"></v-radio>
+                                    <v-radio disabled label="Phone" value="phone"></v-radio>
+                                    <v-radio disabled label="CMS(Virtual Account)" value="abstractAccount"></v-radio>
                                 </v-radio-group>
-                            </v-row>
-                            <v-row v-if="methodSelected">
-                                selectedPayment  TODO
                             </v-row>
                         </v-container>
                     </v-content>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn text depressed @click="Payment">주문 진행하기</v-btn>
+                        <v-btn :disabled="!methodSelected" text depressed @click="Payment">Continue</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-row>
@@ -149,7 +146,7 @@ export default {
             let owner = this.$store.getters.GetUserdata['username']
             this.isLogined = false
             this.axios
-                .get('http://127.0.0.1:8000/api/userinfo/0/?username='+owner)
+                .get('localhost:8000/api/userinfo/0/?username='+owner)
                 .then((result) => {
                     console.log(result.data)
                     this.userinfo = result.data
@@ -162,43 +159,58 @@ export default {
         },
         Payment() {
             console.log("payment...")
+            if(this.totPrice ==0){
+                return
+            }
             //#TODO
             //get payment api
-            
-
-            //if result is true
-            //save order data into server
-
-
-            //else false
-            //alert
-            let result = true
             let currentObj = this
-            if(result){
-                currentObj.axios
-                    .post("http://127.0.0.1:8000/api/order/create/",{
-                        username:currentObj.$store.getters.GetUserdata['username'],
-                        restaurant_name : currentObj.$store.getters.RestaurantName,
-                        table_id : currentObj.$store.getters.TableNumber,
-                        basket_menus:currentObj.$store.getters.GetBasketMenus
-                    })
-                    .then(function(response) {
-                        console.log(response.data)
-                        currentObj.$store.commit('setOrderId',{
-                            orderId : response.data['order_id']
+            var msg=''
+            IMP.init('imp52136590')
+            IMP.request_pay({
+                pg : 'html5_inicis',
+                pay_method : 'card',
+                merchant_uid : 'merchant_' + new Date().getTime(),
+                name : 'Order name:Payment Test',
+                amount : this.totPrice,
+                buyer_email : 'iamport@siot.do',
+                buyer_name : this.$store.getters.GetUserdata['username'],
+                buyer_tel : '010-0000-0000',
+                buyer_addr : 'Hannam',
+                buyer_postcode : '04747',
+            }, function(rsp) {
+                if ( rsp.success ) {
+                    msg = 'Payment Success, \nGo to complete page';
+                    currentObj.axios
+                        .post("localhost:8000/api/order/create/",{
+                            username:currentObj.$store.getters.GetUserdata['username'],
+                            restaurant_name : currentObj.$store.getters.RestaurantName,
+                            table_id : currentObj.$store.getters.TableNumber,
+                            basket_menus:currentObj.$store.getters.GetBasketMenus
                         })
-                        currentObj.$store.commit('initBasket')
-                    })
-                    .catch(function(error) {
-                        console.log("senserver error")
-                        console.log(error)
-                    });
-                setTimeout(function(){
-                    currentObj.$router.push("/order/complete/")
-                }, 2000);
-            } else {
-                this.resultFailed=true
-            }
+                        .then(function(response) {
+                            console.log(response.data)
+                            currentObj.$store.commit('setOrderId',{
+                                orderId : response.data['order_id']
+                            })
+                            currentObj.$store.commit('initBasket')
+                        })
+                        .catch(function(error) {
+                            console.log("senserver error")
+                            console.log(error)
+                        });
+                    setTimeout(function(){
+                        alert(msg);
+                        currentObj.$router.push("/order/complete/")
+                    }, 1000);
+                } else {
+                    msg = 'Payment Failed. \n Please check your error code';
+                    msg += 'Error : ' + rsp.error_msg;
+                    this.resultFailed=true
+                    alert(msg);
+                }
+            });
+
         }
     }
 }

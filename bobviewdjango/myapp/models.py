@@ -29,10 +29,12 @@ class RestaurantInfo(models.Model):
     restaurant_latitude = models.FloatField()
     restaurant_longitude = models.FloatField()
     restaurant_image = models.ImageField(blank=True)
+    tot_table_num = models.IntegerField()
 
     class Meta:
         managed = True
         db_table = 'restaurant_info'
+
 
 
 class MenuInfo(models.Model):
@@ -111,3 +113,26 @@ class CommentList(models.Model):
     class Meta:
         managed = True
         db_table = 'comment_list'
+
+class Messages(models.Model):
+    restaurant = models.ForeignKey(RestaurantInfo, on_delete=models.CASCADE)          # UserOrder와 다대일 관계
+    table_id = models.IntegerField()
+    message = models.TextField()
+
+    class Meta:
+        managed = True
+        db_table = 'messages'
+
+class MenuTemplate(models.Model):
+    restaurant = models.ForeignKey(RestaurantInfo, on_delete=models.CASCADE)    # RestaurantInfo와 다대일 관계
+    menu_type = models.IntegerField(default=0)
+    font_type = models.IntegerField(default=0)
+    font_caption_size = models.IntegerField(default=24)
+    font_normal_size = models.IntegerField(default=16)
+    font_caption_color = models.IntegerField(default=0)
+    fond_normal_color = models.IntegerField(default=10)
+    is_active = models.BooleanField(default=False)
+    
+    class Meta:
+        managed = True
+        db_table = 'menu_template'

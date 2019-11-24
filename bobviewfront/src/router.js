@@ -5,6 +5,7 @@ import AuthLayout from "@/layout/AuthLayout"
 import DashboardLayout from "@/layout/DashboardLayout"
 import OrderLayout from "@/layout/OrderLayout"
 import tested from "@/views/Testing"
+import qrcode from "@/views/QRCode"
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -54,7 +55,7 @@ export default new VueRouter({
                     path: "/review/search",
                     name: "review",
                     component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/main/ReviewSearch.vue")
+                        import ( /* webpackChunkName: "demo" */ "./views/main/Search.vue")
                 },
             ]
         },
@@ -165,6 +166,11 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/dashboard/MenuRating.vue")
                 },
             ]
+        },
+        {
+            path: "/restaurant/qrcode",
+            name: "qrcode",
+            component: qrcode,
         },
         {
             path: "/testing",

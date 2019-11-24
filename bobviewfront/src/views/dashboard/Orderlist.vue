@@ -18,6 +18,30 @@
               inset
               vertical
               ></v-divider>
+              <v-spacer/>
+              <v-dialog v-model="dialog2" max-width="500px">
+              <template v-slot:activator="{ on }">
+                  <v-btn color="blue-grey lighten-2" dark class="mb-2 mx-2" @click="addOrder">Add Order</v-btn>
+              </template>
+              <v-card>
+                  <v-card-title>
+                    <span class="headline">Add Order by Order ID</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-text-field v-model="order_id" label="Order Id"></v-text-field>
+                        </v-row>
+                    </v-container>
+                  </v-card-text>
+
+                  <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                  <v-btn color="blue darken-1" text @click="save(order_id)">Save</v-btn>
+                  </v-card-actions>
+              </v-card>
+              </v-dialog>
           </v-toolbar>
           </template>
           <template v-slot:item.action="{ item }">
@@ -33,16 +57,19 @@
           </template>
       </v-data-table>
     </v-card>
-    <v-content>
-      <span>현재 식사중인 식당</span>
-    </v-content>
-    <v-content
-    class="justify-space-around"
-    v-for="order in activeOrders"
-    :key="order.user_order_id"
-    >
-      <review v-bind:order_id="order.user_order_id"></review>
-    </v-content>
+    <v-card class="elevation-2 justify-space-around my-10">
+      <v-card-title primary-title class="justify-space-around">
+        Now you are eating here...
+      </v-card-title>
+      <v-row
+      class="justify-space-around"
+      v-for="order in activeOrders"
+      :key="order.user_order_id"
+      >
+        <review v-bind:order_id="order.user_order_id"></review>
+      </v-row>
+    </v-card>
+    
     <v-dialog
     v-model="dialog"
     max-width="500"
@@ -65,12 +92,18 @@ export default {
         val || this.close()
         this.newWindow=!this.newWindow
     },
+    dialog2 (val) {
+        val || this.close()
+        this.newWindow=!this.newWindow
+    },
   },
   data: () => ({
     dialog:false,
+    dialog2: false,
     getOrderData:false,
     newWindow:false,
     activeOrders:[],
+    order_id : 0,
     headers: [
       {
         text: 'Order ID',
@@ -88,38 +121,18 @@ export default {
   mounted () {
     console.log("order list mounted")
     console.log("current order id : " +this.$store.getters.GetOrderId)
-    if(this.$store.getters.GetOrderId > 0){
-      this.axios.post('http://localhost:8000/api/order/change/',{
-        username:this.$store.getters.GetUserdata['username'],
-        order_id:this.$store.getters.GetOrderId
-      })
-      .then(function(response){
-        console.log(response.data)
-        if(response.data['message'] == 'success'){
-          this.$store.commit('setOrderId',{
-            orderId : 0,
-          })
-          this.initialize()
-        }
-      })
-      .catch(function(error){
-        console.log(error)
-      });
-    }
-    let currentObj = this
-    setTimeout(function(){
-      currentObj.initialize()
-      currentObj.getOrderData = true
-    },1000)
+    this.save(this.$store.getters.GetOrderId)
   },
   methods: {
     close() {
       this.dialog=false
+      this.dialog2=false
+      this.order_id=0
     },
     initialize () {
       this.getOrderData=false
       this.axios
-      .get('http://127.0.0.1:8000/api/userorder/0/?username='+this.$store.state.userdata['username'])
+      .get('localhost:8000/api/userorder/0/?username='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           this.orderLists = result.data
@@ -139,6 +152,7 @@ export default {
         .then((result)=> {
           console.log(result.data)
           this.activeOrders = result.data
+          
         })
         .catch(function(error) {
           console.log("senserver error")
@@ -153,6 +167,36 @@ export default {
     toggleDialog(payload) {
       console.log("emit dialog : " + payload)
       this.dialog = payload['status']
+    },
+    addOrder(){
+      this.order_id = 0
+      this.dialog2 = true
+    },
+    save(id) {
+      let currentObj = this
+      if(id > 0){
+        currentObj.axios.post('http://localhost:8000/api/order/change/',{
+          username:this.$store.getters.GetUserdata['username'],
+          order_id:id
+        })
+        .then(function(response){
+          console.log(response.data)
+          if(response.data['message'] == 'success'){
+            currentObj.$store.commit('setOrderId',{
+              orderId : 0,
+            })
+            currentObj.initialize()
+          }
+        })
+        .catch(function(error){
+          console.log(error)
+        });
+      }
+      setTimeout(function(){
+        currentObj.initialize()
+        currentObj.getOrderData = true
+      },1000)
+
     }
   },
 }

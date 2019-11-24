@@ -6,7 +6,9 @@
                     v-for="menuinfo in menuinfos"
                     :key="menuinfo.menu_name"
                     cols="12" sm="6">
-                        <menuTemplate1 v-bind:menuinfo="menuinfo" @addBasket="addBasket"></menuTemplate1>
+                        <menuTemplate1 v-if="template_id==1" v-bind:menuinfo="menuinfo" @addBasket="addBasket"></menuTemplate1>
+                        <menuTemplate2 v-if="template_id==2" v-bind:menuinfo="menuinfo" @addBasket="addBasket"></menuTemplate2>
+                        <menuTemplate3 v-if="template_id==3" v-bind:menuinfo="menuinfo" @addBasket="addBasket"></menuTemplate3>
                   </v-col>
             </v-row>
             <v-row v-else>
@@ -17,10 +19,14 @@
 </template>
 
 <script>
-import MenuTemplate1 from "@/components/MenuTemplate1"
+import MenuTemplate1 from "@/components/MenuTemplate/MenuTemplate1"
+import MenuTemplate2 from "@/components/MenuTemplate/MenuTemplate2"
+import MenuTemplate3 from "@/components/MenuTemplate/MenuTemplate3"
 export default {
     components:{
-        MenuTemplate1
+        MenuTemplate1,
+        MenuTemplate2,
+        MenuTemplate3
     },
     mounted() {
         console.log("order menu mounted")
@@ -37,6 +43,7 @@ export default {
                     image : 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
                 },
             ],
+            template_id:0
         }
     },
     methods: {
@@ -48,7 +55,17 @@ export default {
             }
             console.log(restaurant, table)
             this.axios
-            .get('http://127.0.0.1:8000/api/menuinfo/0/?restaurant_name='+restaurant)
+            .get('localhost:8000/api/menutemplate/0/?restaurant_name='+restaurant)
+            .then((result) => {
+                console.log(result.data)
+                this.template_id = result.data['menu_type']
+            })
+            .catch(function(error) {
+                console.log("senserver error")
+                console.log(error)
+            });
+            this.axios
+            .get('localhost:8000/api/menuinfo/0/?restaurant_name='+restaurant)
             .then((result) => {
                 console.log(result.data)
                 this.menuinfos = result.data

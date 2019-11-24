@@ -99,7 +99,7 @@ export default {
             let currentObj = this
             console.log(currentObj.$store.state.userdata['username'])
             this.axios
-            .get('http://127.0.0.1:8000/api/userinfo/0/?username='+currentObj.$store.state.userdata['username'])
+            .get('localhost:8000/api/userinfo/0/?username='+currentObj.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 currentObj.userinfoResponse = result.data
@@ -150,7 +150,7 @@ export default {
         save () {
             let currentObj = this
             currentObj.axios
-            .post('http://127.0.0.1:8000/api/signup/modify/', {
+            .post('localhost:8000/api/signup/modify/', {
                 username: currentObj.$store.state.userdata['username'],
                 token : currentObj.$store.state.userdata['logintoken'],
                 password: currentObj.editedItem.password,

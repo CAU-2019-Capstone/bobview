@@ -11,7 +11,7 @@ class UserInfoSerializer(serializers.HyperlinkedModelSerializer):
 class RestaurantInfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestaurantInfo
-        fields = ('owner','restaurant_name','restaurant_address', 'restaurant_latitude','restaurant_longitude','restaurant_image')
+        fields = ('owner','restaurant_name','restaurant_address', 'restaurant_latitude','restaurant_longitude','restaurant_image', 'tot_table_num')
 
 class ImageTableSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -47,3 +47,13 @@ class CommentListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CommentList
         fields = ('comment_list_id','rest_rating', 'menu_rating', 'comment', 'user')
+
+class MenuTemplateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MenuTemplate
+        fields = ('restaurant', 'menu_type', 'font_type', 'font_caption_size', 'font_normal_size', 'font_caption_color', 'fond_normal_color', 'is_active')
+
+class MessagesSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Messages
+        fields = ('restaurant', 'table_id', 'message')

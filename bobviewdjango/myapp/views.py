@@ -21,6 +21,12 @@ from rest_framework import viewsets
 from myapp.serializers import *
 from myapp.models import *
 from rest_framework.parsers import JSONParser
+from rest_framework.test import APIRequestFactory
+from rest_framework.request import Request
+import re
+from django.db.models import Q
+import qrcode
+from PIL import Image
 
 # Create your views here.
 # api
@@ -85,11 +91,14 @@ class RestaurantInfoViewSet(viewsets.ModelViewSet):
         owner = get_object_or_404(UserInfo, username=data['username'])
 
         new_restaurant = RestaurantInfo(restaurant_name=data['restaurant_name'], restaurant_address=data['restaurant_address'], 
-                                        restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'], owner=owner) # 이미지는 로컬에 저장하는거 해야됨.....
+                                        restaurant_latitude=data['restaurant_latitude'], restaurant_longitude=data['restaurant_longitude'],tot_table_num=data['tot_table_num'],  owner=owner)
         if(request.data['restaurant_image'] is not None):
             image = get_object_or_404(ImageTable, id = request.data['restaurant_image'])
             new_restaurant.restaurant_image = image.image
         new_restaurant.save()
+
+        newTemplate = MenuTemplate(restaurant=new_restaurant, menu_type = 1)
+        newTemplate.save()
         
         resp = JsonResponse({
             'message' : 'success'
@@ -370,10 +379,278 @@ class CommentListViewSet(viewsets.ModelViewSet):
         resp['Access-Control-Allow-Origin'] = '*'
         return resp
 
+class MenuTemplateViewSet(viewsets.ModelViewSet):
+    queryset = MenuTemplate.objects.all()
+    serializer_class = MenuTemplateSerializer
+    def retrieve(self, request, pk=None, format=None):
+        restaurant_name = self.request.query_params.get('restaurant_name')
+        print(pk)
+        print(self.request.query_params)
+
+        templatequery = MenuTemplate.objects.all()
+        try:
+            restaurantquery = RestaurantInfo.objects.all()
+            restaurant = get_object_or_404(restaurantquery, restaurant_name=restaurant_name)
+            template = get_object_or_404(templatequery, restaurant=restaurant)
+        except:
+            template = get_object_or_404(templatequery, id = pk)
+
+
+        serializer_context = {
+            'request': request,
+        }
+        serializer = MenuTemplateSerializer(template, context=serializer_context)
+        return Response(serializer.data)
+
+    def create(self,request, pk=None, format=None):
+        print(pk)
+        print(request.data)
+        restaurantquery = RestaurantInfo.objects.all()
+        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant'])
+        try :
+            templatequery = MenuTemplate.objects.all()
+            template = get_object_or_404(templatequery, restaurant=restaurant)
+            template.menu_type = request.data['menu_type']
+        except : 
+            template = MenuTemplate(restaurant = restaurant, menu_type = request.data['menu_type'])
+        template.save()
+
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+class MessagesViewSet(viewsets.ModelViewSet):
+    queryset = Messages.objects.all()
+    serializer_class = MessagesSerializer
+    def create (self, request, pk=None, format = None):
+        print(pk)
+        print(request.data)
+        restaurantquery = RestaurantInfo.objects.all()
+        restaurant = get_object_or_404(restaurantquery, restaurant_name=request.data['restaurant_name'])
+        new_message = Messages(restaurant=restaurant, message=request.data['message'], table_id=request.data['table_id'])
+        new_message.save()
+        resp = JsonResponse({
+            'message' : 'success',
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+        
+
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
 # 유저 생성, 레스토랑 등록/삭제도 나중에 다 예외처리 해줘야함....
 
+
+@csrf_exempt
+@api_view(['POST'])
+def search(request):
+    if request.method == 'POST':
+        data = request.data
+        search_string = data['search_string']
+        clean_string = re.sub(r'[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]', '', search_string)
+        print(clean_string)
+        split_words = clean_string.split()
+        search_contents_rest = []
+        search_contents_menu = []
+        searched_contents_rest = []
+        searched_contents_menu = []
+        factory = APIRequestFactory()
+        request = factory.get('/')
+        serializer_context = {
+            'request' : Request(request),
+        }
+        serializer_context_rest = {
+            'request' : Request(request),
+            'fields'  : ['restaurant_name']
+        }
+        serializer_context_menu = {
+            'request' : Request(request),
+            'fields'  : ['menu']
+        }
+
+        for word in split_words:
+            # restaurant_rating
+            try:
+                rest_temp_1 = RestaurantInfo.objects.filter(restaurant_name__icontains=word)
+                rest_temp_1 = RestaurantInfoSerializer(instance=rest_temp_1, many=True, context=serializer_context_rest)
+                rest_temp_1 = rest_temp_1.data
+                rest_temp_1 = [v for lst in rest_temp_1 for k, v in lst.items()]
+                # print(rest_temp_1)
+                rest_temp_2 = RestaurantInfo.objects.filter(restaurant_address__icontains=word)
+                rest_temp_2 = RestaurantInfoSerializer(instance=rest_temp_2, many=True, context=serializer_context_rest)
+                rest_temp_2 = rest_temp_2.data
+                rest_temp_2 = [v for lst in rest_temp_2 for k, v in lst.items()]
+                # print(rest_temp_2)
+                rest_temp_1.extend(rest_temp_2)
+                # print(rest_temp_1)
+                rest_temp = rest_temp_1
+                # print(rest_temp)
+            except RestRating.DoesNotExist:
+                rest_temp = None
+            
+            try:
+                if rest_temp is not None:
+                    rest_rating_temp = RestRating.objects.filter(Q(desc__icontains=word)|Q(restaurant__in=rest_temp))
+                else:
+                    rest_rating_temp = RestRating.objects.filter(desc__icontains=word)                                                                                                                                                                                                                                                               
+                serializer = RestRatingSerializer(instance=rest_rating_temp, many=True, context=serializer_context)
+                # print(type(serializer.data))
+                # print(serializer.data)
+                if len(serializer.data) > 0 and serializer.data[0]['restaurant'] not in searched_contents_rest:
+                    search_contents_rest.extend(serializer.data)
+                    searched_contents_rest.append(serializer.data[0]['restaurant'])
+            except RestRating.DoesNotExist:
+                rest_rating_temp = None
+            # print(search_contents_rest)
+            # print(searched_contents_rest)
+
+
+            # menu_rating
+            try:
+                menu_temp_1 = MenuInfo.objects.filter(menu_name__icontains=word)
+                menu_temp_1 = MenuInfoSerializer(instance=menu_temp_1, many=True, context=serializer_context_menu)
+                menu_temp_1 = menu_temp_1.data
+                menu_temp_1 = [int(v) for lst in menu_temp_1 for k, v in lst.items() if k is 'menu_id']
+
+                menu_temp_2 = MenuInfo.objects.filter(menu_name__icontains=word)
+                menu_temp_2 = MenuInfoSerializer(instance=menu_temp_2, many=True, context=serializer_context_menu)
+                menu_temp_2 = menu_temp_2.data
+                menu_temp_2 = [int(v) for lst in menu_temp_2 for k, v in lst.items() if k is 'menu_id']
+
+                menu_temp_1.extend(menu_temp_2)
+
+                menu_temp = menu_temp_1
+                # print(menu_temp)
+            except MenuRating.DoesNotExist:
+                menu_temp = None
+
+            try:
+                if menu_temp is not None:
+                    menu_rating_temp = MenuRating.objects.filter(Q(desc__icontains=word)|Q(menu_id__in=menu_temp))
+                else:
+                    menu_rating_temp = MenuRating.objects.filter(desc__icontains=word)
+                serializer = MenuRatingSerializer(instance=menu_rating_temp, many=True, context=serializer_context)
+                if len(serializer.data) > 0 and serializer.data[0]['menu'] not in searched_contents_menu:
+                    search_contents_menu.extend(serializer.data)
+                    searched_contents_menu.append(serializer.data[0]['menu'])
+            except MenuRating.DoesNotExist:
+                menu_rating_temp = None
+        print(search_contents_rest)
+        # print(searched_contents_rest)
+        print(search_contents_menu)
+        # print(searched_contents_menu)
+            
+
+        if len(search_contents_menu) > 0 or len(search_contents_rest) > 0:
+            resp = JsonResponse({
+            'message' : 'success',
+            'search_contents_rest' : search_contents_rest, # 둘중 하나는 아무겂도 없을수도 있다
+            'search_contents_menu' : search_contents_menu,
+            })
+        else:
+            resp = JsonResponse({
+            'message' : 'fail',
+            })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+@csrf_exempt
+@api_view(['POST', 'GET'])
+def community_main(request):
+    show_list = []     
+    n = 10   # 리뷰 몇개 받을지  
+    total_review_num = 0
+    
+    if request.method == 'POST': # POST: 커뮤니티 메인화면 스크롤 많이 내려서 더 추가로 랜덤 리뷰 불러올때
+        data = request.data
+        existing_rest_rating_list = data['existing_rest_rating_list']   # 이미 표시된 레스토랑 리뷰들의 id를 가지고 있다
+        existing_menu_rating_list = data['existing_menu_rating_list']   # 이미 표시된 메뉴 리뷰들의 id를 가지고 있다
+    
+    # GET:  커뮤니티 메인 화면 처음 들어갔을때(POST 이외의 모든 경우)
+    if request.method == 'GET':
+        existing_rest_rating_list = []   
+        existing_menu_rating_list = []
+
+    if request.method == 'POST' or request.method == 'GET':    
+        factory = APIRequestFactory()
+        request = factory.get('/')
+        serializer_context = {
+            'request' : Request(request),
+        }
+        if RestRating.objects.last() is not None and MenuRating.objects.last() is not None:
+            total_review_num = RestRating.objects.last().rest_rating_id + MenuRating.objects.last().menu_rating_id     
+        # 레스토랑, 메뉴 리뷰가 합해서 n개도 안될때는 있는만큼만..                   
+        if total_review_num < n:
+            if RestRating.objects.last() is not None:
+                ids = []
+                for i in range(RestRating.objects.last().rest_rating_id):
+                    if i not in existing_rest_rating_list:
+                        ids.append(i+1)
+                rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
+                serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
+            if MenuRating.objects.last() is not None:
+                ids = []
+                for i in range(MenuRating.objects.last().menu_rating_id):
+                    if i not in existing_menu_rating_list:
+                        ids.append(i+1)
+                menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
+                serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
+        # 레스토랑, 메뉴 리뷰가 n개 이상일때 n개의 레스토랑, 메뉴 리뷰를 랜덤으로 선택한다 
+        else:
+            count = 0 
+            global rest_max_id
+            rest_max_id = 10000
+            global menu_max_id
+            menu_max_id = 10000
+            global prev
+            prev = 0
+            while count < n:                                            
+                rand = random.randint(0,1)  # 레스토랑 또는 메뉴 리뷰 랜덤 선택
+                if rand == 0 and RestRating.objects.last() is not None:
+                    rest_max_id = RestRating.objects.last().rest_rating_id
+                    if len(existing_rest_rating_list) < rest_max_id:
+                        pk = random.randint(1, rest_max_id)
+                        while pk in existing_rest_rating_list:
+                            pk = random.randint(1, rest_max_id)
+                        existing_rest_rating_list.append(pk)
+                        rest_rating_temp = RestRating.objects.get(rest_rating_id=pk)
+                        serializer = RestRatingSerializer(instance=rest_rating_temp, context=serializer_context)
+                        show_list.append(serializer.data)
+                elif MenuRating.objects.last() is not None:
+                    menu_max_id = MenuRating.objects.last().menu_rating_id
+                    if len(existing_menu_rating_list) < menu_max_id:
+                        pk = random.randint(1, menu_max_id)
+                        while pk in existing_menu_rating_list:
+                            pk = random.randint(1, menu_max_id)
+                        existing_menu_rating_list.append(pk)
+                        menu_rating_temp = MenuRating.objects.get(menu_rating_id=pk)
+                        serializer = MenuRatingSerializer(instance=menu_rating_temp, context=serializer_context)
+                        show_list.append(serializer.data)
+                if len(existing_rest_rating_list) >= rest_max_id and len(existing_menu_rating_list) >= menu_max_id:
+                        break
+                if prev != len(show_list):
+                    count += 1
+                prev = len(show_list)
+        if len(show_list) > 0:
+            random.shuffle(show_list)
+            resp = JsonResponse({
+                'message' : 'success',
+                'items'   :  show_list,     # RestRating, MenuRating이 섞여있다
+            })
+        else:
+            resp = JsonResponse({
+                'message' : 'fail',
+            })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
 
 #insert order
 @csrf_exempt
@@ -424,15 +701,14 @@ def changeOrder(request):
         user = get_object_or_404(userquery, username= request.data['username'])
         tempuser = get_object_or_404(userquery, username='tempuser')
         userorderquery = UserOrder.objects.all()
-        userorder = get_object_or_404(userorderquery, user_order_id=request.data['order_id'])
-        
-        print(userorder.user)
-        print(user)
-        userorder.user = user
-        
-        userorder.save()
-        message='success'
 
+        try:
+            userorder = get_object_or_404(userorderquery, user_order_id=request.data['order_id'], user=tempuser)
+            userorder.user = user
+            userorder.save()
+            message='success'
+        except:
+            message='failed existing user'
 
         resp = JsonResponse({
             'message' : message,
@@ -456,7 +732,7 @@ def getActiveOrder(request):     # 메뉴 정보에서 편집 기능
             restaurantquery = RestaurantInfo.objects.all()
             restaurant = get_object_or_404(restaurantquery, restaurant_name = request.data['restaurant_name'])
             serializer = RestaurantInfoSerializer(restaurant, context=serializer_context)
-            image = serializer.data['restaurant_image']
+            restaurantInfo = serializer.data
             userorderquery = UserOrder.objects.all()
             userorder = get_object_or_404(userorderquery, restaurant = restaurant, table_id = request.data['table_id'], is_active=True)
             orderContents = OrderContents.objects.filter(userorder=userorder)
@@ -471,7 +747,7 @@ def getActiveOrder(request):     # 메뉴 정보에서 편집 기능
         resp = JsonResponse({
             'message' : message,
             'menus' : serializer.data,
-            'restaurant_image' : image,
+            'restaurant' : restaurantInfo,
             'order_id' : order_id,
         })
         resp['Access-Control-Allow-Origin'] = '*'
@@ -512,7 +788,6 @@ def addSignup(request):
         print(data)
 
         print("----------------------")
-        #TODO
         new_user = UserInfo(username=data['username'], first_name=data['first_name'], email=data['email'], is_owner=data['is_owner'])
         new_user.set_password(data['password'])
         new_user.is_active = False
@@ -523,11 +798,12 @@ def addSignup(request):
 
         print("회원가입을 합니다.")
 
+        #TODO
         mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n'
-                            + 'http://127.0.0.1:8000/api/active/' + new_user.last_name, to=[data['email']])
+                            + 'www.bobview.org/api/active/' + new_user.last_name, to=[data['email']])
 
         mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.<br/>사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.<br/>감사합니다.<br/>'
-        + "<a href=\"+http://127.0.0.1:8000/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>http://127.0.0.1:8000/api/active/"+ new_user.last_name, to=[data['email']] )                            
+        + "<a href=\"+www.bobview.org/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>localhost:8000/api/active/"+ new_user.last_name, to=[data['email']] )                            
         mail.content_subtype = "html"
         mail.send()
 

@@ -1,57 +1,101 @@
 <template>
-    <v-container class="justify-space-around mb-10" >
-        <v-card 
-        class="elevation-5"
-        max-width="500"
-        >
-            <v-card-title v-if="progressSuccess" primary-title class="justify-space-around">
-                <div >
-                    <h2 class="headline mb-2">Rate Me!</h2>
-                    <span sm>{{restaurantRating['restaurant_name']}}</span>
-                </div>
-            </v-card-title>
-            <v-container v-if="progressSuccess">
+    <v-card 
+    class="elevation-5 px-12 my-5"
+    max-width="500"
+    >
+        <v-card-title v-if="progressSuccess" primary-title class="justify-space-around">
+            <div >
+                <h2 class="headline mb-2">Rate Me!</h2>
+                <span sm>{{restaurantRating['restaurant_name']}}</span>
+            </div>
+        </v-card-title>
+        <v-container v-if="progressSuccess">
+            <v-content>
+                <v-row class="justify-space-around">
+                    <v-img
+                        :src="restaurantRating['restaurant_image']"
+                        lazy-src="https://picsum.photos/id/11/10/6"
+                        max-width="400"
+                        max-height="100"
+                    >
+                    </v-img>
+                </v-row>
+                <v-row>
+                    <v-content>
+                        <v-row class="justify-center">
+                            <span small>Order Menus</span>
+                        </v-row>
+                        <v-row
+                            v-for="ordermenu in ordermenus"
+                            :key="ordermenu['menu']['menu_id']"
+                        >
+                            <v-col cols="8">
+                                <div class="d-flex align-center">
+                                    <p class="text-left ml-5">{{ordermenu['menu']['menu_name']}}</p>
+                                </div>
+                            </v-col>
+                            <v-col cols="2">
+                                <div class="mx-5">
+                                    <p class="text-right">{{ordermenu['menu_num']}}</p>
+                                </div>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-btn small fab depressed @click="rateMenu(ordermenu)">
+                                    <v-icon v-if="ordermenu.rated">mdi-star</v-icon>
+                                    <v-icon v-else>mdi-star-outline</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-content>
+                </v-row>
+                <v-row class="justify-space-around my-10">
+                    <v-rating
+                        v-model="restaurantRating['rating']"
+                        length="5"
+                        half-increments
+                        color="blue"
+                        hover
+                    ></v-rating>
+                </v-row>
+                <v-row class="mx-3">
+                    <v-textarea 
+                    full-width
+                    single-line
+                    outlined 
+                    label="description" 
+                    v-model="restaurantRating['desc']"></v-textarea>
+                </v-row>
+            </v-content>
+            <v-content v-if="rateSuccess"
+            >
+                <p>평가가 완료되었습니다!</p>
+            </v-content>
+            <v-card-actions>
+                <v-spacer/>
+                <v-btn depressed text @click="save">평가</v-btn>
+                <v-btn depressed text @click="close">취소</v-btn>
+            </v-card-actions>
+            
+
+            <v-dialog
+            v-model="dialog"
+            max-width="400"
+            >
+            <v-card>
+                <v-card-title class="headline">{{editedItem['menu_name']}}</v-card-title>
                 <v-content>
-                    <v-row class="justify-space-around">
+                    <v-row class="justify-space-around my-10">
                         <v-img
-                            :src="restaurantRating['restaurant_image']"
+                            :src="editedItem['menu_image']"
                             lazy-src="https://picsum.photos/id/11/10/6"
-                            max-width="400"
-                            max-height="100"
+                            max-width="350"
+                            max-height="150"
                         >
                         </v-img>
                     </v-row>
-                    <v-row>
-                        <v-content>
-                            <v-row class="justify-center">
-                                <span small>Order Menus</span>
-                            </v-row>
-                            <v-row
-                                v-for="ordermenu in ordermenus"
-                                :key="ordermenu['menu']['menu_id']"
-                            >
-                                <v-col cols="8">
-                                    <div class="d-flex align-center">
-                                        <p class="text-left ml-5">{{ordermenu['menu']['menu_name']}}</p>
-                                    </div>
-                                </v-col>
-                                <v-col cols="2">
-                                    <div class="mx-5">
-                                        <p class="text-right">{{ordermenu['menu_num']}}</p>
-                                    </div>
-                                </v-col>
-                                <v-col cols="2">
-                                    <v-btn small fab depressed @click="rateMenu(ordermenu)">
-                                        <v-icon v-if="ordermenu.rated">mdi-star</v-icon>
-                                        <v-icon v-else>mdi-star-outline</v-icon>
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-content>
-                    </v-row>
                     <v-row class="justify-space-around my-10">
                         <v-rating
-                            v-model="restaurantRating['rating']"
+                            v-model="editedItem['menu_rating']"
                             length="5"
                             half-increments
                             color="blue"
@@ -64,84 +108,38 @@
                         single-line
                         outlined 
                         label="description" 
-                        v-model="restaurantRating['desc']"></v-textarea>
+                        v-model="editedItem['desc']"></v-textarea>
                     </v-row>
                 </v-content>
-                <v-content v-if="rateSuccess"
-                >
-                    <p>평가가 완료되었습니다!</p>
-                </v-content>
                 <v-card-actions>
-                    <v-spacer/>
-                    <v-btn depressed text @click="save">평가</v-btn>
-                    <v-btn depressed text @click="close">취소</v-btn>
-                </v-card-actions>
-                
+                <v-spacer></v-spacer>
 
-                <v-dialog
-                v-model="dialog"
-                max-width="400"
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="saveItem"
                 >
-                <v-card>
-                    <v-card-title class="headline">{{editedItem['menu_name']}}</v-card-title>
-                    <v-content>
-                        <v-row class="justify-space-around my-10">
-                            <v-img
-                                :src="editedItem['menu_image']"
-                                lazy-src="https://picsum.photos/id/11/10/6"
-                                max-width="350"
-                                max-height="150"
-                            >
-                            </v-img>
-                        </v-row>
-                        <v-row class="justify-space-around my-10">
-                            <v-rating
-                                v-model="editedItem['menu_rating']"
-                                length="5"
-                                half-increments
-                                color="blue"
-                                hover
-                            ></v-rating>
-                        </v-row>
-                        <v-row class="mx-3">
-                            <v-textarea 
-                            full-width
-                            single-line
-                            outlined 
-                            label="description" 
-                            v-model="editedItem['desc']"></v-textarea>
-                        </v-row>
-                    </v-content>
-                    <v-card-actions>
-                    <v-spacer></v-spacer>
+                    Save
+                </v-btn>
 
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        @click="saveItem"
-                    >
-                        Save
-                    </v-btn>
-
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        @click="closeItem"
-                    >
-                        Cancle
-                    </v-btn>
-                    </v-card-actions>
-                </v-card>
-                </v-dialog>
-            </v-container>
-            <v-progress-linear
-            v-if="!progressSuccess"
-            indeterminate
-            color="teal"
-            max-width="500"
-            ></v-progress-linear>
-        </v-card>
-    </v-container>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="closeItem"
+                >
+                    Cancle
+                </v-btn>
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
+        </v-container>
+        <v-progress-linear
+        v-if="!progressSuccess"
+        indeterminate
+        color="teal"
+        max-width="500"
+        ></v-progress-linear>
+    </v-card>
 </template>
 
 <script>
@@ -196,7 +194,7 @@ export default {
                         currentObj.ordermenus[index]['menu_rating']['rating'] = currentObj.restaurantRating['rating']
                     }
                     if(this.ordermenus[index]['menu_rating']['menu_rating_id'] != undefined){
-                        currentObj.axios.put('http://127.0.0.1:8000/api/menurating/'+currentObj.ordermenus[index]['menu_rating']['menu_rating_id']+'/', {
+                        currentObj.axios.put('http://localhost:8000/api/menurating/'+currentObj.ordermenus[index]['menu_rating']['menu_rating_id']+'/', {
                             rating:currentObj.ordermenus[index]['menu_rating']['rating'],
                             desc:currentObj.ordermenus[index]['menu_rating']['desc'],
                         })
@@ -208,7 +206,7 @@ export default {
                             console.log(error)
                         });
                     } else {
-                        currentObj.axios.post('http://127.0.0.1:8000/api/menurating/', {
+                        currentObj.axios.post('http://localhost:8000/api/menurating/', {
                             menu_id : currentObj.ordermenus[index]['menu']['menu_id'],
                             username : currentObj.$store.getters.GetUserdata['username'],
                             rating:currentObj.ordermenus[index]['menu_rating']['rating'],
@@ -225,7 +223,7 @@ export default {
                 }
             }
             if(currentObj.restaurantRating['rest_rating_id'] == undefined){
-                currentObj.axios.post('http://127.0.0.1:8000/api/restrating/', {
+                currentObj.axios.post('http://localhost:8000/api/restrating/', {
                     restaurant_name : currentObj.restaurantRating['restaurant_name'],
                     username : currentObj.$store.getters.GetUserdata['username'],
                     rating:currentObj.restaurantRating['rating'],
@@ -239,7 +237,7 @@ export default {
                     console.log(error)
                 });
             } else {
-                currentObj.axios.put('http://127.0.0.1:8000/api/restrating/'+currentObj.restaurantRating['rest_rating_id']+'/', {
+                currentObj.axios.put('http://localhost:8000/api/restrating/'+currentObj.restaurantRating['rest_rating_id']+'/', {
                     rating:currentObj.restaurantRating['rating'],
                     desc:currentObj.restaurantRating['desc'],
                 })

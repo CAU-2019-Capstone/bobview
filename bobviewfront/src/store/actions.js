@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export default {
     verifyLogin(context) {
-        axios.post('http://127.0.0.1:8000/api/login/verify/', {
+        axios.post('http://localhost:8000/api/login/verify/', {
                 username: context.state.userdata['username'],
                 token: context.state.userdata['logintoken'],
             })
@@ -22,7 +22,7 @@ export default {
             });
     },
     getUserInfo(context) {
-        axios.get('http://127.0.0.1:8000/api/userinfo/0/?username=' + context.state.userdata['username'])
+        axios.get('http://localhost:8000/api/userinfo/0/?username=' + context.state.userdata['username'])
             .then((result) => {
                 console.log("get response : " + result.data)
                 if (result.data['is_owner']) {

@@ -11,27 +11,31 @@
                     >
                             <v-btn
                                 text
-                                @click="action(CallMenu.text)"
+                                @click="action(CallMenu.name)"
                             >
                                 {{ CallMenu.name }}
                             </v-btn>
                     </v-col>
                 </v-row>
                 <v-row 
-                    v-if="moreRequest"
                     class="mx-10">
-                    <v-text-field box label="label" v-model="requestText"></v-text-field>
+                    <v-text-field outlined label="label" v-model="requestText"></v-text-field>
                 </v-row>
-                <v-row
-                    v-if="moreRequest"
-                >
+                <v-row v-if="oneMoreRequest" class="justify-center">
+                    Really send the message? Please click one more time
+                </v-row>
+                <v-row>
                     <v-spacer></v-spacer>
                     <v-btn
                         text
                         @click="action('requestMsg')"
+                        :disabled="buttonDisable"
                     >
                         Send
                     </v-btn>
+                </v-row>
+                <v-row v-if="sendSuccess">
+                    Send Success! Please Wait
                 </v-row>
             </v-content>
         </v-card>
@@ -45,10 +49,14 @@ export default {
         return{
             CallMenus:[],
             requestText:'',
-            moreRequest : false
+            moreRequest : false,
+            sendSuccess : false,
+            buttonDisable : false,
+            oneMoreRequest : false,
+            sendedMessage : ''
         }
     },
-    mounted() { 
+    mounted() {
         console.log("login mounted") 
         console.log(this.$store.getters.isLogined)
         if(this.$store.getters.isLogined){
@@ -56,34 +64,63 @@ export default {
         }
         this.initMenus()
     },
+    watch:{
+        requestText:function(val){
+            if(val == this.sendedMessage){
+                this.buttonDisable = true
+            }
+        }
+    },
     methods: {
         initMenus() {
+            let restaurant = this.$store.getters.RestaurantName
+            let table = this.$store.getters.TableNumber
+            if(restaurant == '' || table == undefined){
+                this.$router.push("/")
+            }
             this.CallMenus = [
                 {
-                    name: '점원 부르기',
-                    text: 'callClerk'
+                    name: 'Call Clerk',
                 },
                 {
-                    name: '물 주세요',
-                    text: 'water'
+                    name: 'Give Us Water',
                 },
                 {
-                    name: '물수건 주세요',
-                    text: 'waterTissue'
+                    name: 'Give Us Towel',
                 },
                 {
-                    name: '그 외..',
-                    text: 'etc'
+                    name: 'Give Us Tableware',
                 },
-                
+                {
+                    name: 'Clean the Table',
+                },
             ]
         },
         action(event) {
-            if(event == 'etc'){
-                this.moreRequest=true
-            }
             if(event == 'requestMsg'){
-                console.log("")
+                if(this.oneMoreRequest == false){
+                    this.oneMoreRequest = true
+                    return
+                }
+                this.oneMoreRequest = false
+                this.axios
+                    .post('http://localhost:8000/api/messages/',{
+                        restaurant_name : this.$store.getters.RestaurantName,
+                        message : this.requestText,
+                        table_id : this.$store.getters.TableNumber
+                    })
+                    .then(function(response){
+                        console.log(response)
+                        this.sendSuccess = true
+                        this.sendedMessage = event
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    });
+            }
+            else {
+                this.requestText = event
             }
         }
     },

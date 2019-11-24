@@ -79,18 +79,34 @@ WSGI_APPLICATION = 'BobView.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+import configparser
+config = configparser.ConfigParser()
+#TODO
+config.read('/home/hyuncho/workspace/database/config.ini')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bobview',
-        'USER': 'root',
-        'PASSWORD': '12341234',
-        'HOST': 'localhost',
+        'NAME': config['BOBVIEW']['DATABASE'],
+        'USER': config['BOBVIEW']['USER'],
+        'PASSWORD': config['BOBVIEW']['PASSWORD'],
+        'HOST': config['BOBVIEW']['HOST'],
         'PORT': '3306',
-    }
+    },
+    'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+    },
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'localhost:8000',
+    'localhost:8080',
+    'http://localhost:8080',
+    'www.bobview.org'
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

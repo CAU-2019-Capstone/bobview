@@ -22,7 +22,11 @@
                             inset
                             vertical
                             ></v-divider>
-                        <div class="flex-grow-1"></div>
+                            <div class="flex-grow-1"></div>
+                            <v-spacer/>
+                            <v-btn text depressed @click="showQRCodes(i)">
+                                Show QRCodes
+                            </v-btn>
                         </v-toolbar>
                     </template>
                 </v-data-table>
@@ -59,6 +63,9 @@
                                 <v-text-field v-model="editedItem['restaurant_longitude']" label="longitude"></v-text-field>
                             </v-row>
                             <v-row>
+                                <v-text-field v-model="editedItem['restaurant_tot_table_num']" label="restaurant's total table number"></v-text-field>
+                            </v-row>
+                            <v-row>
                                 <v-file-input
                                 label="Restaurant Image" 
                                 accept="image/png, image/jpeg, image/bmp"
@@ -70,6 +77,7 @@
                         </v-card-text>
 
                         <v-card-actions>
+                        <v-btn color="blue darken-1" text @click="openLatLng">How to get LatLng?</v-btn>
                         <div class="flex-grow-1"></div>
                         <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                         <v-btn color="blue darken-1" text @click="save">Save</v-btn>
@@ -115,14 +123,16 @@ export default {
                 restaurant_address:'',
                 restaurant_latitude:0.0,
                 restaurant_longitude:0.0,
-                restaurant_image:null
+                restaurant_image:null,
+                restaurant_tot_table_num:0
             },
             defaultItem : {
                 restaurant_name: '',
                 restaurant_address:'',
                 restaurant_latitude:0.0,
                 restaurant_longitude:0.0,
-                restaurant_image:null
+                restaurant_image:null,
+                restaurant_tot_table_num:0
             },
             userdatas : {},
             resultList: [],
@@ -132,7 +142,7 @@ export default {
         initialize () {
             this.getSuccess=false
             this.axios
-            .get('http://127.0.0.1:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+            .get('localhost:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 console.log("results")
@@ -158,6 +168,10 @@ export default {
                         {
                             name: 'restaurant_longitude',
                             data: this.resultList[index]['restaurant_longitude'],
+                        },
+                        {
+                            name: 'restaurant_tot_table_num',
+                            data: this.resultList[index]['tot_table_num'],
                         },
                     ]
                 }
@@ -202,7 +216,8 @@ export default {
                     restaurant_address: currentObj.editedItem['restaurant_address'],
                     restaurant_latitude: currentObj.editedItem['restaurant_latitude'],
                     restaurant_longitude: currentObj.editedItem['restaurant_longitude'],
-                    restaurant_image: currentObj.editedItem['restaurant_image']
+                    restaurant_image: currentObj.editedItem['restaurant_image'],
+                    tot_table_num : currentObj.editedItem['restaurant_tot_table_num']
                 })
                 .then(function(response) {
                     console.log(response.data)
@@ -216,6 +231,19 @@ export default {
                     console.log(error)
                 });
             }, 1000);
+        },
+        openLatLng(){
+            window.open("https://www.latlong.net/", "LatLng", "width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes" );
+        },
+        showQRCodes(index){
+            console.log(this.userdatas)
+            this.$router.push({ 
+                path: '/restaurant/qrcode', 
+                query: { 
+                    restaurant_name: this.userdatas[index][1]['data'], 
+                    table_num : this.userdatas[index][5]['data']
+                }
+            })
         }
     },
 

@@ -100,7 +100,7 @@ export default {
   methods: {
     initialize () {
       this.axios
-      .get('http://127.0.0.1:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+      .get('localhost:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           for(let [index] in result.data){

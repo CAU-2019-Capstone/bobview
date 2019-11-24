@@ -16,8 +16,12 @@ router.register('restrating', views.RestRatingViewSet)
 router.register('menurating', views.MenuRatingViewSet)
 router.register('imagetable', views.ImageTableViewSet)
 router.register('commentlist', views.CommentListViewSet)
+router.register('menutemplate', views.MenuTemplateViewSet)
+router.register('messages', views.MessagesViewSet)
 
 urlpatterns = [
+    path('community/main/', views.community_main),     
+    path('community/search/', views.search), 
     path('signup/add/', views.addSignup),
     path('signup/modify/', views.modifySignup),
     path('login/apply/', views.applyLogin),
