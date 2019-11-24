@@ -132,7 +132,7 @@ export default {
     initialize () {
       this.getOrderData=false
       this.axios
-      .get('13.124.90.6:8080/api/userorder/0/?username='+this.$store.state.userdata['username'])
+      .get('http://13.124.90.6:8080/api/userorder/0/?username='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           this.orderLists = result.data

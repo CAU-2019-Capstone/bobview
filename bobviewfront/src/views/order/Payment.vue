@@ -146,7 +146,7 @@ export default {
             let owner = this.$store.getters.GetUserdata['username']
             this.isLogined = false
             this.axios
-                .get('13.124.90.6:8080/api/userinfo/0/?username='+owner)
+                .get('http://13.124.90.6:8080/api/userinfo/0/?username='+owner)
                 .then((result) => {
                     console.log(result.data)
                     this.userinfo = result.data
@@ -182,7 +182,7 @@ export default {
                 if ( rsp.success ) {
                     msg = 'Payment Success, \nGo to complete page';
                     currentObj.axios
-                        .post("13.124.90.6:8080/api/order/create/",{
+                        .post("http://13.124.90.6:8080/api/order/create/",{
                             username:currentObj.$store.getters.GetUserdata['username'],
                             restaurant_name : currentObj.$store.getters.RestaurantName,
                             table_id : currentObj.$store.getters.TableNumber,
