@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         initialize(){
-            this.axios.get('http://localhost:8000/api/commentlist/'+this.comment_list_id+'/')
+            this.axios.get('http://13.124.90.6:8000/api/commentlist/'+this.comment_list_id+'/')
             .then((result)=>{
                 console.log(result.data)
                 this.comment_data = result.data

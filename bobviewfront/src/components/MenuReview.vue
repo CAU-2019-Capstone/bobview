@@ -114,7 +114,7 @@ export default {
             this.loadRating = false
             let currentObj = this
             this.axios
-                .get('http://localhost:8000/api/menurating/'+currentObj.menu_rating_id+'/')
+                .get('http://13.124.90.6:8000/api/menurating/'+currentObj.menu_rating_id+'/')
                 .then((result)=>{
                     console.log(result.data)
                     this.menu_rating = result.data[0]
@@ -124,7 +124,7 @@ export default {
                     console.log("senserver error")
                 });
             this.axios
-                .get('http://localhost:8000/api/commentlist/0/?menu_rating_id='+this.menu_rating_id)
+                .get('http://13.124.90.6:8000/api/commentlist/0/?menu_rating_id='+this.menu_rating_id)
                 .then((result)=>{
                     console.log(result.data)
                     this.comments = result.data
@@ -145,7 +145,7 @@ export default {
                         console.log("senserver error")
                     });
                 currentObj.axios
-                    .get('http://localhost:8000/api/userinfo/'+currentObj.menu_rating['user'].split('/')[5]+'/')
+                    .get('http://13.124.90.6:8000/api/userinfo/'+currentObj.menu_rating['user'].split('/')[5]+'/')
                     .then((result)=>{   
                         console.log(result.data)
                         currentObj.menu_rating['user'] = result.data
@@ -168,7 +168,7 @@ export default {
             this.like = val
         },
         sendComment() {
-            this.axios.post('http://localhost:8000/api/commentlist/',{
+            this.axios.post('http://13.124.90.6:8000/api/commentlist/',{
                 menu_rating_id:this.menu_rating_id,
                 username:this.$store.getters.GetUserdata['username'],
                 comment:this.newComment

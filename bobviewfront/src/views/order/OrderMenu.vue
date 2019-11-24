@@ -55,7 +55,7 @@ export default {
             }
             console.log(restaurant, table)
             this.axios
-            .get('localhost:8000/api/menutemplate/0/?restaurant_name='+restaurant)
+            .get('13.124.90.6:8000/api/menutemplate/0/?restaurant_name='+restaurant)
             .then((result) => {
                 console.log(result.data)
                 this.template_id = result.data['menu_type']
@@ -65,7 +65,7 @@ export default {
                 console.log(error)
             });
             this.axios
-            .get('localhost:8000/api/menuinfo/0/?restaurant_name='+restaurant)
+            .get('13.124.90.6:8000/api/menuinfo/0/?restaurant_name='+restaurant)
             .then((result) => {
                 console.log(result.data)
                 this.menuinfos = result.data

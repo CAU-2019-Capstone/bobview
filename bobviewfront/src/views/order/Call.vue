@@ -104,7 +104,7 @@ export default {
                 }
                 this.oneMoreRequest = false
                 this.axios
-                    .post('http://localhost:8000/api/messages/',{
+                    .post('http://13.124.90.6:8000/api/messages/',{
                         restaurant_name : this.$store.getters.RestaurantName,
                         message : this.requestText,
                         table_id : this.$store.getters.TableNumber

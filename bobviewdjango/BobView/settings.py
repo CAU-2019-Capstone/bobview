@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'BobView.wsgi.application'
 import configparser
 config = configparser.ConfigParser()
 #TODO
-config.read('/home/hyuncho/workspace/database/config.ini')
+config.read('/home/ubuntu/database/config.ini')
 
 DATABASES = {
     'default': {
@@ -98,15 +98,9 @@ DATABASES = {
     },
 }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '13.124.90.6']
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [
-    'localhost:8000',
-    'localhost:8080',
-    'http://localhost:8080',
-    'www.bobview.org'
-]
+CORS_ORIGIN_ALLOW_ALL= True
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

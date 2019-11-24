@@ -95,7 +95,7 @@ export default {
         initialize () {
             this.isUpdated = false
             this.axios
-            .get('http://localhost:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+            .get('http://13.124.90.6:8000/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 for(let [index] in result.data){
@@ -123,7 +123,7 @@ export default {
                 return
             }
             this.axios
-            .get('http://localhost:8000/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
+            .get('http://13.124.90.6:8000/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
             .then((result) => {
                 console.log("menuinfo data")
                 console.log(result.data)
@@ -142,7 +142,7 @@ export default {
             setTimeout(function(){
                 for(let [index] in currentObj.currentRatingInfo){
                     currentObj.axios
-                        .get('http://localhost:8000/api/menurating/1/?menu_id='+currentObj.currentRatingInfo[index]['menu_id'])
+                        .get('http://13.124.90.6:8000/api/menurating/1/?menu_id='+currentObj.currentRatingInfo[index]['menu_id'])
                         .then((result) => {
                             console.log(currentObj.currentRatingInfo[index]['menu_name']+'\'s rating')
                             console.log(result.data)

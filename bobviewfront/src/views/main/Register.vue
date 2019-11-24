@@ -165,7 +165,7 @@ export default {
 
             //axios transmission
             axios
-            .post('localhost:8000/api/signup/add/', {
+            .post('13.124.90.6:8000/api/signup/add/', {
                 is_owner: currentObj.is_owner,
                 first_name: currentObj.PersonalData.name,
                 username: currentObj.PersonalData.id,
