@@ -158,7 +158,6 @@ export default {
             setTimeout(function() {
                 currentObj.loadRating = true
                 currentObj.btnChanged =true
-                console.log(currentObj.rest_rating)
             },500)
         },
         moreReply() {

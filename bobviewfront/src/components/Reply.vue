@@ -16,8 +16,6 @@ export default {
     name:'reply',
     props:['comment_list_id'],
     mounted() {
-        console.log("reply")
-        console.log(this.comment_list_id)
         this.initialize()
     },
     data(){

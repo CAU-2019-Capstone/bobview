@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'BobView',
     'myapp',
     'corsheaders',
+    'sslserver',
 ]
 
 MIDDLEWARE = [

@@ -50,7 +50,7 @@ export default {
         console.log(this.$route.query.table_num)
         this.qrcodeList = []
         for(let i=1 ;i <= this.$route.query.table_num;i++){
-            this.qrcodeList.push(this.makeCode(this.$route.query.restaurant_name, i+1))
+            this.qrcodeList.push(this.makeCode(this.$route.query.restaurant_name, i))
         }
         
     },

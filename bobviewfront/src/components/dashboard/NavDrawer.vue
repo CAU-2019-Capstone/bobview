@@ -140,7 +140,6 @@
       ]
     }),
     mounted() {
-      console.log("dashboard navbar updated")
       console.log("navbar is owner : "+this.is_owner)
       this.initialize()
     },
