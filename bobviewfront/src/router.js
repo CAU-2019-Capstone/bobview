@@ -46,12 +46,6 @@ export default new VueRouter({
                         import ( /* webpackChunkName: "demo" */ "./views/main/MenuPreview.vue")
                 },
                 {
-                    path: "/review",
-                    name: "review",
-                    component: () =>
-                        import ( /* webpackChunkName: "demo" */ "./views/main/Review.vue")
-                },
-                {
                     path: "/review/search",
                     name: "review",
                     component: () =>
