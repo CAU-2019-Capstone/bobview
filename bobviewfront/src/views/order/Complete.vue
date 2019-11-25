@@ -49,7 +49,7 @@ export default {
             console.log("load current order data")
             console.log("order_id : "+this.$store.getters.GetOrderId)
             this.axios
-                .get('http://13.124.90.6:8080/api/ordercontents/0/?order_id='+this.$store.getters.GetOrderId)
+                .get('https://13.124.90.6:8080/api/ordercontents/0/?order_id='+this.$store.getters.GetOrderId)
                 .then((result) => {
                     console.log(result.data)
                     this.currentOrderMenus=result.data

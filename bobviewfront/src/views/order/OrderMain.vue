@@ -140,7 +140,7 @@ export default {
     methods: {
         getOrderMenus() {
             this.axios
-                .post("http://13.124.90.6:8080/api/order/active/",{
+                .post("https://13.124.90.6:8080/api/order/active/",{
                     restaurant_name:this.$route.query.r,
                     table_id:this.$route.query.t
                 })

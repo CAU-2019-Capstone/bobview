@@ -51,7 +51,7 @@ export default {
 
   mounted() {
     this.sending = true
-    this.axios.get('http://13.124.90.6:8080/api/community/main/')
+    this.axios.get('https://13.124.90.6:8080/api/community/main/')
     .then((result)=>{
         console.log(result.data)
         for(let [index] in result.data['items']){
@@ -93,7 +93,7 @@ export default {
           menu_rating_list.push(this.reviewLists[index]['rating_id'])
         }
       }
-      this.axios.post('http://13.124.90.6:8080/api/community/main/',{
+      this.axios.post('https://13.124.90.6:8080/api/community/main/',{
           existing_rest_rating_list: rest_rating_list,
           existing_menu_rating_list: menu_rating_list
         })

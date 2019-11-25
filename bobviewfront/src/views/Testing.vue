@@ -20,7 +20,7 @@ export default {
     },
     data () {
         return {
-            domain : 'http://13.124.90.6/order/main/?r=dalcomm&t=1',
+            domain : 'https://13.124.90.6/order/main/?r=dalcomm&t=1',
             width:100,
             height:100,
             qrcode:'',

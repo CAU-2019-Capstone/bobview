@@ -142,7 +142,7 @@ export default {
         initialize () {
             this.getSuccess=false
             this.axios
-            .get('http://13.124.90.6:8080/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+            .get('https://13.124.90.6:8080/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 console.log("results")
@@ -197,7 +197,7 @@ export default {
                 let frm = new FormData()
                 frm.append('image', this.editedItem['restaurant_image'])
                 this.axios
-                    .post('http://13.124.90.6:8080/api/upload/image/',frm,config)
+                    .post('https://13.124.90.6:8080/api/upload/image/',frm,config)
                     .then((response) => {
                     console.log(response.data)
                     this.editedItem['restaurant_image'] = response.data['url'].split('/')[5]
@@ -210,7 +210,7 @@ export default {
             }
             setTimeout(function(){
             currentObj.axios
-                .post('http://13.124.90.6:8080/api/restaurantinfo/', {
+                .post('https://13.124.90.6:8080/api/restaurantinfo/', {
                     username: currentObj.$store.state.userdata['username'],
                     restaurant_name: currentObj.editedItem['restaurant_name'],
                     restaurant_address: currentObj.editedItem['restaurant_address'],

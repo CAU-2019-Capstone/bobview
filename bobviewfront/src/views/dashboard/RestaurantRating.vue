@@ -100,7 +100,7 @@ export default {
   methods: {
     initialize () {
       this.axios
-      .get('http://13.124.90.6:8080/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
+      .get('https://13.124.90.6:8080/api/restaurantinfo/0/?owner='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           for(let [index] in result.data){
@@ -124,7 +124,7 @@ export default {
       let currentObj = this
       //get restaurant rating
       this.axios
-          .get('http://13.124.90.6:8080/api/restrating/0/?restaurant_name='+this.selectedRestaurant)
+          .get('https://13.124.90.6:8080/api/restrating/0/?restaurant_name='+this.selectedRestaurant)
           .then((result) => {
               console.log("menuinfo data")
               console.log(result.data)
