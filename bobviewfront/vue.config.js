@@ -7,8 +7,8 @@ module.exports = {
         hot: true,
         disableHostCheck: true,
         https: {
-            key: fs.readFileSync('bobview-cert/privkey.pem'),
-            cert: fs.readFileSync('bobview-cert/fullchain.pem'),
+            key: fs.readFileSync('/etc/letsencrypt/liv/bobview-cert/privkey.pem'),
+            cert: fs.readFileSync('/etc/letsencrypt/liv/bobview-cert/privkey.pem'),
         },
         proxy: {
             '/api': {
