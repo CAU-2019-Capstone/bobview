@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         makeCode(res_name, table_num){
-            this.domain = 'http://www.bobview.org/order/main/?r='+res_name+'&t='+table_num
+            this.domain = 'https://www.bobview.org/order/main/?r='+res_name+'&t='+table_num
             let encodedDomain = encodeURIComponent(this.domain);
             let uri = 'https://chart.googleapis.com/chart?cht=qr&chs='+this.Width+'x'+this.Height+'&chl='+encodedDomain
             return uri

@@ -2,36 +2,36 @@
 
 export default {
     saveUserdata(state, payload) {
-        console.log("commit set userdata : " + payload.username + payload.logintoken)
+        //console.log("commit set userdata : " + payload.username + payload.logintoken)
         state.userdata['username'] = payload.username
         state.userdata['logintoken'] = payload.logintoken
     },
     setLogin(state) {
         state.is_logined = true
-        console.log("commit set login : " + state.is_logined)
+            //console.log("commit set login : " + state.is_logined)
     },
     setLogout(state) {
         state.is_logined = false
-        console.log("commit set login : " + state.is_logined)
+            //console.log("commit set login : " + state.is_logined)
     },
     logout(state) {
         state.is_logined = false
         state.userdata['username'] = ''
         state.userdata['logintoken'] = ''
-        console.log("commit logout : " + state.is_logined)
+            //console.log("commit logout : " + state.is_logined)
     },
     setIsowner(state, payload) {
         state.is_owner = payload.is_owner
-        console.log("commit is_owner : " + state.is_owner)
+            //console.log("commit is_owner : " + state.is_owner)
     },
     SetOrderInfo(state, payload) {
         state.restaurant_name = payload.restaurant_name
         state.table_number = payload.table_number
-        console.log("commit order_info : " + state.restaurant_name + ' ' + state.table_number)
+            //console.log("commit order_info : " + state.restaurant_name + ' ' + state.table_number)
     },
     setRedirectDomain(state, payload) {
         state.redirectDomain = payload.redirectDomain
-        console.log("commit redirectDomain : " + state.redirectDomain)
+            //console.log("commit redirectDomain : " + state.redirectDomain)
     },
     initBasket(state) {
         state.basketCount = 0
@@ -47,14 +47,14 @@ export default {
     },
     addItemCount(state, payload) {
         state.basketMenus[payload.index]['count'] += 1
-        console.log("commit add basket count : " + state.basketMenus)
+            //console.log("commit add basket count : " + state.basketMenus)
     },
     subItemCount(state, payload) {
         state.basketMenus[payload.index]['count'] -= 1
         if (state.basketMenus[payload.index]['count'] == 0) {
             state.basketMenus.splice(payload.index, 1)
         }
-        console.log("commit add basket count : " + state.basketMenus)
+        //console.log("commit add basket count : " + state.basketMenus)
     },
     addItem(state, payload) {
         payload.item['count'] = 1
@@ -63,10 +63,10 @@ export default {
         } else {
             state.basketMenus.push(payload.item)
         }
-        console.log("commit add basket count : " + state.basketMenus)
+        //console.log("commit add basket count : " + state.basketMenus)
     },
     setOrderId(state, payload) {
         state.orderId = payload.orderId
-        console.log("commit orderId id : " + state.orderId)
+            //console.log("commit orderId id : " + state.orderId)
     }
 }

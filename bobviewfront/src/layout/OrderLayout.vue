@@ -97,10 +97,10 @@ export default {
     },
     name: 'orderlayout',
     mounted() { 
-        console.log("orderlayout mounted") 
+        //console.log("orderlayout mounted") 
         this.$store.dispatch('verifyLogin')
-        console.log(this.$store.getters.GetUserdata)
-        console.log(this.$store.getters.isLogined)
+        //console.log(this.$store.getters.GetUserdata)
+        //console.log(this.$store.getters.isLogined)
         this.isLogined = this.$store.getters.isLogined
     },
     updated() {
@@ -146,7 +146,7 @@ export default {
             })
         },
         toggleDialog(payload) {
-            console.log("emit dialog : " + payload)
+            //console.log("emit dialog : " + payload)
             this.dialog = payload['status']
             if(payload['to'] == 'payment'){
                 this.$router.push("/order/payment")

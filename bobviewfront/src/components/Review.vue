@@ -147,7 +147,7 @@ export default {
     name:'review',
     props:['order_id', 'updated'],
     mounted() {
-        console.log("review mounted, order_id : " + this.order_id)
+        //console.log("review mounted, order_id : " + this.order_id)
         this.initMenus()
     },
     watch: {
@@ -182,8 +182,8 @@ export default {
     },
     methods : {
         save() {
-            console.log(this.ordermenus)
-            console.log(this.restaurantRating)
+            //console.log(this.ordermenus)
+            //console.log(this.restaurantRating)
             let currentObj = this
             if(currentObj.restaurantRating['rating'] == undefined){
                 return
@@ -284,7 +284,7 @@ export default {
                 .then((result) => {
                     console.log(result.data)
                     this.ordermenus=result.data
-                    console.log(this.ordermenus)
+                    //console.log(this.ordermenus)
                 })
                 .catch(function(error) {
                     console.log("senserver error")
@@ -296,7 +296,7 @@ export default {
                 currentObj.axios
                     .get(restaurant)
                     .then((result) => {    
-                        console.log("restaurant info data")
+                        //console.log("restaurant info data")
                         console.log(result.data)
                         currentObj.restaurantRating = result.data[0]
                     })
@@ -307,7 +307,7 @@ export default {
                 currentObj.axios
                     .get('http://13.124.90.6:8080/api/restrating/1/?restaurant_name='+restaurant.split('/')[5]+'&username='+username)
                     .then((result) => {
-                        console.log("rest rating data")
+                        //console.log("rest rating data")
                         console.log(result.data)
                         if(result.data[0]['rating'] != undefined){
                             currentObj.restaurantRating['rating'] = result.data[0]['rating']
@@ -334,7 +334,7 @@ export default {
                     currentObj.axios
                     .get('http://13.124.90.6:8080/api/menurating/1/?username='+username+'&menu_id='+menu_id)
                     .then((result) => {
-                        console.log("menu rating data")
+                        //console.log("menu rating data")
                         console.log(result.data)
                         currentObj.ordermenus[index]['menu_rating'] = result.data[0]
                         if(currentObj.ordermenus[index]['menu_rating'] == undefined){
@@ -355,16 +355,16 @@ export default {
                 }
             }, 1000)
             setTimeout(() => {
-                console.log("ordermenus")
-                console.log(currentObj.ordermenus)
-                console.log("restaurant rating")
-                console.log(currentObj.restaurantRating)
+                //console.log("ordermenus")
+                //console.log(currentObj.ordermenus)
+                //console.log("restaurant rating")
+                //console.log(currentObj.restaurantRating)
                 currentObj.progressSuccess = true
                 
             }, 2000)
         },
         rateMenu(item){
-            console.log(item)
+            //console.log(item)
             this.editedItem = {
                 menu_name : item['menu']['menu_name'],
                 menu_image : item['menu']['menu_image'],
@@ -376,7 +376,7 @@ export default {
         },
         saveItem() {
             
-            console.log(this.editedItem)
+            //console.log(this.editedItem)
             if(this.editedItem['menu_rating']>0){
                 this.ordermenus[this.editedIndex]['rated'] = true
             }
@@ -389,7 +389,7 @@ export default {
             
         },
         closeItem() {
-            console.log("close")
+            //console.log("close")
             this.dialog = false
         }
     },
