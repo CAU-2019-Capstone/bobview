@@ -99,7 +99,7 @@ export default {
             let currentObj = this
             console.log(currentObj.$store.state.userdata['username'])
             this.axios
-            .get('https://13.124.90.6:8080/api/userinfo/0/?username='+currentObj.$store.state.userdata['username'])
+            .get('https://www.bobview.org:8080/api/userinfo/0/?username='+currentObj.$store.state.userdata['username'])
             .then((result) => {
                 console.log(result.data)
                 currentObj.userinfoResponse = result.data
@@ -150,7 +150,7 @@ export default {
         save () {
             let currentObj = this
             currentObj.axios
-            .post('https://13.124.90.6:8080/api/signup/modify/', {
+            .post('https://www.bobview.org:8080/api/signup/modify/', {
                 username: currentObj.$store.state.userdata['username'],
                 token : currentObj.$store.state.userdata['logintoken'],
                 password: currentObj.editedItem.password,

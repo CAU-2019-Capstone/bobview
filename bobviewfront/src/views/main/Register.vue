@@ -165,7 +165,7 @@ export default {
 
             //axios transmission
             axios
-            .post('https://13.124.90.6:8080/api/signup/add/', {
+            .post('https://www.bobview.org:8080/api/signup/add/', {
                 is_owner: currentObj.is_owner,
                 first_name: currentObj.PersonalData.name,
                 username: currentObj.PersonalData.id,

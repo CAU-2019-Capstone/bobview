@@ -194,7 +194,7 @@ export default {
                         currentObj.ordermenus[index]['menu_rating']['rating'] = currentObj.restaurantRating['rating']
                     }
                     if(this.ordermenus[index]['menu_rating']['menu_rating_id'] != undefined){
-                        currentObj.axios.put('https://13.124.90.6:8080/api/menurating/'+currentObj.ordermenus[index]['menu_rating']['menu_rating_id']+'/', {
+                        currentObj.axios.put('https://www.bobview.org:8080/api/menurating/'+currentObj.ordermenus[index]['menu_rating']['menu_rating_id']+'/', {
                             rating:currentObj.ordermenus[index]['menu_rating']['rating'],
                             desc:currentObj.ordermenus[index]['menu_rating']['desc'],
                         })
@@ -206,7 +206,7 @@ export default {
                             console.log(error)
                         });
                     } else {
-                        currentObj.axios.post('https://13.124.90.6:8080/api/menurating/', {
+                        currentObj.axios.post('https://www.bobview.org:8080/api/menurating/', {
                             menu_id : currentObj.ordermenus[index]['menu']['menu_id'],
                             username : currentObj.$store.getters.GetUserdata['username'],
                             rating:currentObj.ordermenus[index]['menu_rating']['rating'],
@@ -223,7 +223,7 @@ export default {
                 }
             }
             if(currentObj.restaurantRating['rest_rating_id'] == undefined){
-                currentObj.axios.post('https://13.124.90.6:8080/api/restrating/', {
+                currentObj.axios.post('https://www.bobview.org:8080/api/restrating/', {
                     restaurant_name : currentObj.restaurantRating['restaurant_name'],
                     username : currentObj.$store.getters.GetUserdata['username'],
                     rating:currentObj.restaurantRating['rating'],
@@ -237,7 +237,7 @@ export default {
                     console.log(error)
                 });
             } else {
-                currentObj.axios.put('https://13.124.90.6:8080/api/restrating/'+currentObj.restaurantRating['rest_rating_id']+'/', {
+                currentObj.axios.put('https://www.bobview.org:8080/api/restrating/'+currentObj.restaurantRating['rest_rating_id']+'/', {
                     rating:currentObj.restaurantRating['rating'],
                     desc:currentObj.restaurantRating['desc'],
                 })
@@ -271,7 +271,7 @@ export default {
             this.restaurantRating = {}
             let currentObj = this
             let restaurant=''
-            currentObj.axios.get('https://13.124.90.6:8080/api/userorder/'+this.order_id+'/')
+            currentObj.axios.get('https://www.bobview.org:8080/api/userorder/'+this.order_id+'/')
                 .then((result) => {
                     console.log(result.data)
                     restaurant=result.data[0]['restaurant']
@@ -280,7 +280,7 @@ export default {
                     console.log("senserver error")
                     console.log(error)
                 });
-            currentObj.axios.get('https://13.124.90.6:8080/api/ordercontents/1/?order_id='+this.order_id)
+            currentObj.axios.get('https://www.bobview.org:8080/api/ordercontents/1/?order_id='+this.order_id)
                 .then((result) => {
                     console.log(result.data)
                     this.ordermenus=result.data
@@ -305,7 +305,7 @@ export default {
                         console.log(error)
                     }); 
                 currentObj.axios
-                    .get('https://13.124.90.6:8080/api/restrating/1/?restaurant_name='+restaurant.split('/')[5]+'&username='+username)
+                    .get('https://www.bobview.org:8080/api/restrating/1/?restaurant_name='+restaurant.split('/')[5]+'&username='+username)
                     .then((result) => {
                         //console.log("rest rating data")
                         console.log(result.data)
@@ -332,7 +332,7 @@ export default {
                         }); 
 
                     currentObj.axios
-                    .get('https://13.124.90.6:8080/api/menurating/1/?username='+username+'&menu_id='+menu_id)
+                    .get('https://www.bobview.org:8080/api/menurating/1/?username='+username+'&menu_id='+menu_id)
                     .then((result) => {
                         //console.log("menu rating data")
                         console.log(result.data)

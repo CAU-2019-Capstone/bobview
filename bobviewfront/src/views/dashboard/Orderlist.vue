@@ -132,7 +132,7 @@ export default {
     initialize () {
       this.getOrderData=false
       this.axios
-      .get('https://13.124.90.6:8080/api/userorder/0/?username='+this.$store.state.userdata['username'])
+      .get('https://www.bobview.org:8080/api/userorder/0/?username='+this.$store.state.userdata['username'])
       .then((result) => {
           console.log(result.data)
           this.orderLists = result.data
@@ -148,7 +148,7 @@ export default {
           console.log(error)
       });
       this.axios
-        .get('https://13.124.90.6:8080/api/userorder/1/?username='+this.$store.getters.GetUserdata['username']+'&is_active=true')
+        .get('https://www.bobview.org:8080/api/userorder/1/?username='+this.$store.getters.GetUserdata['username']+'&is_active=true')
         .then((result)=> {
           console.log(result.data)
           this.activeOrders = result.data
@@ -175,7 +175,7 @@ export default {
     save(id) {
       let currentObj = this
       if(id > 0){
-        currentObj.axios.post('https://13.124.90.6:8080/api/order/change/',{
+        currentObj.axios.post('https://www.bobview.org:8080/api/order/change/',{
           username:this.$store.getters.GetUserdata['username'],
           order_id:id
         })

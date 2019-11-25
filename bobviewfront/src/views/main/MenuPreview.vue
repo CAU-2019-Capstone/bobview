@@ -102,7 +102,7 @@ export default {
             }
             console.log(restaurant, table)
             this.axios
-            .get('https://13.124.90.6:8080/api/menuinfo/0/?restaurant_name='+restaurant)
+            .get('https://www.bobview.org:8080/api/menuinfo/0/?restaurant_name='+restaurant)
             .then((result) => {
                 console.log(result.data)
                 this.menuinfos = result.data
@@ -116,7 +116,7 @@ export default {
         saveTemplate(){
             let menu_type = this.tab + 1
             this.axios
-                .post('https://13.124.90.6:8080/api/menutemplate/',{
+                .post('https://www.bobview.org:8080/api/menutemplate/',{
                     restaurant: this.$store.getters.RestaurantName,
                     menu_type: menu_type,
                 })

@@ -74,7 +74,7 @@ export default {
             let currentObj = this
             console.log(currentObj.userdata.id + "  " + currentObj.userdata.password)
             axios
-            .post('https://13.124.90.6:8080/api/login/apply/', {
+            .post('https://www.bobview.org:8080/api/login/apply/', {
                 username: currentObj.userdata.id,
                 password: currentObj.userdata.password,
             })
