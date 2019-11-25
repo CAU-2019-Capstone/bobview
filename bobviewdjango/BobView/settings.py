@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import configparser
+
+
+config = configparser.ConfigParser()
+#TODO
+config.read('/home/ubuntu/database/config.ini')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5@%y4z64ma6ez5=ove-v2jyixheqo+qvgx4^%vfnvubm8bhq@m'
+SECRET_KEY = config['SERVER']['KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,11 +85,6 @@ WSGI_APPLICATION = 'BobView.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-import configparser
-config = configparser.ConfigParser()
-#TODO
-config.read('/home/ubuntu/database/config.ini')
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -98,7 +99,7 @@ DATABASES = {
     },
 }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '13.124.90.6']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', '13.124.90.6', 'www.bobview.org']
 
 CORS_ORIGIN_ALLOW_ALL= True
 
@@ -150,9 +151,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 # 메일을 호스트하는 서버
 EMAIL_PORT = '587'
 # gmail과의 통신하는 포트
-EMAIL_HOST_USER = 'bobview.official@gmail.com'
+EMAIL_HOST_USER = config['GMAIL']['EMAIL']
 # 발신할 이메일
-EMAIL_HOST_PASSWORD = 'qwer1357!'
+EMAIL_HOST_PASSWORD = config['GMAIL']['PASSWORD']
 # 발신할 메일의 비밀번호
 EMAIL_USE_TLS = True
 # TLS 보안 방법

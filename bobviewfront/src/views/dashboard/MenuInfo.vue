@@ -194,7 +194,7 @@ export default {
       let currentObj = this
       currentObj.getRestaurantData = false
       this.axios
-          .get('http://:8080/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
+          .get('http://13.124.90.6:8080/api/menuinfo/0/?restaurant_name='+this.selectedRestaurant)
           .then((result) => {
               console.log("menuinfo data")
               console.log(result.data)

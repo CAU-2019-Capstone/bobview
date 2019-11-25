@@ -799,10 +799,10 @@ def addSignup(request):
 
         #TODO
         mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n'
-                            + 'http://13.124.90.6:8080/api/active/' + new_user.last_name, to=[data['email']])
+                            + 'https://www.bobview.org:8080/api/active/' + new_user.last_name, to=[data['email']])
 
         mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.<br/>사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.<br/>감사합니다.<br/>'
-        + "<a href=\"+http://13.124.90.6:8080/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>http://13.124.90.6:8080/api/active/"+ new_user.last_name, to=[data['email']] )                            
+        + "<a href=\"+https://www.bobview.org:8080/api/active/" + new_user.last_name+"\">링크</a>" + "<br/>http://13.124.90.6:8080/api/active/"+ new_user.last_name, to=[data['email']] )                            
         mail.content_subtype = "html"
         mail.send()
 
