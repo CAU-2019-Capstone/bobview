@@ -569,7 +569,7 @@ def search(request):
 @api_view(['POST', 'GET'])
 def community_main(request):
     show_list = []     
-    n = 10   # 리뷰 몇개 받을지  
+    n = 3   # 리뷰 몇개 받을지  
     total_review_num = 0
     
     if request.method == 'POST': # POST: 커뮤니티 메인화면 스크롤 많이 내려서 더 추가로 랜덤 리뷰 불러올때
@@ -588,15 +588,30 @@ def community_main(request):
         serializer_context = {
             'request' : Request(request),
         }
+        print(RestRating.objects.last())
+        print(RestRating.objects.last().rest_rating_id)
+        print(MenuRating.objects.last())
+        print(MenuRating.objects.last().menu_rating_id)
         if RestRating.objects.last() is not None and MenuRating.objects.last() is not None:
-            total_review_num = RestRating.objects.last().rest_rating_id + MenuRating.objects.last().menu_rating_id     
-        # 레스토랑, 메뉴 리뷰가 합해서 n개도 안될때는 있는만큼만..                   
-        if total_review_num < n:
+            total_review_num = RestRating.objects.last().rest_rating_id + MenuRating.objects.last().menu_rating_id
+        if len(existing_rest_rating_list) >= RestRating.objects.last().rest_rating_id or len(existing_menu_rating_list) >= MenuRating.objects.last().menu_rating_id:
+            resp = JsonResponse({
+                'message' : 'fail',
+            })
+            resp['Access-Control-Allow-Origin'] = '*'
+            print("before return")
+            return resp
+        # 레스토랑, 메뉴 리뷰가 합해서 n개도 안될때는 있는만큼만..  
+        '''
+        if total_review_num < 4:
             if RestRating.objects.last() is not None:
                 ids = []
                 for i in range(RestRating.objects.last().rest_rating_id):
                     if i not in existing_rest_rating_list:
                         ids.append(i+1)
+                rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
+                serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
                 rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
                 serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
                 show_list.extend(serializer.data)
@@ -608,15 +623,48 @@ def community_main(request):
                 menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
                 serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
                 show_list.extend(serializer.data)
+                menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
+                serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
+        '''
         # 레스토랑, 메뉴 리뷰가 n개 이상일때 n개의 레스토랑, 메뉴 리뷰를 랜덤으로 선택한다 
+        # else:
+        count = 0 
+        global rest_max_id
+        rest_max_id = 10000
+        global menu_max_id
+        menu_max_id = 10000
+        global prev
+        prev = 0
+        if total_review_num < n: # 총 리뷰 수가 10개 미만일떄
+            while count < total_review_num:                                            
+                rand = random.randint(0,1)  # 레스토랑 또는 메뉴 리뷰 랜덤 선택
+                if rand == 0 and RestRating.objects.last() is not None:
+                    rest_max_id = RestRating.objects.last().rest_rating_id
+                    if len(existing_rest_rating_list) < rest_max_id:
+                        pk = random.randint(1, rest_max_id)
+                        while pk in existing_rest_rating_list:
+                            pk = random.randint(1, rest_max_id)
+                        existing_rest_rating_list.append(pk)
+                        rest_rating_temp = RestRating.objects.get(rest_rating_id=pk)
+                        serializer = RestRatingSerializer(instance=rest_rating_temp, context=serializer_context)
+                        show_list.append(serializer.data)
+                elif MenuRating.objects.last() is not None:
+                    menu_max_id = MenuRating.objects.last().menu_rating_id
+                    if len(existing_menu_rating_list) < menu_max_id:
+                        pk = random.randint(1, menu_max_id)
+                        while pk in existing_menu_rating_list:
+                            pk = random.randint(1, menu_max_id)
+                        existing_menu_rating_list.append(pk)
+                        menu_rating_temp = MenuRating.objects.get(menu_rating_id=pk)
+                        serializer = MenuRatingSerializer(instance=menu_rating_temp, context=serializer_context)
+                        show_list.append(serializer.data)
+                if len(existing_rest_rating_list) >= rest_max_id and len(existing_menu_rating_list) >= menu_max_id:
+                        break
+                if prev != len(show_list):
+                    count += len(show_list) - prev
+                prev = len(show_list)
         else:
-            count = 0 
-            global rest_max_id
-            rest_max_id = 10000
-            global menu_max_id
-            menu_max_id = 10000
-            global prev
-            prev = 0
             while count < n:                                            
                 rand = random.randint(0,1)  # 레스토랑 또는 메뉴 리뷰 랜덤 선택
                 if rand == 0 and RestRating.objects.last() is not None:
@@ -642,8 +690,9 @@ def community_main(request):
                 if len(existing_rest_rating_list) >= rest_max_id and len(existing_menu_rating_list) >= menu_max_id:
                         break
                 if prev != len(show_list):
-                    count += 1
+                    count += len(show_list) - prev
                 prev = len(show_list)
+        
         if len(show_list) > 0:
             random.shuffle(show_list)
             resp = JsonResponse({
