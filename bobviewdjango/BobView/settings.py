@@ -99,7 +99,7 @@ DATABASES = {
     },
 }
 
-ALLOWED_HOSTS = ['13.124.90.6', 'www.bobview.org']
+ALLOWED_HOSTS = ['13.124.90.6', 'www.bobview.org', 'testserver']
 
 CORS_ORIGIN_ALLOW_ALL= True
 
