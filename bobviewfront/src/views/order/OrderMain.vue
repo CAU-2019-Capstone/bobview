@@ -130,7 +130,7 @@ export default {
             
             let distances = Math.sqrt(Xm * Xm + Ym * Ym)
             console.log(distances)
-            if(distances > 100){
+            if(distances < 100){
                 this.farFromRes = false
             }
             return distances
