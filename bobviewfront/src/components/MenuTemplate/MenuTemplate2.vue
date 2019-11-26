@@ -1,13 +1,13 @@
 <template>
     <v-card
-    class="mx-10"
+    class="mx-auto"
     max-width="500"
     >
         <v-container class="d-flex align-start">
             <v-row>
                 <v-col cols="8">
                     <v-img
-                    max-width="660"
+                    max-width="300"
                     height="200"
                     :src="menuinfo.menu_image"
                     >

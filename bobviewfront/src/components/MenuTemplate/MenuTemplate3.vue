@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-card
-        class="mx-10"
+        class="mx-auto"
         max-width="500"
         color="white"
         >
@@ -11,7 +11,7 @@
             <v-img
             class="align-end"
             max-height="200"
-            max-width="400"
+            max-width="500"
             :src="menuinfo.menu_image"
             >
             </v-img>

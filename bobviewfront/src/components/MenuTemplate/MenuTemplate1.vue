@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-card
-            class="mx-10"
+            class="mx-auto"
             max-width="500"
         >
             <v-img
