@@ -32,7 +32,7 @@
                                 <v-col 
                                     v-for="menuinfo in menuinfos"
                                     :key="menuinfo.menu_name"
-                                    cols="6" sm="12">
+                                    cols="12" sm="6">
                                         <menuTemplate1 v-if="template.id==1" v-bind:menuinfo="menuinfo"></menuTemplate1>
                                         <menuTemplate2 v-if="template.id==2" v-bind:menuinfo="menuinfo"></menuTemplate2>
                                         <menuTemplate3 v-if="template.id==3" v-bind:menuinfo="menuinfo"></menuTemplate3>
