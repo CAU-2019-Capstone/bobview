@@ -2,7 +2,7 @@
     <v-container>
         <v-card
             class="mx-auto"
-            max-width="400"
+            max-width="500"
         >
             <v-img
             class="align-end"

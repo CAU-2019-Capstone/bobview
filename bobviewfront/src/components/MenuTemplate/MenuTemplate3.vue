@@ -2,7 +2,7 @@
     <v-container>
         <v-card
         class="mx-auto"
-        max-width="400"
+        max-width="500"
         color="white"
         >
             <v-card-text class="text-center text--primary font-weight-black" style="font-size:2.5em"> 

@@ -1,7 +1,7 @@
 <template>
     <v-card
-    max-width="1000"
-    max-height="800"
+    max-width="500"
+    max-height="600"
     >
         <v-container class="d-flex align-start">
             <v-row>
