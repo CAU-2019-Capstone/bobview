@@ -74,7 +74,7 @@ export default {
             location : false,
             errorStr : false,
             tableIsActive :false,
-            farFromRes: false,
+            farFromRes: true,
             activeOrders : [],
             order_id: 0,
             restaurant_img_src:'@/assets/logo.png',
@@ -119,20 +119,20 @@ export default {
     },
     computed: {
         distance : function() {
+            console.log(this.location.coords.latitude)
+            console.log(this.location.coords.longitude)
+            console.log(this.restaurantInfo.restaurant_latitude)
+            console.log(this.restaurantInfo.restaurant_longitude)
             let X = this.location.coords.latitude - this.restaurantInfo.restaurant_latitude
             let Y = this.location.coords.longitude - this.restaurantInfo.restaurant_longitude
             
-            console.log(X)
-            console.log(Y)
             let Xm = X * 6400 * 2 * Math.PI / 360 * 1000
             let Ym = Y * Math.cos(this.location.coords.latitude) * 6400 * 2 * Math.PI / 360 * 1000
             
-            console.log(Xm)
-            console.log(Ym)
             let distances = Math.sqrt(Xm * Xm + Ym * Ym)
             console.log(distances)
-            if(distances > 50){
-                this.farFromRes = true
+            if(distances > 100){
+                this.farFromRes = false
             }
             return distances
         },
