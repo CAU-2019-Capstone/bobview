@@ -30,9 +30,9 @@
                 <h3 v-if="false">We Recomment These Cocktails to YOU!</h3>
                 <h3 v-if="true">Send this Instance to Our Server!</h3>
             </v-toolbar>
-            <v-row v-if="recommended">
-                <v-btn text depressed outlined @click="sendInstance">
-                    Send Instance
+            <v-row v-if="recommended" class="justify-center">
+                <v-btn text depressed outlined @click="sendInstance" class="red">
+                    Send Instance TO OUR SERVER
                 </v-btn>
                 <v-col
                 v-for="cocktailInfo in recommendedInfos"
