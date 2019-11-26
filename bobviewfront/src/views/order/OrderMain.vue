@@ -114,7 +114,7 @@ export default {
         console.log(this.$store.getters.RestaurantName)
         console.log(this.$store.getters.TableNumber)
 
-        
+        console.log(this.distance)
         this.getOrderMenus()
     },
     computed: {
