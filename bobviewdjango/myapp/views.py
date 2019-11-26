@@ -562,7 +562,7 @@ def search(request):
 @api_view(['POST', 'GET'])
 def community_main(request):
     show_list = []     
-    n = 10   # 리뷰 몇개 받을지  
+    n = 3   # 리뷰 몇개 받을지  
     total_review_num = 0
     
     if request.method == 'POST': # POST: 커뮤니티 메인화면 스크롤 많이 내려서 더 추가로 랜덤 리뷰 불러올때
