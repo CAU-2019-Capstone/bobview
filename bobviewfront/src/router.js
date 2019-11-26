@@ -6,6 +6,7 @@ import DashboardLayout from "@/layout/DashboardLayout"
 import OrderLayout from "@/layout/OrderLayout"
 import tested from "@/views/Testing"
 import qrcode from "@/views/QRCode"
+import cocktail from "@/views/cocktail/Cocktail"
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -176,6 +177,11 @@ export default new VueRouter({
             path: "/testing",
             name: "testing",
             component: tested,
+        },
+        {
+            path: "/cocktail",
+            name: "cocktail",
+            component: cocktail,
         },
     ]
 })

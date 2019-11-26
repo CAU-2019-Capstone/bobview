@@ -18,6 +18,7 @@ router.register('imagetable', views.ImageTableViewSet)
 router.register('commentlist', views.CommentListViewSet)
 router.register('menutemplate', views.MenuTemplateViewSet)
 router.register('messages', views.MessagesViewSet)
+router.register('cocktail', views.CocktailViewSet)
 
 urlpatterns = [
     path('community/main/', views.community_main),     

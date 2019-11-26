@@ -438,7 +438,10 @@ class MessagesViewSet(viewsets.ModelViewSet):
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp
-        
+
+class CocktailViewSet(viewsets.ModelViewSet):
+    queryset = Cocktail.objects.all()
+    serializer_class = CocktailSerializer
 
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
@@ -798,7 +801,6 @@ def addSignup(request):
 
         print("회원가입을 합니다.")
 
-        #TODO
         mail = EmailMessage('BobView 사용자 인증', '안녕하세요 BobView입니다.\n사용자 인증은 위해서 아래 링크에 접속하시기 바랍니다.\n감사합니다.\n\n'
                             + 'www.bobview.org/api/active/' + new_user.last_name, to=[data['email']])
 
@@ -827,7 +829,6 @@ def applyLogin(request):
         print(data)
 
         print("----------------------")
-        #TODO
         user = authenticate(username=data['username'], password=data['password'])
         message =''
         userinfo = None
@@ -872,7 +873,6 @@ def verifyLogin(request):
         print(data)
 
         print("----------------------")
-        #TODO
         userinfo= None
         try:
             userinfo = get_object_or_404(UserInfo, username=data['username'], last_name=data['token']) # 정보를 가져올 유저 객체를 가져온다
@@ -901,8 +901,6 @@ def modifySignup(request):
         data=request.data
         print(data)
 
-        print("----------------------")
-        #TODO
         userinfo= None
         message =''
         try:
@@ -940,8 +938,6 @@ def logout(request):
         data=request.data
         print(data)
 
-        print("----------------------")
-        #TODO
         userinfo= None
         message =''
         try:
@@ -986,3 +982,4 @@ def user_active(request, token):
         user.save()
         message = "이메일이 인증되었습니다."
     return render(request, 'myapp/success.html', {'message':message })
+

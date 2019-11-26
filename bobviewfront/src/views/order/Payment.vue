@@ -162,8 +162,6 @@ export default {
             if(this.totPrice ==0){
                 return
             }
-            //#TODO
-            //get payment api
             let currentObj = this
             var msg=''
             IMP.init('imp52136590')
