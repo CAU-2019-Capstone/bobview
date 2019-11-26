@@ -97,22 +97,23 @@ export default {
             ]
         },
         action(event) {
+            let currentObj = this
             if(event == 'requestMsg'){
-                if(this.oneMoreRequest == false){
-                    this.oneMoreRequest = true
+                if(currentObj.oneMoreRequest == false){
+                    currentObj.oneMoreRequest = true
                     return
                 }
-                this.oneMoreRequest = false
-                this.axios
+                currentObj.oneMoreRequest = false
+                currentObj.axios
                     .post('https://www.bobview.org:8080/api/messages/',{
-                        restaurant_name : this.$store.getters.RestaurantName,
-                        message : this.requestText,
-                        table_id : this.$store.getters.TableNumber
+                        restaurant_name : currentObj.$store.getters.RestaurantName,
+                        message : currentObj.requestText,
+                        table_id : currentObj.$store.getters.TableNumber
                     })
                     .then(function(response){
                         console.log(response)
-                        this.sendSuccess = true
-                        this.sendedMessage = event
+                        currentObj.sendSuccess = true
+                        currentObj.sendedMessage = event
                     })
                     .catch(function(error){
                         console.log(error)
@@ -120,7 +121,7 @@ export default {
                     });
             }
             else {
-                this.requestText = event
+                currentObj.requestText = event
             }
         }
     },
