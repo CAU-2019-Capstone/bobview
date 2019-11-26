@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-card
-        class="mx-auto"
+        class="mx-10"
         max-width="500"
         color="white"
         >
