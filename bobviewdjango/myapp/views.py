@@ -587,7 +587,7 @@ def community_main(request):
         print(MenuRating.objects.last().menu_rating_id)
         if RestRating.objects.last() is not None and MenuRating.objects.last() is not None:
             total_review_num = RestRating.objects.last().rest_rating_id + MenuRating.objects.last().menu_rating_id
-        if len(existing_rest_rating_list) >= RestRating.objects.last().rest_rating_id || len(existing_menu_rating_list) >= MenuRating.objects.last().menu_rating_id:
+        if len(existing_rest_rating_list) >= RestRating.objects.last().rest_rating_id or len(existing_menu_rating_list) >= MenuRating.objects.last().menu_rating_id:
             resp = JsonResponse({
                 'message' : 'fail',
             })
