@@ -3,10 +3,12 @@
         <v-card
             class="mx-auto"
             max-width="500"
+            max-height="400"
         >
             <v-img
             class="align-end"
             max-width="500"
+            max-height="250"
             :src="menuinfo.menu_image"
             >
             <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
