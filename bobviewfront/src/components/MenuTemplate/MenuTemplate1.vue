@@ -6,7 +6,7 @@
         >
             <v-img
             class="align-end"
-            height="200px"
+            max-width="500"
             :src="menuinfo.menu_image"
             >
             <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
