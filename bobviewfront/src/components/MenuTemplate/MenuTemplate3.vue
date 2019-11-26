@@ -2,7 +2,7 @@
     <v-container>
         <v-card
         class="mx-auto"
-        max-width="500"
+        max-width="450"
         color="white"
         >
             <v-card-text class="text-center text--primary font-weight-black" style="font-size:2.5em"> 
@@ -11,7 +11,7 @@
             <v-img
             class="align-end"
             max-height="200"
-            max-width="500"
+            max-width="450"
             :src="menuinfo.menu_image"
             >
             </v-img>

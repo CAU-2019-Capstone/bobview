@@ -2,12 +2,12 @@
     <v-container>
         <v-card
             class="mx-auto"
-            max-width="500"
+            max-width="450"
             max-height="400"
         >
             <v-img
             class="align-end"
-            max-width="500"
+            max-width="450"
             max-height="250"
             :src="menuinfo.menu_image"
             >
