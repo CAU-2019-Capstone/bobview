@@ -57,3 +57,13 @@ class MessagesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Messages
         fields = ('restaurant', 'table_id', 'message')
+
+class CocktailSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Cocktail
+        fields = ('cocktail_id', 'name', 'alcoholic','category','glass','instruction','drink_image')
+
+class CocktailInstanceSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = CocktailInstance
+        fields = ('instance_id', 'cocktail_like')

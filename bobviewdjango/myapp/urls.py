@@ -18,6 +18,8 @@ router.register('imagetable', views.ImageTableViewSet)
 router.register('commentlist', views.CommentListViewSet)
 router.register('menutemplate', views.MenuTemplateViewSet)
 router.register('messages', views.MessagesViewSet)
+router.register('cocktail', views.CocktailViewSet)
+router.register('cocktailInstance', views.CocktailInstanceViewSet)
 
 urlpatterns = [
     path('community/main/', views.community_main),     
@@ -30,6 +32,8 @@ urlpatterns = [
     path('order/create/', views.createOrder),
     path('order/change/', views.changeOrder),
     path('order/active/', views.getActiveOrder),
+    path('cocktail/recommend/', views.cocktailRecommend),
+    path('cocktail/send/', views.cocktailInstanceSave),
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),

@@ -136,3 +136,26 @@ class MenuTemplate(models.Model):
     class Meta:
         managed = True
         db_table = 'menu_template'
+
+#for cocktail...
+#TODO
+class Cocktail(models.Model):
+    cocktail_id = models.IntegerField(primary_key=True, null=False)
+    name = models.CharField(max_length=60)
+    alcoholic = models.BooleanField(default=False)
+    category = models.CharField(max_length=30)
+    glass = models.CharField(max_length=30)
+    instruction = models.TextField()
+    drink_image = models.CharField(max_length=255)
+
+    class Meta:
+        managed = True
+        db_table = 'cocktail'
+
+class CocktailInstance(models.Model):
+    instance_id = models.AutoField(primary_key=True)
+    cocktail_like = models.TextField()
+
+    class Meta:
+        managed = True
+        db_table = 'cocktail_instance'

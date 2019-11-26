@@ -437,7 +437,14 @@ class MessagesViewSet(viewsets.ModelViewSet):
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp
-        
+
+class CocktailViewSet(viewsets.ModelViewSet):
+    queryset = Cocktail.objects.all()
+    serializer_class = CocktailSerializer
+
+class CocktailInstanceViewSet(viewsets.ModelViewSet):
+    queryset = CocktailInstance.objects.all()
+    serializer_class = CocktailInstanceSerializer
 
 # ref http://raccoonyy.github.io/drf3-tutorial-2/
 
@@ -981,3 +988,43 @@ def user_active(request, token):
         user.save()
         message = "이메일이 인증되었습니다."
     return render(request, 'myapp/success.html', {'message':message })
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+def cocktailRecommend(request):
+    if request.method == 'POST':
+        data=request.data
+        print(data)
+
+        cocktails = Cocktail.objects.filter(cocktail_id=999)
+
+        serializer_context = {
+            'request': request,
+        }
+        serializer = CocktailSerializer(cocktails, many=True, context=serializer_context)
+        return Response(serializer.data)
+
+@csrf_exempt
+@api_view(['POST'])
+def cocktailInstanceSave(request):
+    if request.method == 'POST':
+        data=request.data
+
+        like_list = ''
+        for item in request.data :
+            print(item)
+            like_list = like_list + str(item['cocktail_id']) + ','
+
+        new_instance = CocktailInstance(cocktail_like = like_list)
+        new_instance.save()
+
+        #set response. (dont need it here)
+        resp = JsonResponse({
+            'result' : 'success',
+            'like_list' : like_list
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
