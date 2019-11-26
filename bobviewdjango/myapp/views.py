@@ -590,10 +590,9 @@ def community_main(request):
                 for i in range(RestRating.objects.last().rest_rating_id):
                     if i not in existing_rest_rating_list:
                         ids.append(i+1)
-                if (not !ids):
-                    rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
-                    serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
-                    show_list.extend(serializer.data)
+                rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
+                serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
                 rest_ratings = RestRating.objects.filter(rest_rating_id__in=ids)
                 serializer = RestRatingSerializer(instance=rest_ratings, many=True, context=serializer_context)
                 show_list.extend(serializer.data)
@@ -602,10 +601,9 @@ def community_main(request):
                 for i in range(MenuRating.objects.last().menu_rating_id):
                     if i not in existing_menu_rating_list:
                         ids.append(i+1)
-                if (not !ids):
-                    menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
-                    serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
-                    show_list.extend(serializer.data)
+                menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
+                serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
+                show_list.extend(serializer.data)
                 menu_ratings = MenuRating.objects.filter(menu_rating_id__in=ids)
                 serializer = MenuRatingSerializer(instance=menu_ratings, many=True, context=serializer_context)
                 show_list.extend(serializer.data)
