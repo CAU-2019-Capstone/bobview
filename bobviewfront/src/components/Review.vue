@@ -280,7 +280,7 @@ export default {
                     console.log("senserver error")
                     console.log(error)
                 });
-            currentObj.axios.get('https://www.bobview.org:8080/api/ordercontents/1/?order_id='+this.order_id)
+            currentObj.axios.get('https://www.bobview.org:8080/api/ordercontents/0/?order_id='+this.order_id)
                 .then((result) => {
                     console.log(result.data)
                     this.ordermenus=result.data
@@ -305,7 +305,7 @@ export default {
                         console.log(error)
                     }); 
                 currentObj.axios
-                    .get('https://www.bobview.org:8080/api/restrating/1/?restaurant_name='+restaurant.split('/')[5]+'&username='+username)
+                    .get('https://www.bobview.org:8080/api/restrating/0/?restaurant_name='+restaurant.split('/')[5]+'&username='+username)
                     .then((result) => {
                         //console.log("rest rating data")
                         console.log(result.data)
@@ -332,7 +332,7 @@ export default {
                         }); 
 
                     currentObj.axios
-                    .get('https://www.bobview.org:8080/api/menurating/1/?username='+username+'&menu_id='+menu_id)
+                    .get('https://www.bobview.org:8080/api/menurating/0/?username='+username+'&menu_id='+menu_id)
                     .then((result) => {
                         //console.log("menu rating data")
                         console.log(result.data)

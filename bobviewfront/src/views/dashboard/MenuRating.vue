@@ -142,7 +142,7 @@ export default {
             setTimeout(function(){
                 for(let [index] in currentObj.currentRatingInfo){
                     currentObj.axios
-                        .get('https://www.bobview.org:8080/api/menurating/1/?menu_id='+currentObj.currentRatingInfo[index]['menu_id'])
+                        .get('https://www.bobview.org:8080/api/menurating/0/?menu_id='+currentObj.currentRatingInfo[index]['menu_id'])
                         .then((result) => {
                             console.log(currentObj.currentRatingInfo[index]['menu_name']+'\'s rating')
                             console.log(result.data)
