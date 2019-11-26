@@ -1063,8 +1063,10 @@ def cocktailInstanceSave(request):
 
         like_list = ''
         for item in request.data :
-            print(item)
-            like_list = like_list + str(item['cocktail_id']) + ','
+            if like_list is '' :
+                like_list = str(item['cocktail_id'])
+            else :
+                like_list = like_list + ',' + str(item['cocktail_id'])
 
         new_instance = CocktailInstance(cocktail_like = like_list)
         new_instance.save()

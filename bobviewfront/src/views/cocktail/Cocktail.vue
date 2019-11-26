@@ -31,7 +31,7 @@
                 <h3 v-if="true">Send this Instance to Our Server!</h3>
             </v-toolbar>
             <v-row v-if="recommended">
-                <v-btn text depressed outlined @clikc="sendInstance">
+                <v-btn text depressed outlined @click="sendInstance">
                     Send Instance
                 </v-btn>
                 <v-col
@@ -158,11 +158,11 @@ export default {
         getRecommendInfo(){
             this.loading = true
             let currentObj = this
-            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/',this.selectedCocktails)
+            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/',currentObj.selectedCocktails)
                 .then(function(response){
                     console.log(response.data)
-                    this.recommend
-                    this.loading = false
+                    currentObj.recommendedInfos = response.data
+                    currentObj.loading = false
                 })
                 .catch(function(error){
                     console.log(error)
@@ -172,11 +172,17 @@ export default {
         sendInstance() {
             this.loading = true
             let currentObj = this
-            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/send/',this.selectedCocktails)
+            console.log("send instance")
+            console.log(currentObj.selectedCocktails)
+            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/send/',currentObj.selectedCocktails)
                 .then(function(response){
                     console.log(response.data)
-                    this.recommendedInfos = response.data
-                    this.loading = false
+                    currentObj.loading = false
+                    currentObj.selectedCocktails = []
+                    currentObj.recommendedInfos = []
+                    currentObj.recommended = false
+                    currentObj.randomInfos = []
+                    currentObj.selectRandom(12)
                 })
                 .catch(function(error){
                     console.log(error)
