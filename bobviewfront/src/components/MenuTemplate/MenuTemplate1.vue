@@ -77,7 +77,7 @@ export default {
                 count++
             }
             rating_num = rating_num / count
-            return rating_num.toFiexd(1)
+            return parseFloat(rating_num).toFiexd(1)
         }
     },
     watch: {
