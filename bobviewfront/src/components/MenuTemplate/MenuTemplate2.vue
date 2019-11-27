@@ -73,8 +73,8 @@ export default {
         tot_rating : function(){
             var rating_num = 0
             var count = 0;
-            for(let [index] in menuratingList){
-                rating_num = rating_num + menuratingList[index]['rating']
+            for(let [index] in this.menuratingList){
+                rating_num = rating_num + this.menuratingList[index]['rating']
                 count++
             }
             rating_num = rating_num / count
@@ -88,7 +88,7 @@ export default {
     },
     mounted () {
         let currentObj = this
-        currenObj.axios.get('https://www.bobview.org:8080/api/menurating/0/?menu_id='+currentObj.menuinfo.menu_id)
+        currentObj.axios.get('https://www.bobview.org:8080/api/menurating/0/?menu_id='+currentObj.menuinfo.menu_id)
             .then(function(response){
                 console.log(response.data)
                 currentObj.menuratingList = response.data
