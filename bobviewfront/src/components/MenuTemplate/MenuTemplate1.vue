@@ -15,7 +15,7 @@
             </v-img>
 
             <v-card-text class="text--primary">
-                <div><v-icon>mdi-star x{{tot_rating}}</v-icon></div>
+                <div><v-icon>mdi-star</v-icon>x{{tot_rating}}</div>
                 <div>Price : {{menuinfo.menu_price}}</div>
                 <div>Description : {{menuinfo.menu_desc}}</div>
             </v-card-text>
@@ -33,8 +33,9 @@
                 color="orange"
                 text
                 @click="showDetailReviews"
+                v-if="menuRatingExist"
             >
-                Order
+                Show Review on This
             </v-btn>
             </v-card-actions>
         </v-card>
@@ -85,6 +86,12 @@ export default {
                 rating_num = 0
             }
             return rating_num
+        },
+        menuRatingExist : function() {
+            if(this.menuratingList == []){
+                return false
+            }
+            return true
         }
     },
     watch: {

@@ -32,6 +32,14 @@
                             >
                                 Order
                             </v-btn>
+                            <v-btn
+                                color="orange"
+                                text
+                                @click="showDetailReviews"
+                                v-if="menuRatingExist"
+                            >
+                                Show Review on This
+                            </v-btn>
                         </v-card-actions>
                     </v-row>
                 </v-col>
@@ -86,6 +94,12 @@ export default {
                 rating_num = 0
             }
             return rating_num
+        },
+        menuRatingExist : function() {
+            if(this.menuratingList == []){
+                return false
+            }
+            return true
         }
     },
     watch: {

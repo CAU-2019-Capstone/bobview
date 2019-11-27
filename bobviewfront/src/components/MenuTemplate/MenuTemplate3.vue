@@ -31,6 +31,14 @@
             >
                 Order
             </v-btn>
+            <v-btn
+                color="orange"
+                text
+                @click="showDetailReviews"
+                v-if="menuRatingExist"
+            >
+                Show Review on This
+            </v-btn>
             </v-card-actions>
         </v-card>
         <v-dialog
@@ -79,8 +87,15 @@ export default {
                 rating_num = 0
             }
             return rating_num
+        },
+        menuRatingExist : function() {
+            if(this.menuratingList == []){
+                return false
+            }
+            return true
         }
     },
+
     watch: {
         dialog : function(val){
             val || this.close()
