@@ -77,8 +77,15 @@ export default {
                 rating_num = rating_num + this.menuratingList[index]['rating']
                 count++
             }
-            rating_num = rating_num / count
-            return parseFloat(rating_num).toFiexd(1)
+            console.log(rating_num)
+            console.log(count)
+            if(count > 0){
+                rating_num = rating_num / count
+            }
+            else {
+                rating_num = 0
+            }
+            return rating_num
         }
     },
     watch: {
