@@ -35,7 +35,7 @@
                 color="orange"
                 text
                 @click="showDetailReviews"
-                v-if="menuRatingExist"
+                v-if="tot_rating != 0"
             >
                 Show Review on This
             </v-btn>
@@ -88,12 +88,6 @@ export default {
             }
             return rating_num
         },
-        menuRatingExist : function() {
-            if(this.menuratingList == []){
-                return false
-            }
-            return true
-        }
     },
 
     watch: {
