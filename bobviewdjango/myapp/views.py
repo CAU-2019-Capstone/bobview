@@ -286,7 +286,7 @@ class MenuRatingViewSet(viewsets.ModelViewSet):
         try:
             menuquery = MenuInfo.objects.all()
             menu = get_object_or_404(menuquery, menu_id=menu_id)
-            if username is '':
+            if username is None:
                 menuRating = MenuRating.objects.filter(menu=menu)
             else :
                 userquery = UserInfo.objects.all()

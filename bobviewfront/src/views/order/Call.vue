@@ -111,7 +111,7 @@ export default {
                         table_id : currentObj.$store.getters.TableNumber
                     })
                     .then(function(response){
-                        console.log(response)
+                        console.log(response.data)
                         currentObj.sendSuccess = true
                         currentObj.sendedMessage = event
                     })

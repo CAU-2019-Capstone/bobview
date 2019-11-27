@@ -68,12 +68,12 @@
             </v-content>
             <v-content v-if="rateSuccess"
             >
-                <p>평가가 완료되었습니다!</p>
+                <p>Review Applied!</p>
             </v-content>
             <v-card-actions>
                 <v-spacer/>
-                <v-btn depressed text @click="save">평가</v-btn>
-                <v-btn depressed text @click="close">취소</v-btn>
+                <v-btn depressed text @click="save">Apply</v-btn>
+                <v-btn depressed text @click="close">Cancel</v-btn>
             </v-card-actions>
             
 
@@ -360,7 +360,6 @@ export default {
                 //console.log("restaurant rating")
                 //console.log(currentObj.restaurantRating)
                 currentObj.progressSuccess = true
-                
             }, 2000)
         },
         rateMenu(item){
