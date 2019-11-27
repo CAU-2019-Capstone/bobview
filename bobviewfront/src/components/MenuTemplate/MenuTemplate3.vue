@@ -64,8 +64,8 @@ export default {
     },
     computed : {
         tot_rating : function(){
-            var rating_num = 0
-            var count = 0;
+            var rating_num = 0.0
+            var count = 0.0
             for(let [index] in this.menuratingList){
                 rating_num = rating_num + this.menuratingList[index]['rating']
                 count++
