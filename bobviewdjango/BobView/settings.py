@@ -15,7 +15,7 @@ import configparser
 
 config = configparser.ConfigParser()
 #TODO
-config.read('/home/ubuntu/database/config.ini')
+config.read('/home/hyuncho/workspace/database/config.ini')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -99,7 +99,7 @@ DATABASES = {
     },
 }
 
-ALLOWED_HOSTS = ['13.124.90.6', 'www.bobview.org', 'testserver']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '13.124.90.6', 'www.bobview.org', 'testserver']
 
 CORS_ORIGIN_ALLOW_ALL= True
 
