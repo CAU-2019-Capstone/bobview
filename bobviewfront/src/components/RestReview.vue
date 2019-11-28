@@ -17,7 +17,7 @@
         <v-divider></v-divider>
         <div class="px-4 py-2">
             <h5>Restaurant Description</h5>
-            <h5 class="mb-0">{{rest_rating['desc']}}</h5>
+            <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>
             <v-spacer/>

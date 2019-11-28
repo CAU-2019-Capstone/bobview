@@ -1040,42 +1040,143 @@ def user_active(request, token):
 
 
 
+from cocktails import cbf_recommend as CBF
+from cocktails import cf_recommend as CF
+
+
 @csrf_exempt
 @api_view(['POST'])
-def cocktailRecommend(request):
+def cocktailRecommentCF(request):
     if request.method == 'POST':
         data=request.data
-        print(data)
 
-        cocktails = Cocktail.objects.filter(cocktail_id=999)
+        #save cocktail instances
+        like_list = []
+        unlike_list = []
+        for item in request.data['like_list'] :
+            like_list.append(item['cocktail_id'])
+            
+        for item in request.data['unlike_list'] :
+            unlike_list.append(item['cocktail_id'])
+
+        new_instance = CocktailInstance(cocktail_like = str(like_list), cocktail_unlike = str(unlike_list))
+        new_instance.save()
+
+        instance_id = new_instance.instance_id
 
         serializer_context = {
             'request': request,
         }
-        serializer = CocktailSerializer(cocktails, many=True, context=serializer_context)
-        return Response(serializer.data)
 
-@csrf_exempt
-@api_view(['POST'])
-def cocktailInstanceSave(request):
-    if request.method == 'POST':
-        data=request.data
+        cocktailsInstance = CocktailInstance.objects.all()
+        serializer = CocktailInstanceSerializer(cocktailsInstance, many=True, context=serializer_context)
+        
 
-        like_list = ''
-        for item in request.data :
-            if like_list is '' :
-                like_list = str(item['cocktail_id'])
-            else :
-                like_list = like_list + ',' + str(item['cocktail_id'])
+        instanceLists = {}
+        like_list = []
+        unlike_list = []
+        
+        
+        for instance in serializer.data:
+            tempKey = str(instance['instance_id'])
+            like_list_str = instance['cocktail_like']
+            like_list = strToList(like_list_str)
 
-        new_instance = CocktailInstance(cocktail_like = like_list)
-        new_instance.save()
+            instanceLists[tempKey] = {}
+            for like in like_list:
+                instanceLists[tempKey][str(like)] = 1
+            unlike_list_str = instance['cocktail_unlike']
+            unlike_list = strToList(unlike_list_str)
 
-        #set response. (dont need it here)
+            for unlike in unlike_list:
+                instanceLists[tempKey][str(unlike)] = 0
+        
+        r = CF.RecommenderCF(instanceLists)
+
+
+        userbased_list = r.getRecommendUserBased(str(instance_id))
+        itembased_list = r.getRecommendItemBased(str(instance_id))
+
+        print("userbased_list")
+        print(userbased_list)
+
+        print("itembased_list")
+        print(itembased_list)
+
+        user_based_recommend = []
+        cocktailquery = Cocktail.objects.all()
+        for item in userbased_list:
+            cocktails = get_object_or_404(cocktailquery, cocktail_id=item[1])
+            serializer = CocktailSerializer(cocktails, context=serializer_context)
+            user_based_recommend.append(serializer.data)
+
+        item_based_recommend = []
+        for item in itembased_list:
+            cocktails = get_object_or_404(cocktailquery, cocktail_id=item[1])
+            serializer = CocktailSerializer(cocktails, context=serializer_context)
+            item_based_recommend.append(serializer.data)
+
+
         resp = JsonResponse({
-            'result' : 'success',
-            'like_list' : like_list
+            'user_based_recommend' : user_based_recommend,
+            'item_based_recommend' : item_based_recommend,
         })
         resp['Access-Control-Allow-Origin'] = '*'
         print("before return")
         return resp
+
+@csrf_exempt
+@api_view(['POST'])
+def cocktailRecommentCBF(request):
+    if request.method == 'POST':
+        data=request.data
+        
+        like_list = []
+        for item in data['like_list']:
+            like_list.append(item['cocktail_id'])
+
+        count = data['count']
+        
+        print(like_list)
+        print(count)
+
+        r = CBF.RecommenderCBF(like_list,count)
+        rec_lists = []
+        rec_lists = r.GetResult()
+        print(rec_lists)
+        
+
+        serializer_context = {
+            'request': request,
+        }
+
+        result_lists = []
+        cocktailquery = Cocktail.objects.all()
+        for item in rec_lists:
+            
+            cocktails = get_object_or_404(cocktailquery, cocktail_id=item[1])
+            serializer = CocktailSerializer(cocktails, context=serializer_context)
+            
+            result_lists.append(serializer.data)
+
+
+        resp = JsonResponse({
+            'result_lists' : result_lists,
+        })
+        resp['Access-Control-Allow-Origin'] = '*'
+        print("before return")
+        return resp
+
+#str = "[12,124,1251]"
+def strToList(str):
+    split_list = str.split(',')
+    if len(split_list) > 1 :
+        split_list[0] = split_list[0].split('[')[1]
+        split_list[len(split_list)-1] = split_list[len(split_list)-1].split(']')[0]
+    result_list = []
+    for value in split_list:
+        try:
+            result_list.append(int(value))
+        except:
+            print("no value")
+    return result_list

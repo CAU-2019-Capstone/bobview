@@ -32,8 +32,8 @@ urlpatterns = [
     path('order/create/', views.createOrder),
     path('order/change/', views.changeOrder),
     path('order/active/', views.getActiveOrder),
-    path('cocktail/recommend/', views.cocktailRecommend),
-    path('cocktail/send/', views.cocktailInstanceSave),
+    path('cocktail/recommend/CBF/', views.cocktailRecommentCBF),
+    path('cocktail/recommend/CF/', views.cocktailRecommentCF),
 
     # path('user/<pk>/verify/<token>/', UserVerificationView.as_view()),
     path('active/<token>', views.user_active),

@@ -43,7 +43,7 @@
         </v-card>
         <v-dialog
             v-model="dialog"
-            max-width="500">
+            max-width="1000">
             <v-content>
                 <v-row
                 v-for="menurating in menuratingList"

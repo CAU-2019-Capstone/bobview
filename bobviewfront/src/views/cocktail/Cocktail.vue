@@ -2,15 +2,17 @@
     <v-app>
         <v-container>
             <v-toolbar>
-                <h3>Cocktail Recommendation System</h3>
+                <v-btn text depressed outlined class="mx-2" @click="reset">
+                    Cocktail Recommendation System
+                </v-btn>
                 <v-spacer/>
-                <v-btn v-if="!recommended" text depressed outlined class="mx-2" @click="showRecomment">
+                <v-btn v-if="!recommended" :disabled="likeCocktails.length==0 && unlikeCocktails.length==0" text depressed outlined class="mx-2" @click="showRecomment">
                     show recommendation!
                 </v-btn>
                 <v-btn v-else text depressed outlined class="mx-2" @click="showRandom">
                     select More!
                 </v-btn>
-                <v-btn text depressed outlined @click="pass">
+                <v-btn text depressed outlined @click="pass" class="red">
                     pass
                 </v-btn>
             </v-toolbar>
@@ -23,38 +25,145 @@
                 :key="cocktailInfo.cocktail_id"
                 cols="12" lg="3" sm="6"
                 >
-                    <cocktailCard v-bind:detail="detail" v-bind:cocktailInfo="cocktailInfo" @select="selected"></cocktailCard>
+                    <cocktailCard v-bind:detail="detail" v-bind:cocktailInfo="cocktailInfo" @selectLike="likeSelect" @selectUnlike="unlikeSelect"></cocktailCard>
                 </v-col>
             </v-row>
-            <v-toolbar class="my-10" v-if="recommended">
-                <h3 v-if="false">We Recomment These Cocktails to YOU!</h3>
-                <h3 v-if="true">Send this Instance to Our Server!</h3>
-            </v-toolbar>
-            <v-row v-if="recommended" class="justify-center">
-                <v-btn text depressed outlined @click="sendInstance" class="red">
-                    Send Instance TO OUR SERVER
-                </v-btn>
-                <v-col
-                v-for="cocktailInfo in recommendedInfos"
-                :key="cocktailInfo.cocktail_id"
-                cols="12" lg="3" sm="6"
-                >
-                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @select="selected"></cocktailCard>
-                </v-col>
-            </v-row>
-            
+            <v-container v-if="!recommended">
+                <v-toolbar class="my-10">
+                    <h3>Your Like in Selected Cocktail</h3>
+                </v-toolbar>
+                <v-row>
+                    <v-col
+                    v-for="cocktailInfo in likeCocktails"
+                    :key="cocktailInfo.cocktail_id"
+                    cols="12" lg="3" sm="6"
+                    >
+                        <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo"></cocktailCard>
+                    </v-col>
+                </v-row>
+            </v-container>
+            <v-container v-if="!recommended">
+                <v-toolbar class="my-10">
+                    <h3>Your Unlike in Selected Cocktail</h3>
+                </v-toolbar>
+                <v-row>
+                    <v-col
+                    v-for="cocktailInfo in unlikeCocktails"
+                    :key="cocktailInfo.cocktail_id"
+                    cols="12" lg="3" sm="6"
+                    >
+                        <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo"></cocktailCard>
+                    </v-col>
+                </v-row>
+            </v-container>
 
-            <v-toolbar class="my-10">
-                <h3>Your Selected Cocktail</h3>
-            </v-toolbar>
-            <v-row>
-                <v-col
-                v-for="cocktailInfo in selectedCocktails"
-                :key="cocktailInfo.cocktail_id"
-                cols="12" lg="3" sm="6"
-                >
-                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @select="selected"></cocktailCard>
+
+
+
+            <v-row class="justify-between">
+                <v-col cols="10">
+                    <v-tabs
+                    v-model="tab">
+                    <v-tabs-slider></v-tabs-slider>
+                        <v-tab 
+                        v-for="template in templateMenus"
+                        :key="template.id"
+                        >
+                        <p>{{template.desc}}</p>
+                        </v-tab>
+                    </v-tabs>
                 </v-col>
+            </v-row>
+            <v-row>
+                <v-tabs-items v-model="tab">
+                    <v-tab-item
+                        v-for="template in templateMenus"
+                        :key="template.id"
+                    >
+                        <v-container v-if="template.id==1">
+                            <v-toolbar class="my-10" v-if="recommended">
+                                <h3>We Recomment These Cocktails to YOU!</h3>
+                            </v-toolbar>
+                            <v-row v-if="recommended" class="justify-center">
+                                <v-col
+                                v-for="cocktailInfo in recommendedInfos"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @selectLike="likeSelect" @selectUnlike="unlikeSelect"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-container v-if="template.id==2">
+                            <v-toolbar class="my-10" v-if="recommended">
+                                <h3>We Recomment These Cocktails to YOU! - CF (Item-Based)</h3>
+                            </v-toolbar>
+                            <v-row v-if="recommended" class="justify-center">
+                                <v-col
+                                v-for="cocktailInfo in recommendedInfosCFUser"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @selectLike="likeSelect" @selectUnlike="unlikeSelect"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                            <v-toolbar class="my-10" v-if="recommended">
+                                <h3>We Recomment These Cocktails to YOU! - CF (User-Based)</h3>
+                            </v-toolbar>
+                            <v-row v-if="recommended" class="justify-center">
+                                <v-col
+                                v-for="cocktailInfo in recommendedInfosCFItem"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @selectLike="likeSelect" @selectUnlike="unlikeSelect"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-container v-if="template.id==3">
+                            <v-toolbar class="my-10" v-if="recommended">
+                                <h3>We Recomment These Cocktails to YOU! - CBF</h3>
+                            </v-toolbar>
+                            <v-row v-if="recommended" class="justify-center">
+                                <v-col
+                                v-for="cocktailInfo in recommendedInfosCBF"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo" @selectLike="likeSelect" @selectUnlike="unlikeSelect"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-container v-if="template.id==4">
+                            <v-toolbar class="my-10">
+                                <h3>Your Like in Selected Cocktail</h3>
+                            </v-toolbar>
+                            <v-row>
+                                <v-col
+                                v-for="cocktailInfo in likeCocktails"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-container v-if="template.id==5">
+                            <v-toolbar class="my-10">
+                                <h3>Your Unlike in Selected Cocktail</h3>
+                            </v-toolbar>
+                            <v-row>
+                                <v-col
+                                v-for="cocktailInfo in unlikeCocktails"
+                                :key="cocktailInfo.cocktail_id"
+                                cols="12" lg="3" sm="6"
+                                >
+                                    <cocktailCard v-bind:detail="!detail" v-bind:cocktailInfo="cocktailInfo"></cocktailCard>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-tab-item>
+                </v-tabs-items>
             </v-row>
         </v-container>
     </v-app>
@@ -77,13 +186,40 @@ export default {
     },
     data() {
         return {
+            tab:0,
             recommended:false,
             detail:false,
             loading:false,
             cocktailInfos:[],
             randomInfos:[],
-            selectedCocktails:[],
-            recommendedInfos:[]
+            likeCocktails:[],
+            unlikeCocktails:[],
+            recommendedInfosCFItem:[],
+            recommendedInfosCFUser:[],
+            recommendedInfosCBF:[],
+            recommendedInfos:[],
+            templateMenus:[
+                {
+                    id:1,
+                    desc:'Our Recommend'
+                },
+                {
+                    id:2,
+                    desc:'Recommend CF'
+                },
+                {
+                    id:3,
+                    desc:'Recommend CBF'
+                },
+                {
+                    id:4,
+                    desc:"Your Like Selected Item's info"
+                },
+                {
+                    id:5,
+                    desc:"Your Unlike Selected Item's info"
+                }
+            ]
         }
     },
     methods:{
@@ -109,10 +245,17 @@ export default {
                 console.log("random")
                 console.log(this.randomInfos)
                 console.log("selected")
-                console.log(this.selectedCocktails)
-                if(this.selectedCocktails.length > 0){
-                    for(let [index] in this.selectedCocktails){
-                        if(result == this.selectedCocktails[index]['cocktail_id']){
+                console.log(this.likeCocktails)
+                if(this.likeCocktails.length > 0){
+                    for(let [index] in this.likeCocktails){
+                        if(result == this.likeCocktails[index]['cocktail_id']){
+                            duplicated=true
+                        }
+                    }
+                }
+                if(this.unlikeCocktails.length > 0){
+                    for(let [index] in this.unlikeCocktails){
+                        if(result == this.unlikeCocktails[index]['cocktail_id']){
                             duplicated=true
                         }
                     }
@@ -135,9 +278,15 @@ export default {
             }
             this.loading=false
         },
-        selected(item){
+        likeSelect(item){
             this.loading=true
-            this.selectedCocktails.push(item)
+            this.likeCocktails.push(item)
+            this.selectRandom(12)
+            this.loading=false
+        },
+        unlikeSelect(item){
+            this.loading=true
+            this.unlikeCocktails.push(item)
             this.selectRandom(12)
             this.loading=false
         },
@@ -147,7 +296,9 @@ export default {
             this.loading=false
         },
         showRecomment(){
+            this.loading = true
             this.recommended = true
+            this.tab = 0
             this.randomInfos = []
             this.getRecommendInfo()
         },
@@ -155,39 +306,95 @@ export default {
             this.recommended = false
             this.selectRandom(12)
         },
+        
         getRecommendInfo(){
             this.loading = true
             let currentObj = this
-            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/',currentObj.selectedCocktails)
-                .then(function(response){
-                    console.log(response.data)
-                    currentObj.recommendedInfos = response.data
-                    currentObj.loading = false
-                })
-                .catch(function(error){
-                    console.log(error)
-                    console.log("senserver error")
-                })
+            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/CF/',{
+            like_list : currentObj.likeCocktails,
+            unlike_list : currentObj.unlikeCocktails,
+            })
+            .then(function(response){
+                console.log("CF Result")
+                console.log(response.data)
+                currentObj.recommendedInfosCFUser = response.data['user_based_recommend']
+                currentObj.recommendedInfosCFItem = response.data['item_based_recommend']
+                currentObj.loading = false
+            })
+            .catch(function(error){
+
+            console.log(error)
+            console.log("senserver error")
+            })
+            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/CBF/',{
+                like_list : currentObj.likeCocktails,
+                count : 10
+            })
+            .then(function(response){
+                console.log("CBF Result")
+                console.log(response.data['result_lists'])
+                currentObj.recommendedInfosCBF = response.data['result_lists']
+                currentObj.loading = false
+            })
+            .catch(function(error){
+                console.log(error)
+                console.log("senserver error")
+            })
+
+            setTimeout(function(){
+                currentObj.recommendedInfos = []
+                for(let [index] in currentObj.recommendedInfosCFUser){
+                    currentObj.recommendedInfos.push(currentObj.recommendedInfosCFUser[index])
+                }
+                for(let [index] in currentObj.recommendedInfosCFItem){
+                    currentObj.recommendedInfos.push(currentObj.recommendedInfosCFItem[index])
+                }
+                console.log("rec infos")
+                console.log(currentObj.recommendedInfos)
+                if(currentObj.recommendedInfos.length == 0){
+                    console.log("length 0")
+                    currentObj.recommendedInfos = currentObj.recommendedInfosCBF
+                }
+                else if(currentObj.recommendedInfos.length > 0 && currentObj.recommendedInfos.length < 20){
+                    console.log("length 1~20")
+                    currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/CBF/',{
+                        like_list : currentObj.recommendedInfos,
+                        count : 20 - currentObj.recommendedInfos.length
+                    })
+                    .then(function(response){
+                        console.log("CF and CBF Result")
+                        console.log(response.data)
+                        for(let [index] in response.data['result_lists']){
+                            currentObj.recommendedInfos.push(response.data['result_lists'][index])
+                        }
+                        currentObj.loading = false
+                        console.log("our result")
+                        console.log(currentObj.recommendedInfos)
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    })
+                }
+                else {
+                    console.log("length 21~")
+                }
+
+            },3000)
+
+            
         },
-        sendInstance() {
-            this.loading = true
+        reset() {
             let currentObj = this
-            console.log("send instance")
-            console.log(currentObj.selectedCocktails)
-            currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/send/',currentObj.selectedCocktails)
-                .then(function(response){
-                    console.log(response.data)
-                    currentObj.loading = false
-                    currentObj.selectedCocktails = []
-                    currentObj.recommendedInfos = []
-                    currentObj.recommended = false
-                    currentObj.randomInfos = []
-                    currentObj.selectRandom(12)
-                })
-                .catch(function(error){
-                    console.log(error)
-                    console.log("senserver error")
-                })
+            currentObj.likeCocktails = []
+            currentObj.unlikeCocktails = []
+            currentObj.recommendedInfosCFUser = []
+            currentObj.recommendedInfosCFItem = []
+            currentObj.recommendedInfosCBF = []
+            currentObj.recommendedInfos = []
+            currentObj.recommended = false
+            currentObj.randomInfos = []
+            currentObj.selectRandom(12)
         }
     }
 }

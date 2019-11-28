@@ -3,7 +3,10 @@
     fill-hegiht
     fluid>
         <v-card-text class="justify-space-around">
-            <v-text-field label="search" v-model="search"
+            <v-text-field 
+            outlined
+            max-width="1500"
+            label="search" v-model="search"
             append-outer-icon="mdi-send"
             @click:append-outer="searchKeyword"
             ></v-text-field>

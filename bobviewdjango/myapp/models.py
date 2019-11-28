@@ -154,7 +154,8 @@ class Cocktail(models.Model):
 
 class CocktailInstance(models.Model):
     instance_id = models.AutoField(primary_key=True)
-    cocktail_like = models.TextField()
+    cocktail_like = models.TextField(default = [])
+    cocktail_unlike = models.TextField(default = [])
 
     class Meta:
         managed = True

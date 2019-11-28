@@ -66,4 +66,4 @@ class CocktailSerializer(serializers.HyperlinkedModelSerializer):
 class CocktailInstanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CocktailInstance
-        fields = ('instance_id', 'cocktail_like')
+        fields = ('instance_id', 'cocktail_like', 'cocktail_unlike')

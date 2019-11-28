@@ -24,23 +24,23 @@
                         <v-card-text class="text--primary">{{menuinfo.menu_desc}}</v-card-text>
                     </v-row>
                     <v-row>
-                        <v-card-actions>
-                            <v-btn
-                                color="red"
-                                text
-                                @click="$emit('addBasket', menuinfo)"
-                            >
-                                Order
-                            </v-btn>
-                            <v-btn
-                                color="orange"
-                                text
-                                @click="showDetailReviews"
-                                v-if="tot_rating != 0"
-                            >
-                                Show Review on This
-                            </v-btn>
-                        </v-card-actions>
+                        <v-btn
+                            color="red"
+                            text
+                            @click="$emit('addBasket', menuinfo)"
+                        >
+                            Order
+                        </v-btn>
+                    </v-row>
+                    <v-row>
+                        <v-btn
+                            color="orange"
+                            text
+                            @click="showDetailReviews"
+                            v-if="tot_rating != 0"
+                        >
+                            Show Review on This
+                        </v-btn>
                     </v-row>
                 </v-col>
             </v-row>

@@ -36,8 +36,11 @@
             </v-row>
         </v-content>
         <v-card-actions>
-            <v-btn v-if="!detail" text depressed color="red lighten-3" @click="$emit('select', cocktailInfo)">
-                select
+            <v-btn v-if="!detail" text depressed color="red lighten-3" @click="$emit('selectLike', cocktailInfo)">
+                Like
+            </v-btn>
+            <v-btn v-if="!detail" text depressed color="red lighten-3" @click="$emit('selectUnlike', cocktailInfo)">
+                Unlike
             </v-btn>
         </v-card-actions>
     </v-card>
