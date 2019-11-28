@@ -1178,5 +1178,5 @@ def strToList(str):
         try:
             result_list.append(int(value))
         except:
-            
+            print("no value")
     return result_list
