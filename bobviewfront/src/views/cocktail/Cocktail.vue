@@ -319,7 +319,6 @@ export default {
                 console.log(response.data)
                 currentObj.recommendedInfosCFUser = response.data['user_based_recommend']
                 currentObj.recommendedInfosCFItem = response.data['item_based_recommend']
-                currentObj.loading = false
             })
             .catch(function(error){
 
@@ -334,7 +333,6 @@ export default {
                 console.log("CBF Result")
                 console.log(response.data['result_lists'])
                 currentObj.recommendedInfosCBF = response.data['result_lists']
-                currentObj.loading = false
             })
             .catch(function(error){
                 console.log(error)
