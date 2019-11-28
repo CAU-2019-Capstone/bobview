@@ -8,9 +8,9 @@ class RecommenderCBF :
         self.result = 0
         self.count = count
         all_rec_list = []
-        results = np.load("cocktails/results.npy", allow_pickle=True)
+        results = np.load("bobviewdjango/cocktails/results.npy", allow_pickle=True)
         results = results.tolist()
-        idx_to_name = np.load("cocktails/idx_to_name.npy", allow_pickle=True)
+        idx_to_name = np.load("bobviewdjango/cocktails/idx_to_name.npy", allow_pickle=True)
         idx_to_name = idx_to_name.tolist()
 
         # below is the input cocktail id list !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
