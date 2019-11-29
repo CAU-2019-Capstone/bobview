@@ -3,17 +3,22 @@
         <v-container>
             <v-toolbar>
                 <v-btn text depressed outlined class="mx-2" @click="reset">
-                    Cocktail Recommendation System
+                    <p class="d-xs-none">CRS</p>
+                    <p class="d-none d-lg-block">Cocktail Recommendation System</p>
+                    
                 </v-btn>
                 <v-spacer/>
                 <v-btn v-if="!recommended" :disabled="likeCocktails.length==0 && unlikeCocktails.length==0" text depressed outlined class="mx-2" @click="showRecomment">
-                    show recommendation!
+                    <p class="d-none d-lg-block">show recommendation!</p>
+                    <p class="d-xs-none">Rec</p>
                 </v-btn>
                 <v-btn v-else text depressed outlined class="mx-2" @click="showRandom">
-                    select More!
+                    <p class="d-none d-xs-block">select More!</p>
+                    <p class="d-xs-none">More</p>
+                    
                 </v-btn>
                 <v-btn text depressed outlined @click="pass" class="red">
-                    pass
+                    <p>pass</p>
                 </v-btn>
             </v-toolbar>
             <v-row v-if="loading">
