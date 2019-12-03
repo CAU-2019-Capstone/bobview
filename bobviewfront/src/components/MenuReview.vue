@@ -154,16 +154,6 @@ export default {
                     console.log(error)
                     console.log("senserver error")
                 });
-            this.axios
-                .get('https://www.bobview.org:8080/api/commentlist/0/?menu_rating_id='+this.menu_rating_id)
-                .then((result)=>{
-                    console.log(result.data)
-                    this.comments = result.data
-                })
-                .catch(function(error){
-                    console.log(error)
-                    console.log("senserver error")
-                });
             setTimeout(function(){
                 currentObj.axios
                     .get(currentObj.menu_rating['menu'])
@@ -214,9 +204,22 @@ export default {
         },
         moreReply() {
             this.reply=!this.reply
+            this.initcomment()
         },
         setLike(val){
             this.like = val
+        },
+        initcomment() {
+            this.axios
+                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+this.rest_rating_id)
+                .then((result)=>{
+                    console.log(result.data)
+                    this.comments = result.data
+                })
+                .catch(function(error){
+                    console.log(error)
+                    console.log("senserver error")
+                });
         },
         sendComment() {
             this.reply=false
@@ -227,7 +230,6 @@ export default {
             })
             .then(function(response){
                 console.log(response.data)
-                this.reply=true
                 this.initcomment()
             })
             .catch(function(error){
