@@ -2,11 +2,11 @@
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
         <v-card-title primary-title>
             <v-row>
-                <v-col>
+                <v-col cols="6">
                     <h5>Restaurant Review</h5>
                     <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
                 </v-col>
-                <v-col>
+                <v-col cols="6">
                     <h4>Restaurant Location</h4>
                     <h6>{{rest_rating['restaurant']['restaurant_address']}}</h6>
                 </v-col>
@@ -191,11 +191,11 @@ export default {
                     });
             },500)
             setTimeout(function() {
-                this.axios
+                currentObj.axios
                 .get('https://www.bobview.org:8080/api/restrating/0/?restaurant_name='+currentObj.rest_rating['restaurant']['restaurant_name'])
                 .then((result)=>{
                     console.log(result.data)
-                    this.rest_rating_list = result.data
+                    currentObj.rest_rating_list = result.data
                 })
                 .catch(function(error){
                     console.log(error)
