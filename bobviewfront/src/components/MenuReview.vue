@@ -3,15 +3,15 @@
         <v-container primary-title>
             <v-row>
                 <v-col cols="8">
-                    <h5>Menu Review</h5>
-                    <h4 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h4>
+                    <h4>Menu Review</h4>
+                    <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
                 </v-col>
                 <v-col cols="4">
-                    <h5>Restaurant Location</h5>
-                    <h6>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h6>
+                    <h4>Restaurant Location</h4>
+                    <h3>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h3>
                 </v-col>
             </v-row>
-            <v-row>
+            <v-row class="ml-10">
                 <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
             </v-row>
         </v-container>
