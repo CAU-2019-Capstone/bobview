@@ -9,13 +9,14 @@
             </v-card-title>
 
             <v-content class="px-5 py-2">
-                <v-text-field  label="ID" v-model="userdata.id"></v-text-field>
+                <v-text-field  label="ID" v-model="userdata.id" @keyup.enter="ApplyLogin"></v-text-field>
                 <v-text-field
                     label="password"
                     hint="At least 8 characters"
                     counter="8"
                     :type="'password'"
                     v-model="userdata.password"
+                    @keyup.enter="ApplyLogin"
                 ></v-text-field>
                 <p v-if="loginerror">{{message}}</p>
             </v-content>

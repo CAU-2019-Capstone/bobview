@@ -53,8 +53,8 @@
                 v-if="isLogined"
                 class="blue lighten-4"
                 >
-                <template v-slot:activator="{ on }">
-                    <v-btn text v-on="on" mr-5>
+                <template v-slot:activator="{ on }" class="blue darken-2">
+                    <v-btn text v-on="on" mr-5 class="blue accent-1">
                         {{$store.state.userdata['username']}}
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
