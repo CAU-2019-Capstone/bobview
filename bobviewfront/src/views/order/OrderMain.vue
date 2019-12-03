@@ -1,6 +1,14 @@
 <template>
+
     <v-container grid-list-xs>
-        <v-card>
+        <v-card v-if="loading">
+            <v-contnet v-if="farFromRes" class="my-10">
+                <v-row class="justify-center">
+                   <h2>Now We Collect Your Location... Please click YES to your gps Permission</h2>
+                </v-row>
+            </v-contnet>
+        </v-card>
+        <v-card v-if="!loading">
             <v-contnet v-if="farFromRes" class="my-10">
                 <v-row class="justify-center">
                    <h2>your location is far from restaurant, please connect correctly</h2>
@@ -56,18 +64,21 @@
                         to="/order/call"
                         :disabled="farFromRes"
                     >
-                        <span>Reqeust Something</span>
+                        <span>Request Something</span>
                     </v-btn>
                 </v-row>
             </v-content>
         </v-card>
+
     </v-container>
+    
 </template>
 <script>
 export default {
     name :'ordermain',
     data() {
         return{
+            loading : false,
             restaurant : this.$route.query.r,
             table : this.$route.query.t,
             gettingLocation : false,
@@ -84,13 +95,18 @@ export default {
     created() {
         //do we support geolocation
         if(!("geolocation" in navigator)) {
-        this.errorStr = 'Geolocation is not available.';
-        console.log(this.errorStr)
-        return;
+            this.errorStr = 'Geolocation is not available.';
+            console.log(this.errorStr)
+            return;
+            this.loading = false
         }
 
         console.log("success")
-        
+    },
+
+    mounted() { 
+        console.log("order main mounted") 
+        console.log(this.$store.getters.isLogined)
         // get position
         navigator.geolocation.getCurrentPosition(pos => {
             this.gettingLocation = true;
@@ -99,22 +115,21 @@ export default {
             this.gettingLocation = false;
             this.errorStr = err.message;
         })
-    },
+        let currentObj = this
+        setTimeout(function(){
+            if(currentObj.$route.query.r == undefined){
+                currentObj.$router.push("/")
+            }
+            currentObj.$store.commit('SetOrderInfo',{
+                restaurant_name : currentObj.$route.query.r,
+                table_number : currentObj.$route.query.t,
+            })
+            console.log(currentObj.$store.getters.RestaurantName)
+            console.log(currentObj.$store.getters.TableNumber)
 
-    mounted() { 
-        console.log("order main mounted") 
-        console.log(this.$store.getters.isLogined)
-        if(this.$route.query.r == undefined){
-            this.$router.push("/")
-        }
-        this.$store.commit('SetOrderInfo',{
-            restaurant_name : this.$route.query.r,
-            table_number : this.$route.query.t,
-        })
-        console.log(this.$store.getters.RestaurantName)
-        console.log(this.$store.getters.TableNumber)
+            currentObj.getOrderMenus()
+        }, 1000)
 
-        this.getOrderMenus()
     },
     computed: {
         distance : function() {
