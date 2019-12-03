@@ -794,6 +794,7 @@ def getActiveOrder(request):     # 메뉴 정보에서 편집 기능
         serializer_context = {
             'request': request,
         }
+        restaurantInfo = {}
         try:
             restaurantquery = RestaurantInfo.objects.all()
             restaurant = get_object_or_404(restaurantquery, restaurant_name = request.data['restaurant_name'])
