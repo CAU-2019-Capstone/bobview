@@ -32,7 +32,7 @@
             left
             bottom
             v-if="isLogined"
-            class="blue lighten-4"
+            class="blue darken-2"
             >
             <template v-slot:activator="{ on }" class="blue darken-2">
                 <v-btn text v-on="on" mr-5 class="blue accent-1">
@@ -46,8 +46,9 @@
                     v-for="userinfo in userinfos"
                     :key="userinfo.title"
                     :to="userinfo.to"
+                    class="blue darken-2"
                 >
-                    <v-list-item-title class="blue lighten-4">
+                    <v-list-item-title class="blue darken-2">
                         <v-icon>{{ userinfo.icon }}</v-icon>
                         {{ userinfo.title }}
                     </v-list-item-title>
