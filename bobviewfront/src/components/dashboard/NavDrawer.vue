@@ -29,7 +29,7 @@
       </v-list-item-avatar>
 
       <v-list-item-title class="title-sm">
-        <v-btn depressed outlined color="blue darken-2" to="/">Bobview</v-btn>
+        <v-btn depressed outlined color="blue darken-2" to="/"><p>Bobview</p></v-btn>
       </v-list-item-title>
     </v-list-item>
 
