@@ -3,11 +3,11 @@
         <v-card-title primary-title>
             <v-row>
                 <v-col cols="8">
-                    <h5>Restaurant Review</h5>
-                    <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
+                    <h5>Name</h5>
+                    <h4 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h4>
                 </v-col>
                 <v-col cols="4">
-                    <h5>Restaurant Location</h5>
+                    <h5>Location</h5>
                     <h6>{{rest_rating['restaurant']['restaurant_address']}}</h6>
                 </v-col>
             </v-row>

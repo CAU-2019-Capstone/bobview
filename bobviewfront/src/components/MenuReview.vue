@@ -4,10 +4,10 @@
             <v-row>
                 <v-col cols="8">
                     <h5>Menu Review</h5>
-                    <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
+                    <h4 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h4>
                 </v-col>
                 <v-col cols="4">
-                    <h4>Restaurant Location</h4>
+                    <h5>Restaurant Location</h5>
                     <h6>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h6>
                 </v-col>
             </v-row>
@@ -126,6 +126,8 @@ export default {
                 sum = sum + this.menu_rating_list[index]['rating']
                 count = count + 1
             }
+            console.log(sum)
+            console.log(count)
             if(count > 0.0){
                 return sum/count
             }
