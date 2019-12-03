@@ -32,10 +32,9 @@
             left
             bottom
             v-if="isLogined"
-            class="blue darken-2"
             >
-            <template v-slot:activator="{ on }" class="blue darken-2">
-                <v-btn text v-on="on" mr-5 class="blue lighten-4">
+            <template v-slot:activator="{ on }">
+                <v-btn text v-on="on" mr-5>
                     {{$store.state.userdata['username']}}
                     <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
@@ -46,9 +45,8 @@
                     v-for="userinfo in userinfos"
                     :key="userinfo.title"
                     :to="userinfo.to"
-                    class="blue darken-2"
                 >
-                    <v-list-item-title class="blue lighten-4">
+                    <v-list-item-title>
                         <v-icon>{{ userinfo.icon }}</v-icon>
                         {{ userinfo.title }}
                     </v-list-item-title>
