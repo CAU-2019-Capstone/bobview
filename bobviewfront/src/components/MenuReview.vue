@@ -1,6 +1,6 @@
 <template>
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
-        <v-content primary-title>
+        <v-container primary-title>
             <v-row>
                 <v-col cols="8">
                     <h5>Menu Review</h5>
@@ -14,7 +14,7 @@
             <v-row>
                 <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
             </v-row>
-        </v-content>
+        </v-container>
         <v-divider></v-divider>
         <v-img
             contain
