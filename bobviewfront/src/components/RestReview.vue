@@ -11,10 +11,13 @@
                     <h3>{{rest_rating['restaurant']['restaurant_address']}}</h3>
                 </v-col>
             </v-row>
-            <v-row class="ml-3">
-                <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
-                <v-spacer/>
-                <span>review count : {{rest_rating_list.length}}</span>
+            <v-row class="ml-1">
+                <v-col cols="8">
+                    <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
+                </v-col>
+                <v-col cols="4">
+                    <span>review count : {{rest_rating_list.length}}</span>
+                </v-col>
             </v-row>
         </v-container>
         <v-divider></v-divider>

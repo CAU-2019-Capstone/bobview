@@ -12,9 +12,14 @@
                 </v-col>
             </v-row>
             <v-row class="ml-3">
-                <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
-                <span>review count : {{menu_rating_list.length}}</span>
+                <v-col cols="8">
+                    <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
+                </v-col>
+                <v-col cols="4">
+                    <span>review count : {{menu_rating_list.length}}</span>
+                </v-col>
             </v-row>
+
         </v-container>
         <v-divider></v-divider>
         <v-img
