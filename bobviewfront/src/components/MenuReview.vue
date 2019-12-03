@@ -7,7 +7,8 @@
                     <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
                 </v-col>
                 <v-col cols="4">
-                    <h4>Restaurant Location</h4>
+                    <h4>Restaurant Info</h4>
+                    <h3>{{menu_rating['menu']['restaurant']['restaurant_name']}}</h3>
                     <h3>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h3>
                 </v-col>
             </v-row>
