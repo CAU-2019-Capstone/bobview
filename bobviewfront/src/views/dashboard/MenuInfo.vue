@@ -26,8 +26,8 @@
               <div class="flex-grow-1"></div>
               <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                  <v-btn color="blue-grey lighten-2" dark class="mb-2 mx-2" @click="commitRestaurant">Preview</v-btn>
-                  <v-btn color="blue-grey lighten-2" dark class="mb-2" v-on="on">New Item</v-btn>
+                  <v-btn color="blue lighten-3" dark class="mb-2 mx-2" @click="commitRestaurant">Preview</v-btn>
+                  <v-btn color="blue lighten-2" dark class="mb-2" v-on="on">New Item</v-btn>
               </template>
               <v-card>
                   <v-card-title>
