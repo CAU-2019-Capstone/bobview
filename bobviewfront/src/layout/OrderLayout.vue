@@ -6,6 +6,7 @@
             to="/"
             width="50"
             height="50"
+            class="blue lighten-2"
         >
             <v-img
             height="50"
