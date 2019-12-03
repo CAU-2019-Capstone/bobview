@@ -2,12 +2,12 @@
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
         <v-card-title primary-title>
             <v-row>
-                <v-col cols="6">
+                <v-col cols="8">
                     <h5>Restaurant Review</h5>
                     <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
                 </v-col>
-                <v-col cols="6">
-                    <h4>Restaurant Location</h4>
+                <v-col cols="4">
+                    <h5>Restaurant Location</h5>
                     <h6>{{rest_rating['restaurant']['restaurant_address']}}</h6>
                 </v-col>
             </v-row>
@@ -26,7 +26,7 @@
         <div class="justify-center" v-if="rest_rating['restaurant']['restaurant_image']==''">No Image</div>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>Review</h5>
+            <h5>Restaurant Review</h5>
             <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>
@@ -127,6 +127,8 @@ export default {
                 sum = sum + this.rest_rating_list[index]['rating']
                 count = count + 1
             }
+            console.log(sum)
+            console.log(count)
             if(count > 0.0){
                 return sum/count
             }

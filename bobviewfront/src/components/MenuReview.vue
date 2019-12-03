@@ -2,11 +2,11 @@
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
         <v-card-title primary-title>
             <v-row>
-                <v-col>
+                <v-col cols="8">
                     <h5>Menu Review</h5>
                     <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
                 </v-col>
-                <v-col>
+                <v-col cols="4">
                     <h4>Restaurant Location</h4>
                     <h6>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h6>
                 </v-col>
@@ -25,7 +25,7 @@
         </v-img>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>Menu Description</h5>
+            <h5>Menu Review</h5>
             <h4 class="mb-0">{{menu_rating['desc']}}</h4>
         </div>
         <v-card-actions>
