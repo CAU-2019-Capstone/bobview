@@ -4,13 +4,13 @@
     max-width="500"
     >
         <v-card-title v-if="progressSuccess" primary-title class="justify-space-around">
-            <div >
+            <div>
                 <h2 class="headline mb-2">Rate Me!</h2>
                 <span sm>{{restaurantRating['restaurant_name']}}</span>
             </div>
         </v-card-title>
-        <v-container v-if="progressSuccess">
-            <v-content>
+        <v-content v-if="progressSuccess">
+            <v-container>
                 <v-row class="justify-space-around">
                     <v-img
                         :src="restaurantRating['restaurant_image']"
@@ -21,7 +21,7 @@
                     </v-img>
                 </v-row>
                 <v-row>
-                    <v-content>
+                    <v-container>
                         <v-row class="justify-center">
                             <span small>Order Menus</span>
                         </v-row>
@@ -46,7 +46,7 @@
                                 </v-btn>
                             </v-col>
                         </v-row>
-                    </v-content>
+                    </v-container>
                 </v-row>
                 <v-row class="justify-space-around my-10">
                     <v-rating
@@ -65,7 +65,7 @@
                     label="description" 
                     v-model="restaurantRating['desc']"></v-textarea>
                 </v-row>
-            </v-content>
+            </v-container>
             <v-content v-if="rateSuccess"
             >
                 <p>Review Applied!</p>
@@ -132,7 +132,7 @@
                 </v-card-actions>
             </v-card>
             </v-dialog>
-        </v-container>
+        </v-content>
         <v-progress-linear
         v-if="!progressSuccess"
         indeterminate
