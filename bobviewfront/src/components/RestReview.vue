@@ -87,6 +87,7 @@ export default {
     props:['rest_rating_id'],
     mounted() {
         this.initiate()
+        this.initcomment()
     },
     data() {
         return{
@@ -150,7 +151,6 @@ export default {
                     console.log(error)
                     console.log("senserver error")
                 });
-            this.initcomment()
             setTimeout(function(){
                 currentObj.axios
                     .get(currentObj.rest_rating['restaurant'])
