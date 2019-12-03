@@ -9,7 +9,7 @@
                 <span sm>{{restaurantRating['restaurant_name']}}</span>
             </div>
         </v-card-title>
-        <v-content v-if="progressSuccess">
+        <v-content v-if="progressSuccess" class="justify-space-around">
             <v-container>
                 <v-row class="justify-space-around">
                     <v-img
