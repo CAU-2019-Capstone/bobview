@@ -181,16 +181,6 @@ export default {
                         console.log(error)
                         console.log("senserver error")
                     });
-                currentObj.axios
-                    .get(currentObj.rest_rating['user'])
-                    .then((result)=>{   
-                        console.log(result.data)
-                        currentObj.rest_rating['user'] = result.data
-                    })
-                    .catch(function(error){
-                        console.log(error)
-                        console.log("senserver error")
-                    });
             },500)
             setTimeout(function() {
                 currentObj.axios
