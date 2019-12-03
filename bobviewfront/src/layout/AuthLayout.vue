@@ -41,11 +41,11 @@
                 </v-btn>
             </template>
             <v-expand-transition>
-            <v-list >
+            <v-list>
                 <v-list-item
                     v-for="userinfo in userinfos"
                     :key="userinfo.title"
-                    :to="userinfo.to"
+                    @click="userinfo.title"
                 >
                     <v-list-item-title>
                         <v-icon>{{ userinfo.icon }}</v-icon>
