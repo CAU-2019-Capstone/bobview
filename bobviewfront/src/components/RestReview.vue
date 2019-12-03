@@ -228,7 +228,7 @@ export default {
                 console.log(error)
                 console.log("senserver error")
             });
-            setTiemout(function(){
+            setTimeout(function(){
                 currentObj.initcomment()
             },500)
         },

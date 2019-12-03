@@ -149,8 +149,10 @@ export default {
     mounted() {
         //console.log("review mounted, order_id : " + this.order_id)
         this.initMenus()
-        if(this.active=true){
-            this.forActive = true
+        if(this.active != undefined){
+            if(this.active == true){
+                this.forActive = true
+            }
         }
     },
     watch: {
