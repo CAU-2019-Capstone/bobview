@@ -15,7 +15,7 @@
             :src="menuinfo.menu_image"
             >
             </v-img>
-
+            <div><v-icon>mdi-star</v-icon>x{{tot_rating}}</div>
             <v-card-text class="text-center font-italic font-weight-light" style="font-size:1.2em">  
                 <div>{{menuinfo.menu_price + "KRW"}}</div>
             </v-card-text>

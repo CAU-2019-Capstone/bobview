@@ -18,6 +18,7 @@
                         <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
                     </v-row>
                     <v-row>
+                        <div><v-icon>mdi-star</v-icon>x{{tot_rating}}</div>
                         <v-card-text>{{menuinfo.menu_price + "KRW"}}</v-card-text>
                     </v-row>
                     <v-row>

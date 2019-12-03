@@ -45,9 +45,9 @@
                 <v-list-item
                     v-for="userinfo in userinfos"
                     :key="userinfo.title"
-                    @click="userinfo.title"
+                    :to="userinfo.to"
                 >
-                    <v-list-item-title>
+                    <v-list-item-title @click="userinfo.title">
                         <v-icon>{{ userinfo.icon }}</v-icon>
                         {{ userinfo.title }}
                     </v-list-item-title>
