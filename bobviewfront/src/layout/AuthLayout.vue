@@ -32,6 +32,7 @@
             left
             bottom
             v-if="isLogined"
+            class="blue lighten-4"
             >
             <template v-slot:activator="{ on }">
                 <v-btn text v-on="on" mr-5>

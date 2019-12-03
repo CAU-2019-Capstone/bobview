@@ -25,9 +25,10 @@
                     v-slot:activator="{ on }"
                 >
                     <v-btn
-                        fab depressed
-                        class="mx-2"
+                        fab depressed small
+                        class="mx-2 blue lighten-2"
                         v-on="on"
+                        
                         >
                         <v-badge overlap>
                             <template v-slot:badge>{{$store.getters.GetBasketCount}}</template>
@@ -51,7 +52,7 @@
                 left
                 bottom
                 v-if="isLogined"
-                
+                class="blue lighten-2"
                 >
                 <template v-slot:activator="{ on }" >
                     <v-btn text v-on="on" mr-5 >
