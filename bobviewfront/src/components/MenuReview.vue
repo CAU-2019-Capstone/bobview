@@ -11,7 +11,7 @@
                     <h3>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h3>
                 </v-col>
             </v-row>
-            <v-row class="ml-10">
+            <v-row class="ml-3">
                 <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
             </v-row>
         </v-container>

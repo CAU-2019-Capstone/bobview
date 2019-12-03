@@ -11,7 +11,7 @@
                     <h3>{{rest_rating['restaurant']['restaurant_address']}}</h3>
                 </v-col>
             </v-row>
-            <v-row class="ml-10">
+            <v-row class="ml-3">
                 <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
             </v-row>
         </v-container>
@@ -204,6 +204,7 @@ export default {
             this.like = val
         },
         sendComment() {
+            this.reply = false
             this.axios.post('https://www.bobview.org:8080/api/commentlist/',{
                 rest_rating_id:this.rest_rating_id,
                 username:this.$store.getters.GetUserdata['username'],
@@ -212,6 +213,7 @@ export default {
             .then(function(response){
                 console.log(response.data)
                 this.newComment=''
+                this.reply = true
             })
             .catch(function(error){
                 console.log(error)
