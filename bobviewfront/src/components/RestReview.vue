@@ -150,16 +150,7 @@ export default {
                     console.log(error)
                     console.log("senserver error")
                 });
-            this.axios
-                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+this.rest_rating_id)
-                .then((result)=>{
-                    console.log(result.data)
-                    this.comments = result.data
-                })
-                .catch(function(error){
-                    console.log(error)
-                    console.log("senserver error")
-                });
+            this.initcomment()
             setTimeout(function(){
                 currentObj.axios
                     .get(currentObj.rest_rating['restaurant'])
@@ -203,6 +194,18 @@ export default {
         setLike(val){
             this.like = val
         },
+        initcomment() {
+            this.axios
+                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+this.rest_rating_id)
+                .then((result)=>{
+                    console.log(result.data)
+                    this.comments = result.data
+                })
+                .catch(function(error){
+                    console.log(error)
+                    console.log("senserver error")
+                });
+        },
         sendComment() {
             this.reply = false
             this.axios.post('https://www.bobview.org:8080/api/commentlist/',{
@@ -214,6 +217,7 @@ export default {
                 console.log(response.data)
                 this.newComment=''
                 this.reply = true
+                this.initcomment()
             })
             .catch(function(error){
                 console.log(error)
