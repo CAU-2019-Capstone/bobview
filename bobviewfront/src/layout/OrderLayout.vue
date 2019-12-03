@@ -1,18 +1,21 @@
 <template>
     <v-app>
-        <v-app-bar app>
+        <v-app-bar app class="blue lighten-2">
             <v-btn
                 text
                 to="/"
             >
-            <v-toolbar-title class="headline text-uppercase">
-                <span>Bobview</span>
-            </v-toolbar-title>
+                <v-img
+                height="36"
+                weight="36"
+                src="../assets/logo.png"
+                >\
+                </v-img>
             </v-btn>
             <v-spacer></v-spacer>
             <v-dialog
                 v-model="dialog"
-                width="500" >
+                width="500">
                 <template 
                     v-slot:activator="{ on }"
                 >
@@ -35,6 +38,7 @@
                 @click="saveDomain()"
                 to="/order/login"
                 v-if="!isLogined"
+                class="blue lighten-4"
             >
                 <span class="mr-2">Login</span>
             </v-btn>
@@ -42,6 +46,7 @@
                 left
                 bottom
                 v-if="isLogined"
+                class="blue lighten-4"
                 >
                 <template v-slot:activator="{ on }">
                     <v-btn text v-on="on" mr-5>
@@ -50,7 +55,7 @@
                     </v-btn>
                 </template>
                 <v-expand-transition>
-                <v-list>
+                <v-list class="blue lighten-4">
                     <v-list-item
                         v-for="userinfo in userinfos"
                         :key="userinfo.title"

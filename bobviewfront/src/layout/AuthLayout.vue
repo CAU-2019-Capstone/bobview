@@ -1,15 +1,18 @@
 <template>
 <v-app>
-    <v-app-bar app>
+    <v-app-bar app class="blue darken-2">
         <v-btn
             text
             depressed
             outlined
             to="/"
-        >
-            <v-toolbar-title class="headline text-uppercase">
-                <span>Bobview</span>
-            </v-toolbar-title>
+        >\
+            <v-img
+            height="36"
+            weight="36"
+            src="../assets/logo.png"
+            >\
+            </v-img>
         </v-btn>
         <v-spacer></v-spacer>
         
@@ -19,6 +22,7 @@
             v-if="!isLogined"
             @click="saveDomain()"
             to="/login"
+            class="blue lighten-4"
         >
             <span class="mr-2">Login</span>
         </v-btn>
@@ -26,21 +30,22 @@
             left
             bottom
             v-if="isLogined"
+            class="blue lighten-4"
             >
             <template v-slot:activator="{ on }">
-                <v-btn text v-on="on" mr-5>
+                <v-btn text v-on="on" mr-5 class="blue accent-1">
                     {{$store.state.userdata['username']}}
                     <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
             </template>
             <v-expand-transition>
-            <v-list>
+            <v-list >
                 <v-list-item
                     v-for="userinfo in userinfos"
                     :key="userinfo.title"
                     :to="userinfo.to"
                 >
-                    <v-list-item-title>
+                    <v-list-item-title class="blue lighten-4">
                         <v-icon>{{ userinfo.icon }}</v-icon>
                         {{ userinfo.title }}
                     </v-list-item-title>

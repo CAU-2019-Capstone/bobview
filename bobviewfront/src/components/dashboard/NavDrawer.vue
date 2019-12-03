@@ -4,7 +4,7 @@
     v-model="inputValue"
     :src="image"
     app
-    color="blue-grey darken-2"
+    color="blue darken-2"
     dark
     floating
     mobile-break-point="991"
@@ -21,7 +21,7 @@
     <v-list-item two-line>
       <v-list-item-avatar color="white">
         <v-img
-          src="https://cdn.vuetifyjs.com/images/logos/v.png"
+          src="../assets/logo.png"
           height="34"
           contain
         />

@@ -3,7 +3,7 @@
     id="core-app-bar"
     absolute
     app
-    color="blue-grey lighten-2"
+    color="blue lighten-2"
     flat
     height="62"
   >
