@@ -55,7 +55,7 @@
                 class="blue lighten-2"
                 >
                 <template v-slot:activator="{ on }" >
-                    <v-btn text v-on="on" mr-5 >
+                    <v-btn text v-on="on" mr-5 outlined>
                         {{$store.state.userdata['username']}}
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>

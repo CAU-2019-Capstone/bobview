@@ -24,7 +24,7 @@
                             ></v-divider>
                             <div class="flex-grow-1"></div>
                             <v-spacer/>
-                            <v-btn text depressed @click="showQRCodes(i)">
+                            <v-btn text depressed @click="showQRCodes(i)" class="blue lighten-2">
                                 Show QRCodes
                             </v-btn>
                         </v-toolbar>

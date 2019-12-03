@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-xs class="d-flex align-center">
+    <v-container grid-list-xs>
         <v-card>
             
             <v-card-title primary-title>

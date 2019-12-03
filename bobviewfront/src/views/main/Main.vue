@@ -2,15 +2,16 @@
     <v-container grid-list-xs
     fill-hegiht
     fluid>
-        <v-card-text class="justify-space-around">
-            <v-text-field 
-            outlined
-            max-width="750"
-            label="search" v-model="search"
-            append-outer-icon="mdi-send"
-            @click:append-outer="searchKeyword"
-            ></v-text-field>
-            
+        <v-card-text 
+        class="justify-space-around" 
+        max-width="750"
+        >
+          <v-text-field 
+          outlined
+          label="search" v-model="search"
+          append-outer-icon="mdi-send"
+          @click:append-outer="searchKeyword"
+          ></v-text-field>
         </v-card-text>
         <v-container>
           <v-row

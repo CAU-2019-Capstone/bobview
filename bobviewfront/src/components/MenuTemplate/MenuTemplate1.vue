@@ -11,10 +11,10 @@
             max-height="250"
             :src="menuinfo.menu_image"
             >
-            <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
+            <v-card-title justify-center class="white--text">{{menuinfo.menu_name}}</v-card-title>
             </v-img>
 
-            <v-card-text class="text--primary white--text">
+            <v-card-text class="text--primary">
                 <div><v-icon>mdi-star</v-icon>x{{tot_rating}}</div>
                 <div>Price : {{menuinfo.menu_price}}</div>
                 <div>Description : {{menuinfo.menu_desc}}</div>
