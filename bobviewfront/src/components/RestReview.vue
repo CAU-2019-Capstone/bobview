@@ -200,11 +200,12 @@ export default {
             this.like = val
         },
         initcomment() {
-            this.axios
-                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+this.rest_rating_id)
+            let currentObj = this
+            currentObj.axios
+                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+currentObj.rest_rating_id)
                 .then((result)=>{
                     console.log(result.data)
-                    this.comments = result.data
+                    currentObj.comments = result.data
                 })
                 .catch(function(error){
                     console.log(error)
@@ -212,22 +213,23 @@ export default {
                 });
         },
         sendComment() {
-            this.reply = false
-            this.axios.post('https://www.bobview.org:8080/api/commentlist/',{
-                rest_rating_id:this.rest_rating_id,
-                username:this.$store.getters.GetUserdata['username'],
-                comment:this.newComment
+            let currentObj = this
+            currentObj.axios.post('https://www.bobview.org:8080/api/commentlist/',{
+                rest_rating_id:currentObj.rest_rating_id,
+                username:currentObj.$store.getters.GetUserdata['username'],
+                comment:currentObj.newComment
             })
             .then(function(response){
                 console.log(response.data)
-                this.newComment=''
-                this.reply = true
-                this.initcomment()
+                currentObj.newComment=''
             })
             .catch(function(error){
                 console.log(error)
                 console.log("senserver error")
             });
+            setTiemout(function(){
+                currentObj.initcomment()
+            },500)
         },
     }
 }

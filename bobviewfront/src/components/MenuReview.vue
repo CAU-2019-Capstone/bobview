@@ -49,7 +49,7 @@
             </v-btn>
         </v-card-actions>
         <v-divider></v-divider>
-        <v-content v-if="reply">
+        <v-container v-if="reply">
             <v-row
             v-for="comment in comments"
             :key="comment.comment_list_id"
@@ -77,7 +77,7 @@
                     <v-icon>mdi-send</v-icon>
                 </v-btn>
             </v-row>
-        </v-content>
+        </v-container>
     </v-card>
 </template>
 <script>
@@ -210,11 +210,12 @@ export default {
             this.like = val
         },
         initcomment() {
-            this.axios
-                .get('https://www.bobview.org:8080/api/commentlist/0/?rest_rating_id='+this.rest_rating_id)
+            let currentObj = this
+            currentObj.axios
+                .get('https://www.bobview.org:8080/api/commentlist/0/?menu_rating_id='+currentObj.menu_rating_id)
                 .then((result)=>{
                     console.log(result.data)
-                    this.comments = result.data
+                    currentObj.comments = result.data
                 })
                 .catch(function(error){
                     console.log(error)
@@ -222,20 +223,20 @@ export default {
                 });
         },
         sendComment() {
-            this.axios.post('https://www.bobview.org:8080/api/commentlist/',{
-                menu_rating_id:this.menu_rating_id,
-                username:this.$store.getters.GetUserdata['username'],
-                comment:this.newComment
+            let currentObj = this
+            currentObj.axios.post('https://www.bobview.org:8080/api/commentlist/',{
+                menu_rating_id:currentObj.menu_rating_id,
+                username:currentObj.$store.getters.GetUserdata['username'],
+                comment:currentObj.newComment
             })
             .then(function(response){
                 console.log(response.data)
-                
+                currentObj.newComment=''
             })
             .catch(function(error){
                 console.log(error)
                 console.log("senserver error")
             });
-            let currentObj = this
             setTimeout(function(){
                 currentObj.initcomment()
             },1000)
