@@ -21,7 +21,7 @@
     <v-list-item two-line>
       <v-list-item-avatar color="white">
         <v-img
-          src="../assets/logo.png"
+          src="../../assets/logo.png"
           height="34"
           contain
         />
