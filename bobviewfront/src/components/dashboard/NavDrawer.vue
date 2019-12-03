@@ -55,22 +55,23 @@
         <v-list-item-title
           v-text="link.text" />
       </v-list-item>
-        <v-list-item
-          v-for="(link, i) in restaurant_links"
-          :key="i"
-          :to="link.to"
-          active-class="primary white--text"
+      <v-list-item
+        v-for="(link, i) in restaurant_links"
+        :key="i"
+        :to="link.to"
+        active-class="primary white--text"
+      >
+        <v-list-item-action
+          v-if="is_owner"
+          :disabled="!is_owner"
         >
-          <v-list-item-action
-            v-if="is_owner"
-          >
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-item-action>
+          <v-icon>{{ link.icon }}</v-icon>
+        </v-list-item-action>
 
-          <v-list-item-title
-            v-if="is_owner"
-            v-text="link.text" />
-        </v-list-item>
+        <v-list-item-title
+          v-if="is_owner"
+          v-text="link.text" />
+      </v-list-item>
     </v-list>
 
     <template v-slot:append>

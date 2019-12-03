@@ -11,6 +11,7 @@
           label="search" v-model="search"
           append-outer-icon="mdi-send"
           @click:append-outer="searchKeyword"
+          @keyup.enter="searchKeyword"
           ></v-text-field>
         </v-card-text>
         <v-container>
