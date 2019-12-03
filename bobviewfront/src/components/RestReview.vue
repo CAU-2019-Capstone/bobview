@@ -26,7 +26,7 @@
         <div class="justify-center" v-if="rest_rating['restaurant']['restaurant_image']==''">No Image</div>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>{{rest_rating['user']['username']}} 's Review</h5>
+            <h5>{{rest_rating['user']['username']}} 's Review  <span><v-icon>mdi-star</v-icon>{{rest_rating['rating']}}</span></h5>
             <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>

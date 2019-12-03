@@ -25,7 +25,7 @@
         </v-img>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>{{menu_rating['user']['username']}}'s Review</h5>
+            <h5>{{menu_rating['user']['username']}}'s Review  <span><v-icon>mdi-star</v-icon>{{menu_rating['rating']}}</span></h5>
             <h4 class="mb-0">{{menu_rating['desc']}}</h4>
         </div>
         <v-card-actions>
