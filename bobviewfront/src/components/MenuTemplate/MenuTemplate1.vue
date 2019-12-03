@@ -3,7 +3,6 @@
         <v-card
             class="mx-auto py-2"
             max-width="450"
-            max-height="400"
         >
             <v-img
             class="align-end"
