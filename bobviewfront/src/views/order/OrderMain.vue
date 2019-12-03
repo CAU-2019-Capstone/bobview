@@ -98,9 +98,7 @@ export default {
             this.errorStr = 'Geolocation is not available.';
             console.log(this.errorStr)
             return;
-            this.loading = false
         }
-
         console.log("success")
     },
 
