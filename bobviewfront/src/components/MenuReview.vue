@@ -9,7 +9,7 @@
                 <v-col cols="4">
                     <h4>Restaurant Info</h4>
                     <h3>{{menu_rating['menu']['restaurant']['restaurant_name']}}</h3>
-                    <h3>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h3>
+                    <h6>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h6>
                 </v-col>
             </v-row>
             <v-row class="ml-3">
