@@ -60,10 +60,10 @@
         :key="i"
         :to="link.to"
         active-class="primary white--text"
+        :disabled="!is_owner"
       >
         <v-list-item-action
           v-if="is_owner"
-          :disabled="!is_owner"
         >
           <v-icon>{{ link.icon }}</v-icon>
         </v-list-item-action>
