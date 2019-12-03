@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-card
-            class="mx-auto"
+            class="mx-auto py-2"
             max-width="450"
             max-height="400"
         >
