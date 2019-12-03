@@ -26,7 +26,7 @@
                 >
                     <v-btn
                         fab depressed small
-                        class="mx-2 blue lighten-2"
+                        class="mx-2 blue lighten-4"
                         v-on="on"
                         
                         >

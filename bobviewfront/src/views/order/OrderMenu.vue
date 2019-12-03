@@ -1,6 +1,6 @@
 <template>
-    <v-app>
-        <v-container class="blue-grey lighten-2">
+    <v-app class="blue lighten-5">
+        <v-container>
             <v-row v-if="getMenuData">
                   <v-col 
                     v-for="menuinfo in menuinfos"

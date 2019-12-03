@@ -14,7 +14,7 @@
             <v-card-title justify-center>{{menuinfo.menu_name}}</v-card-title>
             </v-img>
 
-            <v-card-text class="text--primary">
+            <v-card-text class="text--primary white--text">
                 <div><v-icon>mdi-star</v-icon>x{{tot_rating}}</div>
                 <div>Price : {{menuinfo.menu_price}}</div>
                 <div>Description : {{menuinfo.menu_desc}}</div>

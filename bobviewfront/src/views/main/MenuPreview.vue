@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app class="blue lighten-5">
         <v-container >
             <v-row  class="justify-between">
                 <v-col cols="10">
