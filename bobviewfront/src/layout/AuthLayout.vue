@@ -6,7 +6,7 @@
         >
             <v-img
             height="36"
-            weight="36"
+            width="36"
             src="../assets/logo.png"
             >
             </v-img>
