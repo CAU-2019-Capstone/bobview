@@ -357,7 +357,7 @@ export default {
                         console.log(error)
                     }); 
                 }
-            }, 1000)
+            }, 500)
             setTimeout(() => {
                 //console.log("ordermenus")
                 //console.log(currentObj.ordermenus)
