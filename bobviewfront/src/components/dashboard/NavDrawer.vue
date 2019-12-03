@@ -22,7 +22,8 @@
       <v-list-item-avatar color="white">
         <v-img
           src="../../assets/logo.png"
-          height="34"
+          height="36"
+          width="36"
           contain
         />
       </v-list-item-avatar>
