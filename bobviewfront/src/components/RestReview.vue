@@ -124,7 +124,7 @@ export default {
             var sum=0.0
             var count=0.0
             for(let [index] in this.rest_rating_list){
-                sum = sum + rest_rating_list[index]['rating']
+                sum = sum + this.rest_rating_list[index]['rating']
                 count = count + 1
             }
             if(count > 0.0){
