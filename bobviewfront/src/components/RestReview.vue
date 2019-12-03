@@ -1,6 +1,6 @@
 <template>
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
-        <v-card-title primary-title>
+        <v-content primary-title>
             <v-row>
                 <v-col cols="8">
                     <h5>Name</h5>
@@ -14,7 +14,7 @@
             <v-row>
                 <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
             </v-row>
-        </v-card-title>
+        </v-content>
         <v-divider></v-divider>
         <v-img
             contain

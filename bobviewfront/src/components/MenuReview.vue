@@ -1,6 +1,6 @@
 <template>
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
-        <v-card-title primary-title>
+        <v-content primary-title>
             <v-row>
                 <v-col cols="8">
                     <h5>Menu Review</h5>
@@ -14,7 +14,7 @@
             <v-row>
                 <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
             </v-row>
-        </v-card-title>
+        </v-content>
         <v-divider></v-divider>
         <v-img
             contain
@@ -184,6 +184,16 @@ export default {
             setTimeout(function() {
                 currentObj.axios
                     .get(currentObj.menu_rating['menu']['restaurant'])
+                    .then((result)=>{   
+                        console.log(result.data)
+                        currentObj.menu_rating['menu']['restaurant'] = result.data[0]
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    });
+                currentObj.axios
+                    .get('https://www.bobview.org:8080/api/menurating/0/?menu_id='+ currentObj.menu_rating['menu']['menu_id'])
                     .then((result)=>{   
                         console.log(result.data)
                         currentObj.menu_rating['menu']['restaurant'] = result.data[0]
