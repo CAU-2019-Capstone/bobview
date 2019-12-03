@@ -196,7 +196,7 @@ export default {
                     .get('https://www.bobview.org:8080/api/menurating/0/?menu_id='+ currentObj.menu_rating['menu']['menu_id'])
                     .then((result)=>{   
                         console.log(result.data)
-                        currentObj.menu_rating['menu']['restaurant'] = result.data[0]
+                        currentObj.menu_rating_list = result.data
                     })
                     .catch(function(error){
                         console.log(error)
