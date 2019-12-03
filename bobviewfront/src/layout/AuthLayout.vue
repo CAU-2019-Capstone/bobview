@@ -35,7 +35,7 @@
             class="blue darken-2"
             >
             <template v-slot:activator="{ on }" class="blue darken-2">
-                <v-btn text v-on="on" mr-5 class="blue accent-1">
+                <v-btn text v-on="on" mr-5 class="blue lighten-4">
                     {{$store.state.userdata['username']}}
                     <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
@@ -48,7 +48,7 @@
                     :to="userinfo.to"
                     class="blue darken-2"
                 >
-                    <v-list-item-title class="blue darken-2">
+                    <v-list-item-title class="blue lighten-4">
                         <v-icon>{{ userinfo.icon }}</v-icon>
                         {{ userinfo.title }}
                     </v-list-item-title>
