@@ -1,10 +1,19 @@
 <template>
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
         <v-card-title primary-title>
-            <div>
-                <h5>Menu name</h5>
-                <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
-            </div>
+            <v-row>
+                <v-col>
+                    <h5>Menu Review</h5>
+                    <h3 class="headline mb-0">{{menu_rating['menu']['menu_name']}}</h3>
+                </v-col>
+                <v-col>
+                    <h4>Restaurant Location</h4>
+                    <h6>{{menu_rating['menu']['restaurant']['restaurant_address']}}</h6>
+                </v-col>
+            </v-row>
+            <v-row>
+                <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
+            </v-row>
         </v-card-title>
         <v-divider></v-divider>
         <v-img
@@ -89,6 +98,7 @@ export default {
             like:0,
             comments:[],
             newComment:'',
+            menu_rating_list:[]
         }
     },
     watch:{
@@ -106,6 +116,20 @@ export default {
                 this.isUnliked = true
             }
             
+        }
+    },
+    computed:{
+        menu_review : function(){
+            var sum=0.0
+            var count=0.0
+            for(let [index] in this.menu_rating_list){
+                sum = sum + menu_rating_list[index]['rating']
+                count = count + 1
+            }
+            if(count > 0.0){
+                return sum/count
+            }
+            return 0.0
         }
     },
     methods: {
@@ -156,10 +180,20 @@ export default {
                     });
             },500)
             setTimeout(function() {
+                currentObj.axios
+                    .get(currentObj.menu_rating['menu']['restaurant'])
+                    .then((result)=>{   
+                        console.log(result.data)
+                        currentObj.menu_rating['menu']['restaurant'] = result.data[0]
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    });
                 currentObj.loadRating = true
                 currentObj.btnChanged =true
                 console.log(currentObj.menu_rating)
-            },500)
+            },1000)
         },
         moreReply() {
             this.reply=!this.reply

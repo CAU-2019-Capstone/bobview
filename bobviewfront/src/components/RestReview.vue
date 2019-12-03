@@ -1,10 +1,19 @@
 <template>
     <v-card width="1000" height="auto" v-if="loadRating" class="elevation-7">
         <v-card-title primary-title>
-            <div>
-                <h5>Restaurant name</h5>
-                <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
-            </div>
+            <v-row>
+                <v-col>
+                    <h5>Restaurant Review</h5>
+                    <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
+                </v-col>
+                <v-col>
+                    <h4>Restaurant Location</h4>
+                    <h6>{{rest_rating['restaurant']['restaurant_address']}}</h6>
+                </v-col>
+            </v-row>
+            <v-row>
+                <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
+            </v-row>
         </v-card-title>
         <v-divider></v-divider>
         <v-img
@@ -14,9 +23,10 @@
             :src="rest_rating['restaurant']['restaurant_image']"
         >
         </v-img>
+        <div class="justify-center" v-if="rest_rating['restaurant']['restaurant_image']==''">No Image</div>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>Restaurant Description</h5>
+            <h5>Review</h5>
             <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>
@@ -89,6 +99,7 @@ export default {
             btnChanged:false,
             like:0,
             comments:[],
+            rest_rating_list:[]
         }
     },
     watch:{
@@ -106,6 +117,20 @@ export default {
                 this.isUnliked = true
             }
             
+        }
+    },
+    computed:{
+        rest_review : function(){
+            var sum=0.0
+            var count=0.0
+            for(let [index] in this.rest_rating_list){
+                sum = sum + rest_rating_list[index]['rating']
+                count = count + 1
+            }
+            if(count > 0.0){
+                return sum/count
+            }
+            return 0.0
         }
     },
     methods: {
@@ -145,6 +170,16 @@ export default {
                         console.log("senserver error")
                     });
                 currentObj.axios
+                    .get(currentObj.rest_rating['user'])
+                    .then((result)=>{   
+                        console.log(result.data)
+                        currentObj.rest_rating['user'] = result.data
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    });
+                currentObj.axios
                     .get('https://www.bobview.org:8080/api/userinfo/'+currentObj.rest_rating['user'].split('/')[5]+'/')
                     .then((result)=>{   
                         console.log(result.data)
@@ -156,9 +191,19 @@ export default {
                     });
             },500)
             setTimeout(function() {
+                this.axios
+                .get('https://www.bobview.org:8080/api/restrating/0/?restaurant_name='+currentObj.rest_rating['restaurant']['restaurant_name'])
+                .then((result)=>{
+                    console.log(result.data)
+                    this.rest_rating_list = result.data
+                })
+                .catch(function(error){
+                    console.log(error)
+                    console.log("senserver error")
+                });
                 currentObj.loadRating = true
                 currentObj.btnChanged =true
-            },500)
+            },1000)
         },
         moreReply() {
             this.reply=!this.reply
