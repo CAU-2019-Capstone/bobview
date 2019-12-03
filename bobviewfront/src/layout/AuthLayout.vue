@@ -111,7 +111,7 @@ export default {
                 {
                     title:'logout',
                     icon:'mdi-logout',
-                    to: 'logout'
+                    to: '/logout'
                 }
             ],
             redirect : this.$router.fullPath
