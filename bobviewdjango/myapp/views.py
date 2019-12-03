@@ -732,10 +732,16 @@ def createOrder(request):
             current_order.save()
         
         menuquery = MenuInfo.objects.all()
+        ordercontentsquery = OrderContents.objects.all()
         for basket_menu in request.data['basket_menus']:
             selected_menu = get_object_or_404(menuquery, menu_id = basket_menu['menu_id'])
-            new_order_contents = OrderContents(userorder = current_order, menu = selected_menu, menu_num = basket_menu['count'])
-            new_order_contents.save()
+            try:
+                selected_menu_contents = get_object_or_404(ordercontentsquery, userorder = current_order, menu = selected_menu)
+                selected_menu_contents.menu_num = selected_menu_contents.menu_num + basket_menu['count']
+                selected_menu_contents.save()
+            except:
+                new_order_contents = OrderContents(userorder = current_order, menu = selected_menu, menu_num = basket_menu['count'])
+                new_order_contents.save()
 
         resp = JsonResponse({
             'message' : 'success',
