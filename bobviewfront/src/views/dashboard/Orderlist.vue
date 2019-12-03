@@ -62,11 +62,11 @@
         Now you are eating here...
       </v-card-title>
       <v-row
-      class="justify-space-around"
+      class="justify-center"
       v-for="order in activeOrders"
       :key="order.user_order_id"
       >
-        <review v-bind:order_id="order.user_order_id"></review>
+        <review v-bind:order_id="order.user_order_id" v-bind:active="true"></review>
       </v-row>
     </v-card>
     
