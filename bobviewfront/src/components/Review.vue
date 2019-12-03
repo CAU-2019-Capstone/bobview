@@ -70,10 +70,10 @@
             >
                 <p>Review Applied!</p>
             </v-content>
-            <v-card-actions>
+            <v-card-actions v-if="!rateSuccess">
                 <v-spacer/>
                 <v-btn depressed text @click="save">Apply</v-btn>
-                <v-btn depressed text @click="close">Cancel</v-btn>
+                <v-btn v-if="!forActive" depressed text @click="close">Cancel</v-btn>
             </v-card-actions>
             
 
@@ -145,10 +145,13 @@
 <script>
 export default {
     name:'review',
-    props:['order_id', 'updated'],
+    props:['order_id', 'updated', 'active'],
     mounted() {
         //console.log("review mounted, order_id : " + this.order_id)
         this.initMenus()
+        if(active=true){
+            this.forActive = true
+        }
     },
     watch: {
         order_id: function() {
@@ -163,6 +166,7 @@ export default {
     },
     data() {
         return {
+            forActive:false,
             progressSuccess:false,
             dialog:false,
             restaurantRating:{},
