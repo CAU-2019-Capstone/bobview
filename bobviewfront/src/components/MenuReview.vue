@@ -58,6 +58,11 @@
                 v-bind:comment_list_id="comment.comment_list_id"
                 ></reply>
             </v-row>
+            <v-row
+            v-if="comments.length == 0"
+            >
+            <span>No Comments...</span>
+            </v-row>
             <v-divider></v-divider>
             <v-row class="mx-5 d-flex align-center"
             v-if="$store.getters.isLogined"
