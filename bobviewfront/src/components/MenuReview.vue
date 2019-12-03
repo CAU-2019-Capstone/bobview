@@ -13,7 +13,7 @@
             </v-row>
             <v-row class="ml-3">
                 <v-col cols="8">
-                    <span><v-icon>mdi-star</v-icon>{{rest_review}}</span>
+                    <span><v-icon>mdi-star</v-icon>{{menu_review}}</span>
                 </v-col>
                 <v-col cols="4">
                     <span>review count : {{menu_rating_list.length}}</span>
