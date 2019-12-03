@@ -725,10 +725,13 @@ def createOrder(request):
         
         try:
             orderquery = UserOrder.objects.all()
-            current_order = get_object_or_404(orderquery, user=user,restaurant=restaurant, table_id=requst.data['table_id'], is_active=True)
+            print('current order is')
+            current_order = get_object_or_404(orderquery, restaurant=restaurant, table_id=requst.data['table_id'], is_active=True)
+            print(current_order.user_order_id)
         except:
-            current_order = UserOrder(user=user,restaurant=restaurant, order_time=timezone.now(),
+            current_order = UserOrder(user=user, restaurant=restaurant, order_time=timezone.now(),
                                     table_id=request.data['table_id'], is_active=True)
+            print('new order is' + current_order.user_order_id)
             current_order.save()
         
         menuquery = MenuInfo.objects.all()
