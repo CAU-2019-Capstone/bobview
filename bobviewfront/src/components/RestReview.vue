@@ -50,7 +50,7 @@
             </v-btn>
         </v-card-actions>
         <v-divider></v-divider>
-        <v-content v-if="reply">
+        <v-container v-if="reply">
             <v-row
             v-for="comment in comments"
             :key="comment.comment_list_id"
@@ -78,7 +78,7 @@
                     <v-icon>mdi-send</v-icon>
                 </v-btn>
             </v-row>
-        </v-content>
+        </v-container>
     </v-card>
 </template>
 

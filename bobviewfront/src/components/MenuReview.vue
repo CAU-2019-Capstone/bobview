@@ -219,6 +219,7 @@ export default {
             this.like = val
         },
         sendComment() {
+            this.reply=false
             this.axios.post('https://www.bobview.org:8080/api/commentlist/',{
                 menu_rating_id:this.menu_rating_id,
                 username:this.$store.getters.GetUserdata['username'],
@@ -226,7 +227,8 @@ export default {
             })
             .then(function(response){
                 console.log(response.data)
-                this.initiate()
+                this.reply=true
+                this.initcomment()
             })
             .catch(function(error){
                 console.log(error)
