@@ -3,7 +3,7 @@
         <v-container primary-title>
             <v-row>
                 <v-col cols="8">
-                    <h4>Name</h4>
+                    <h4>Restaurant Review</h4>
                     <h3 class="headline mb-0">{{rest_rating['restaurant']['restaurant_name']}}</h3>
                 </v-col>
                 <v-col cols="4">
@@ -26,7 +26,7 @@
         <div class="justify-center" v-if="rest_rating['restaurant']['restaurant_image']==''">No Image</div>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>Restaurant Review</h5>
+            <h5>{{menu_rating['user']['username']}}'s Review</h5>
             <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>
