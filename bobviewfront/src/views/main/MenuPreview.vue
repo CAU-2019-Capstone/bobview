@@ -13,7 +13,7 @@
                     </v-tabs>
                 </v-col>
                 <v-col>
-                    <v-btn text depressed @click="saveTemplate">
+                    <v-btn text depressed class="blue darken-2" @click="saveTemplate">
                         APPLY
                     </v-btn>
                 </v-col>

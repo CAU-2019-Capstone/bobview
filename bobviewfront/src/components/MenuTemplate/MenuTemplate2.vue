@@ -39,7 +39,7 @@
                             @click="showDetailReviews"
                             v-if="tot_rating != 0"
                         >
-                            Show Review on This
+                            Show Review
                         </v-btn>
                     </v-row>
                 </v-col>
