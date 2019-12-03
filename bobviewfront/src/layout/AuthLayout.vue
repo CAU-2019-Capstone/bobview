@@ -119,9 +119,11 @@ export default {
     },
     methods: {
         user_info() {
+            console.log("user_info")
             this.$router.push("/dashboard/user_info")
         },
         logout() {
+            console.log("logout")
             this.$store.commit('saveUserdata',{
                 username:'',
                 logintoken:''
