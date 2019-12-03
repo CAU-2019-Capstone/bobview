@@ -60,6 +60,7 @@
             </v-row>
             <v-row
             v-if="comments.length == 0"
+            class="justify-center"
             >
             <span>No Comments...</span>
             </v-row>
