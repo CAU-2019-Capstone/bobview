@@ -2,7 +2,10 @@
     <v-app>
         <v-app-bar app class="blue lighten-2">
         <v-btn
+            depressed
             to="/"
+            width="50"
+            height="50"
         >
             <v-img
             height="50"
