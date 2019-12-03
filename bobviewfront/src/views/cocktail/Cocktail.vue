@@ -362,7 +362,7 @@ export default {
                     console.log("length 1~20")
                     currentObj.axios.post('https://www.bobview.org:8080/api/cocktail/recommend/CBF/',{
                         like_list : currentObj.recommendedInfos,
-                        count : 20 - currentObj.recommendedInfos.length
+                        count : 5
                     })
                     .then(function(response){
                         console.log("CF and CBF Result")
