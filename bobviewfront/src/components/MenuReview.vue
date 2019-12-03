@@ -180,6 +180,16 @@ export default {
                         console.log(error)
                         console.log("senserver error")
                     });
+                currentObj.axios
+                    .get('https://www.bobview.org:8080/api/userinfo/'+currentObj.rest_rating['user'].split('/')[5]+'/')
+                    .then((result)=>{   
+                        console.log(result.data)
+                        currentObj.rest_rating['user'] = result.data
+                    })
+                    .catch(function(error){
+                        console.log(error)
+                        console.log("senserver error")
+                    });
             },500)
             setTimeout(function() {
                 currentObj.axios

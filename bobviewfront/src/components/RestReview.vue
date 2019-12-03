@@ -26,7 +26,7 @@
         <div class="justify-center" v-if="rest_rating['restaurant']['restaurant_image']==''">No Image</div>
         <v-divider></v-divider>
         <div class="px-4 py-2">
-            <h5>{{menu_rating['user']['username']}}'s Review</h5>
+            <h5>{{menu_rating['user']['username']}} 's Review</h5>
             <h4 class="mb-0">{{rest_rating['desc']}}</h4>
         </div>
         <v-card-actions>
@@ -172,7 +172,7 @@ export default {
                         console.log("senserver error")
                     });
                 currentObj.axios
-                    .get(currentObj.rest_rating['user'])
+                    .get('https://www.bobview.org:8080/api/userinfo/'+currentObj.rest_rating['user'].split('/')[5]+'/')
                     .then((result)=>{   
                         console.log(result.data)
                         currentObj.rest_rating['user'] = result.data
@@ -182,7 +182,7 @@ export default {
                         console.log("senserver error")
                     });
                 currentObj.axios
-                    .get('https://www.bobview.org:8080/api/userinfo/'+currentObj.rest_rating['user'].split('/')[5]+'/')
+                    .get(currentObj.rest_rating['user'])
                     .then((result)=>{   
                         console.log(result.data)
                         currentObj.rest_rating['user'] = result.data
