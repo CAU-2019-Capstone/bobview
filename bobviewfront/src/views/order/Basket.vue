@@ -32,11 +32,11 @@
             </v-content>
             <v-card-actions>
                 <v-spacer/>
-                <v-btn text depressed @click="Payment">결제</v-btn>
-                <v-btn text depressed @click="cancel">취소</v-btn>
+                <v-btn text depressed @click="Payment">Pay Now</v-btn>
+                <v-btn text depressed @click="cancel">Cancel</v-btn>
             </v-card-actions>
             <v-content v-if="basketEmpty">
-                <p class="text-center">장바구니를 추가해 주세요</p>
+                <p class="text-center">It is an empty Basket</p>
             </v-content>
         </v-card>
     </v-content>
