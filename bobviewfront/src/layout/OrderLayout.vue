@@ -3,6 +3,7 @@
         <v-app-bar app class="blue lighten-2">
         <v-btn
             depressed
+            fab
             to="/"
             width="50"
             height="50"
