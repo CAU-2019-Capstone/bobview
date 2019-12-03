@@ -1,15 +1,16 @@
 <template>
     <v-app>
         <v-app-bar app class="blue lighten-2">
-        <v-img
-        height="36"
-        width="36"
-        src="../assets/logo.png"
-        >
-            <v-btn
+        <v-btn
             to="/"
-            ></v-btn>
-        </v-img>
+        >
+            <v-img
+            height="50"
+            width="50"
+            src="../assets/logo.png"
+            >
+            </v-img>
+        </v-btn>
 
             <v-spacer></v-spacer>
             <v-dialog
