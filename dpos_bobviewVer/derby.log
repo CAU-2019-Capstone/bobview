@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Sun Nov 24 22:34:47 KST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-016e-9d9f-3622-000006513818 
+on database directory C:\Users\KSJ\Downloads\dposSource\dpos_\dpos1_1_test\dpos1_1\database\dongwundpos-database  with class loader sun.misc.Launcher$AppClassLoader@1b2c6ec2 
+Loaded from file:/C:/Users/KSJ/Downloads/dposSource/dpos_/dpos1_1_test/dpos1_1/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_172-b11
+user.dir=C:\Users\KSJ\Downloads\dposSource\dpos_\dpos1_1_test\dpos1_1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

@@ -1,0 +1,54 @@
+// script.SendOrder.txt
+// Sends an item in a Sale to a remote (Kitchen) Printer
+//
+//    dPOS - Dongwun Point Of Sale
+//    Copyright (c) 2009-2017 Dongwun & uniCenta & previous Openbravo POS works
+//    http://www.dongwun.com
+//
+//    This file is part of dPOS.
+//
+//    dPOS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    dPOS is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with dPOS.  If not, see <http://www.gnu.org/licenses/>.
+// **************************************************************************
+
+boolean kitchen = false;
+
+for(int i= 0; i < ticket.getLinesCount(); i++){
+	line = ticket.getLine(i);
+
+	if (line.isProductKitchen() && (line.getProperty("sendstatus") == null)){
+		line.setProperty("sendstatus", "No");
+	}
+	if((line.isProductKitchen()) && (line.getProperty("sendstatus").equals("No"))){
+		kitchen = true;
+	}
+}
+
+if (kitchen) {
+	sales.printTicket("Printer.TicketKitchen");
+}
+if (kitchen){
+	javax.swing.JOptionPane.showMessageDialog(null, "주방으로 주문을 전송하였습니다.");
+} else {
+	javax.swing.JOptionPane.showMessageDialog(null, "보낼 주문이 없습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+}
+
+for(int i = ticket.getLinesCount()-1; i>= 0 ; i--){
+	line = ticket.getLine(i);
+	String a = line.getProperty("sendstatus");
+
+		
+	if((line.isProductKitchen()) && (line.getProperty("sendstatus").equals("No"))){
+		line.setProperty("sendstatus", "OK");
+	}
+}

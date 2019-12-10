@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+    dPOS - Dongwun Point Of Sale
+    Copyright (c) 2009-2017 Dongwun & uniCenta & previous Openbravo POS works.
+    http://www.dongwun.com
+    This file is part of dPOS.
+    dPOS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    dPOS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with dPOS.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<output>
+    <ticket>
+        <image>Printer.Ticket.Logo</image>
+        <line></line>
+        <line></line>
+        <line size="1">
+            <text align ="center" bold="true" length="52">정산 보고서</text>
+        </line>
+        <line></line>
+        <line>
+            <text align ="left" bold="true" length="25">지불 보고서</text>
+            <text align ="right" bold="true" length="30">금액</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getPaymentLines())
+        <line>
+            <text align ="left" length="30">${line.printType()} ${line.printReason()}</text>
+            <text align ="right" length="50">${line.printValue()}</text>
+        </line>
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text align ="left" length="29" bold="true">총 판매</text>
+            <text align ="right" length="30" bold="true">${payments.printPaymentsTotal()}</text>
+        </line>
+        <line>
+            <text align ="left" length="30">지불 횟수:</text>
+            <text align ="right" length="50">${payments.printPayments()}</text>
+        </line>
+        <line></line>
+        <line>
+            <text align ="left" bold="true" length="25">세금 분석</text>
+            <text align ="right" bold="true" length="30">금액</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getSaleLines())
+        <line>
+            <text align ="left" length="30">${line.printTaxName()}</text>
+            <text align ="right" length="50">${line.printTaxes()}</text>
+        </line>
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text align ="left" length="30">영수증:</text>
+            <text align ="right" length="50">${payments.printSales()}</text>
+        </line>
+        <line></line>
+        <line size="1">
+            <text align ="left" length="29" bold="true">부분합</text>
+            <text align ="right" length="30" bold="true">${payments.printSalesBase()}</text>
+        </line>
+        <line size="1">
+            <text align ="left" length="29" bold="true">부가세</text>
+            <text align ="right" length="31" bold="true">${payments.printSalesTaxes()}</text>
+        </line>
+        <line size="1">
+            <text align ="left" length="30" bold="true">합   계</text>
+            <text align ="right" length="31" bold="true">${payments.printSalesTotal()}</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text length="29">단말기:</text>
+            <text>${payments.printHost()}</text>
+        </line>
+        <line>
+            <text length="37">정산 번호:</text>
+            <text>${payments.printSequence()}</text>
+        </line>
+        <line>
+            <text length="15">시작 일시:</text>
+            <text>${payments.printDateStart()}</text>
+        </line>
+        <line>
+            <text length="15">종료 일시:</text>
+            <text>${payments.printDateEnd()}</text>
+        </line>
+    </ticket>
+</output>

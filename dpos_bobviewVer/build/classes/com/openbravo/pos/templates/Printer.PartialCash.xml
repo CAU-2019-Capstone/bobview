@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    dPOS - Dongwun Point Of Sale
+    Copyright (c) 2009-2017 Dongwun & uniCenta & previous Openbravo POS works.
+    http://www.dongwun.com
+
+    This file is part of dPOS.
+
+    dPOS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    dPOS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with dPOS.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<output>
+    <ticket>
+        <image>Printer.Ticket.Logo</image>
+        <line></line>
+        <line></line>
+        <line size="1">
+            <text align ="center" length="37" bold="true">중간 정산 보고</text>
+        </line>
+        <line></line>
+        <line>
+            <text bold="true">판매 보고서</text>
+        </line>
+        <line>
+            <text align ="left" length="10">품명</text>
+            <text align ="right" length="25">가격+부가세</text>
+            <text align ="right" length="1"></text>
+            <text align ="right" length="5">항목</text>
+            <text align ="right" length="15">합계</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getProductSalesLines())
+        #if($line.printProductName().length() == 2)
+        <line>
+            <text align ="left" length="8">${line.printProductName()}</text>
+            <text align ="right" length="25">${line.printProductPriceTax()}</text>
+            <text align ="right" length="5">${line.printTaxRate()}</text>
+            <text align ="right" length="6">${line.printProductUnits()}</text>
+            <text align ="right" length="15">${line.printProductSubValue()}</text>
+        </line>
+        #elseif($line.printProductName().length() == 3)
+        <line>
+            <text align ="left" length="8">${line.printProductName()}</text>
+            <text align ="right" length="23">${line.printProductPriceTax()}</text>
+            <text align ="right" length="5">${line.printTaxRate()}</text>
+            <text align ="right" length="6">${line.printProductUnits()}</text>
+            <text align ="right" length="15">${line.printProductSubValue()}</text>
+        </line>
+        #elseif($line.printProductName().length() == 4)
+        <line>
+            <text align ="left" length="8">${line.printProductName()}</text>
+            <text align ="right" length="21">${line.printProductPriceTax()}</text>
+            <text align ="right" length="5">${line.printTaxRate()}</text>
+            <text align ="right" length="5">${line.printProductUnits()}</text>
+            <text align ="right" length="15">${line.printProductSubValue()}</text>
+        </line>
+        #else
+        <line>
+            <text align ="left" length="8">${line.printProductName()}</text>
+            <text align ="right" length="20">${line.printProductPriceTax()}</text>
+            <text align ="right" length="5">${line.printTaxRate()}</text>
+            <text align ="right" length="5">${line.printProductUnits()}</text>
+            <text align ="right" length="15">${line.printProductSubValue()}</text>
+        </line>
+        #end
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text align ="left" length="32">Ticket Lines:</text>
+            <text align ="right" length="48">${payments.printProductSalesRows()}</text>
+        </line>
+        <line></line>
+        <line size="1">
+            <text align ="left" length="19" bold="true">총 항목</text>
+            <text align ="right" length="25" bold="true">${payments.printProductSalesTotalUnits()}</text>
+            <text align ="right" length="10" bold="true">${payments.printProductSalesTotal()}</text>
+        </line>
+        <line></line>
+        <!-- Janar - Removed Ticket Lines -->
+        <line>
+            <text bold="true">Removed Ticket Lines Report</text>
+        </line>
+        <line>
+            <text align ="left">직원</text>
+        </line>
+        <line>
+            <text align ="left" length="10">영수증 ID</text>
+            <text align ="left" length="30">상품</text>
+            <text align ="right" length="20">항목</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getRemovedProductLines())
+        <line>
+            <text align ="left">${line.printWorkerName()}</text>
+        </line>
+        <line>
+            <text align ="left" length="10">${line.printTicketId()}</text>
+            <text align ="left" length="30">${line.printProductName()}</text>
+            <text align ="right" length="20">${line.printTotalUnits()}</text>
+        </line>
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line></line>
+        <!-- End -->                
+        <line>
+            <text bold="true">지불 보고서</text>
+        </line>
+        <line>
+            <text align ="left" length="30">유형</text>
+            <text align ="right" length="45">합계</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line> 
+        #foreach ($line in $payments.getPaymentLines())
+        <line>
+            <text align ="left" length="30">${line.printType()}</text>
+            <text align ="right" length="45">${line.printValue()}</text>
+        </line> 
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text align ="left" length="30">지불:</text>
+            <text align ="right" length="55">${payments.printPayments()}</text>
+        </line>        
+        <line></line>
+        <line size="1">
+            <text align ="left" length="30" bold="true">합계</text>
+            <text align ="right" length="30" bold="true">${payments.printPaymentsTotal()}</text>
+        </line>
+        <line></line>
+        <line>
+            <text bold="true">세금 보고서</text>
+        </line>
+        <line>
+            <text align ="left" length="30">세금명</text>
+            <text align ="right" length="43">합계</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getSaleLines())
+        <line>
+            <text align ="left" length="30">${line.printTaxName()}</text>
+            <text align ="right" length="43">${line.printTaxes()}</text>
+        </line> 
+        #end        
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>        
+        <!-- JG 9 Nov 12 for Categories -->
+        <line></line>
+        <line>
+            <text bold="true">상품 항목 판매</text>
+        </line>
+        <line>
+            <text align ="left" length="20">품명</text>
+            <text align ="right" length="30">수량</text>
+            <text align ="right" length="20">합계</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        #foreach ($line in $payments.getCategorySalesLines())
+        #if($line.printCategoryName().length() == 2)
+        <line>
+            <text align ="left" length="22">${line.printCategoryName()}</text>
+            <text align ="right" length="30">${line.printCategoryUnits()}</text>
+            <text align ="right" length="22">${line.printCategorySum()}</text>
+        </line>
+        #elseif($line.printCategoryName().length() == 3)
+        <line>
+            <text align ="left" length="21">${line.printCategoryName()}</text>
+            <text align ="right" length="30">${line.printCategoryUnits()}</text>
+            <text align ="right" length="20">${line.printCategorySum()}</text>
+        </line>
+        #else
+        <line>
+            <text align ="left" length="20">${line.printCategoryName()}</text>
+            <text align ="right" length="28">${line.printCategoryUnits()}</text>
+            <text align ="right" length="20">${line.printCategorySum()}</text>         
+        </line>
+        #end
+        #end
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line>
+            <text align ="left" length="32">Ticket Lines:</text>
+            <text align ="right" length="48">${payments.printCategorySalesRows()}</text>
+        </line>
+        <line></line>
+        <line size="1">
+            <text align ="left" length="15" bold="true">합계</text>
+            <text align ="right" length="30" bold="true">${payments.printCategorySalesTotalUnits()}</text>
+            <text align ="right" length="15" bold="true">${payments.printCategorySalesTotal()}</text>
+        </line>
+        <line>
+            <text align="left">-------------------------------------------------------------------------</text>
+        </line>
+        <line></line>
+        <!-- end -->
+        <line>
+            <text align ="left" length="32">영수증:</text>
+            <text align ="right" length="48">${payments.printSales()}</text>
+        </line>                
+        <line></line>
+        <line size="1">
+            <text align ="left" length="30" bold="true">소  계</text>
+            <text align ="right" length="31" bold="true">${payments.printSalesBase()}</text>
+        </line>
+        <line size="1">
+            <text align ="left" length="29" bold="true">부가세</text>
+            <text align ="right" length="31" bold="true">${payments.printSalesTaxes()}</text>
+        </line>
+        <line size="1">
+            <text align ="left" length="30" bold="true">합  계</text>
+            <text align ="right" length="31" bold="true">${payments.printSalesTotal()}</text>
+        </line>        
+        <line></line>
+        <line>
+            <text length="29">단말기:</text>
+            <text align="right" length="36">${payments.printHost()}</text>
+        </line>    
+        <line>
+            <text length="37">정산번호:</text>
+            <text align="right" length="41">${payments.printSequence()}</text>
+        </line> 
+        <line>
+            <text length="15">시작 일시:</text>
+            <text align="right" length="42">${payments.printDateStart()}</text>
+        </line>  
+        <line>
+            <text length="15">종료 일시:</text>
+            <text align="right" length="42">${payments.printDateEnd()}</text>
+        </line>  
+    </ticket>
+</output>

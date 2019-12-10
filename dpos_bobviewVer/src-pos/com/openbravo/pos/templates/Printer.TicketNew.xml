@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    dPOS - Dongwun Point Of Sale
+    Copyright (c) 2009-2017 Dongwun & uniCenta & previous Openbravo POS works.
+    http://www.dongwun.com
+
+    This file is part of dPOS.
+
+    dPOS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    dPOS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with dPOS.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<output>
+
+    <display>
+        <line>
+            <text align="left" length="10">합계</text>
+            <text align="right" length="10">${ticket.printTotal()}</text>
+        </line>
+        <line>
+            <text align="left" length="40">이용해 주셔서 감사합니다.</text>
+        </line>
+    </display>
+
+    <ticket>
+        <line>
+            <text bold="true" size="5">                   영   수   증                    </text>
+        </line>               
+        #if (${ticket.ticketType} == 0)
+        <line>
+            <text>영 수 증: ${ticket.printId()}</text>
+            #end
+            #if (${ticket.ticketType} == 1)
+            <text>환    불: ${ticket.printId()}</text>
+            #end
+            <text size="3">일    시: ${ticket.printDate()}</text>
+            #if ($ticket.getCustomer())
+            <text>고 객 명: ${ticket.getCustomer().printName()}</text>
+            <text>현재 외상: ${ticket.getCustomer().printCurDebt()}</text>
+            #end
+            #if (${tickettext.place} != ${place})
+            <text align="left" length="15">테 이 블: ${place}</text>
+            #end        
+            <text align="left" length="15">담 당 자: ${ticket.printUser()}</text>       
+            <text>================================================</text>       
+            <text> 상품          단가        수량        합계 </text>            
+            <text>================================================</text>      
+            #foreach ($ticketline in $ticket.getLines())                  
+            <text> ${ticketline.printName()}</text>
+            <text> ${ticketline.printBarcode()}         ${ticketline.printPriceTax()}        ${ticketline.printMultiply()}       ${ticketline.printValue()}</text>            
+            #end
+            <text>------------------------------------------------</text>
+            <text>상품갯수: ${ticket.printArticlesCount()}</text>
+            <text> </text>
+            <text size="3">합    계:                              ${ticket.printTotal()}</text>
+            <text> </text>
+            #foreach ($paymentline in $ticket.payments)
+            #if ($paymentline.name == "cash")
+            <text bold="true">거래유형 : 현금결제</text>
+            <text>내 신 돈:                              ${paymentline.printPaid()}</text>                  
+            <text>거스름돈:                              ${paymentline.printChange()}</text>
+            #end
+          	
+            #if ($paymentline.name == "cashrefund")
+            <text bold="true">거래유형 : 현금환불</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+	
+            #if ($paymentline.name == "magcard")
+            <text bold="true">거래유형 : 신용지불</text>
+            <text>카드유형</text>
+            <text>${paymentline.getCardName()}</text> 
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "magcardrefund")
+            <text bold="true">거래유형 : 신용취소</text>
+            <text>카드 유형</text>
+            <text>${paymentline.getCardName()}</text> 
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "cheque")
+
+            <text bold="true">거래유형 : 수표</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "chequerefund")
+            <text bold="true">거래유형 : 수표 환불</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "paperin")
+            <text bold="true">거래유형 : 할인쿠폰</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "paperout")
+            <text bold="true">거래유형 : 쿠폰 환불</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+
+            #if ($paymentline.name == "free")
+            <text bold="true">거래유형 : 무료</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+	
+            #if ($paymentline.name == "debt")
+            <text bold="true">거래유형 : 외상 지불</text>
+            <text align ="right" length="42">${paymentline.printTotal()}</text>
+            #end
+            #end
+            <text> </text>
+            <text>과세매출:                              ${ticket.printSubTotal()}</text>
+            <text>부 가 세:                              ${ticket.printTax()}</text>
+            <text>------------------------------------------------</text>      
+            <text>           이용해 주셔서 감사합니다.</text>       
+            <text>                또 찾아주세요.</text>        
+            <text>------------------------------------------------</text>
+
+            <line>
+                <text>=============절========취========선=============</text>
+            </line>
+        </line>
+    </ticket>
+
+    #foreach ($paymentline in $ticket.payments)
+    #if ($paymentline.name == "cash")
+    <opendrawer/>
+    #end
+    #if ($paymentline.name == "cashrefund")
+    <opendrawer/>
+    #end
+    #end
+
+</output>
